@@ -1,0 +1,101 @@
+.survey-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.survey-question {
+    margin-bottom: 20px;
+}
+
+.question-container {
+    margin-bottom: 20px;
+}
+
+.question-text {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.answer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.answer-option {
+    width: 45%;
+    margin-bottom: 10px;
+}
+
+.answer-text {
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.percentage-text {
+    font-size: 14px;
+    color: #666;
+    margin-left: 10px;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.submit-button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #3e8e41;
+}
+
+
+/* for add survey */
+
+.custom-radio-group .ant-radio-checked .ant-radio-inner {
+    border-color: #ECB206 !important;
+}
+.custom-radio-group .ant-radio-checked .ant-radio-inner:after {
+    background-color: #ECB206 !important;
+}
+
+.custom-input.ant-input {
+    border-color: #ECB206 !important;
+}
+.custom-input.ant-input:focus,
+.custom-input.ant-input-focused {
+    box-shadow: 0 0 0 2px rgba(236, 178, 6, 0.2) !important;
+}
+
+.custom-input.ant-picker {
+    border-color: #ECB206 !important;
+}
+.custom-input.ant-picker:focus,
+.custom-input.ant-picker-focused {
+    box-shadow: 0 0 0 2px rgba(236, 178, 6, 0.2) !important;
+}
+
+.active-btn {
+    background-color: #ECB206 !important;
+    border-color: #ECB206 !important;
+}
+
+.ant-picker-cell-selected .ant-picker-cell-inner {
+    background: #ECB206 !important;
+}
+
+.ant-picker-cell-inner:hover {
+    background: #ECB206 !important;
+}

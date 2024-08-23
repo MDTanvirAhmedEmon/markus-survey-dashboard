@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-1: #38393E;
+  --color-2: #ECB206;
+  --color-3: #2C2C30;
+  --color-4: #6BAE46;
+  --color-5: #F3FBEE;
+  --color-6: #F7F7FB;
+  --color-7: #FDFDFD;
+  font-family: "Poppins", sans-serif;
+}
+
+@layer utilities {
+  .start-start {
+    @apply flex justify-start items-start
+  }
+
+  .start-center {
+    @apply flex justify-start items-center
+  }
+
+  .center-center {
+    @apply flex justify-center items-center
+  }
+
+  .between-center {
+    @apply flex justify-between items-center
+  }
+
+  .between-start {
+    @apply flex justify-between items-start
+  }
+
+  .end-center {
+    @apply flex justify-end items-center
+  }
+
+  .grid-2 {
+    @apply grid grid-cols-2 items-center justify-start
+  }
+
+  .grid-3 {
+    @apply grid grid-cols-3 items-center justify-start
+  }
+
+  .grid-4 {
+    @apply grid grid-cols-4 items-center justify-start
+  }
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+#sidebar .active{
+  background: var(--color-2);
+}
+
+/* .questions .ant-space-item{
+width: 38% !important;
+} */
+.dashboard-custom-table .start-center {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+.custom-pagination-all .ant-pagination .ant-pagination-item-active {
+  border: none;
+  background-color: #38393e17;
+  border-radius: 50%;
+}
+.custom-pagination-all .ant-pagination .ant-pagination-item-active a {
+  color: black
+}
+.custom-pagination-all ul.ant-pagination.ant-table-pagination.ant-table-pagination-right.css-dev-only-do-not-override-98ntnt {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+:where(.css-dev-only-do-not-override-98ntnt).ant-pagination-end {
+  justify-content: center;
+  margin-top: 30px;
+}
+
+:where(.css-dev-only-do-not-override-98ntnt).ant-pagination .ant-pagination-options-size-changer {
+  display: none;
+  width: auto;
+}
+:where(.css-dev-only-do-not-override-98ntnt).ant-pagination .ant-pagination-item-active {
+  border-color: #4096ff00;
+  background-color: #0000000d;
+  border-radius: 50%;
+}
+:where(.css-dev-only-do-not-override-98ntnt).ant-pagination .ant-pagination-item-active a {
+  color: black;
+}
+
+:where(.css-dev-only-do-not-override-98ntnt).ant-pagination .ant-pagination-item-active:hover {
+  border-color: #4096ff00;
+  background-color: #0000000d;
+  border-radius: 50%;
+}
+ul.ant-pagination.custom-pagination-all.css-dev-only-do-not-override-98ntnt {
+  justify-content: center;
+}
+/* .custom-table */
+/* ReCharts */
+.recharts-legend-wrapper {
+  display: none;
+}
+
+.gap-5 {
+  gap: .5rem;
+}
