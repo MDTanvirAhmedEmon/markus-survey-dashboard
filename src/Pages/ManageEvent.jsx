@@ -44,7 +44,7 @@ const ManageEvent = () => {
                     <button to={`/driver-details/id`}>
                         <MdCloudDownload className='cursor-pointer' />
                     </button>
-                    <button onClick={()=>{
+                    <button onClick={() => {
                         setOpenAddModal(true)
                     }}>
                         <FaEdit className='cursor-pointer' />
@@ -70,7 +70,7 @@ const ManageEvent = () => {
                 <div className='end-center gap-2'>
                     <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
                     <button onClick={() => setOpenAddModal(true)} className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
-                        Add New Project
+                        Add New Event
                         <FaPlus />
                     </button>
                 </div>
@@ -135,7 +135,7 @@ const ManageEvent = () => {
                             <label className='w-full block py-2 h-[200px] border rounded-md' htmlFor='qrCode'>
                                 <img className='w-full h-full object-contain' src={image ? URL.createObjectURL(image) : 'https://i.ibb.co/9c2gMyK/transparent-upload-icon-free-png.webp'} alt="" />
                             </label>
-                            <input onChange={(e)=>{
+                            <input onChange={(e) => {
                                 setImage(e.target.files[0])
                             }} id='qrCode' type='file' accept='image/*' style={{
                                 display: 'none'
