@@ -7,6 +7,7 @@ import { MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useCreateProjectMutation, useDeleteProjectMutation, useGetProjectsQuery } from '../redux/projects/projectApi';
 import moment from 'moment';
+import { MakeFormData } from '../utils/FormDataHooks';
 
 const CreateProject = () => {
     const [openAddModal, setOpenAddModal] = useState(false);
@@ -98,8 +99,10 @@ const CreateProject = () => {
     ];
 
     const onFinish = (value) => {
-        const formData = new FormData();
-        formData.append("project_name", value.project_name);
+        // const formData = new FormData();
+        // formData.append("project_name", value.project_name);
+        
+        const formData = MakeFormData(value)
         createProject(formData);
     };
 
