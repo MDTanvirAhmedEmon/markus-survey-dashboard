@@ -92,7 +92,7 @@ export const router = createBrowserRouter([
                 element: <ArchiveProject />,
             },
             {
-                path: '/add-project',
+                path: '/add-questions',
                 element: <AddQuestions />,
             },
 

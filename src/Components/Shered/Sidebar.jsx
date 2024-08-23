@@ -129,7 +129,7 @@ const Sidebar = () => {
 
     return (
         <div id='sidebar' className='w-full h-full mt-10'>
-            <div className="log mb-5">
+            <div className="log my-5">
                 <Link to={`/`} className='text-white font-bold text-2xl'>Company Logo</Link>
             </div>
 
@@ -138,7 +138,7 @@ const Sidebar = () => {
                     links.map((item, index) => {
                         if (item?.sub_menu) {
                             return (
-                                <div onClick={() => toggleAccordion(index)} key={index} className='w-full '>
+                                <div onClick={() => toggleAccordion(index)} key={index} className='w-full custom-submenu'>
                                     <div className='start-center gap-2 w-full py-2 bg-[var(--color-3)] px-4 cursor-pointer'>
                                         {item?.icon}
                                         {item?.label}
@@ -152,7 +152,7 @@ const Sidebar = () => {
                                         {
                                             item?.sub_menu?.map((sub_item, subIndex) => (
                                                 <NavLink to={sub_item?.path} key={subIndex}
-                                                    className='start-center px-4 gap-2 w-full py-2 bg-[var(--color-3)] cursor-pointer my-1'>
+                                                    className='start-center px-4 gap-2 w-full py-2 bg-[var(--color-3)] cursor-pointer my-1 custom-submenu-item'>
                                                     {sub_item?.icon}
                                                     {sub_item?.label}
                                                 </NavLink>

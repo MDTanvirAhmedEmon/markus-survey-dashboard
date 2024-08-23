@@ -90,8 +90,8 @@ const ManageCompany = () => {
                 </div>
                 <div className='end-center gap-2'>
                     <Input  onChange={(e) => setSearchTerm(e.target.value)} className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
-                    <Link to={`/add-project`} className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
-                        Add New Project
+                    <Link to={`/add-questions`} className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
+                        Add New Question
                         <FaPlus />
                     </Link>
                 </div>

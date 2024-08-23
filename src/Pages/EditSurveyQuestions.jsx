@@ -53,14 +53,11 @@ const EditSurveyQuestions = () => {
                             data?.data[0].questions?.map((q, index) => <div className=' mt-4' key={index}>
                                 <p className='mb-1'>Question no. {index + 1}</p>
                                 <div className='h-16 rounded-md border flex items-center pl-3'><p>{q?.question_en}</p></div>
+                                
                             </div>)
                         }
                     </div>
             }
-
-
-
-
 
         </div>
     );
