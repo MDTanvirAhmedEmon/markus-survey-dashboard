@@ -21,7 +21,7 @@ export const surveyAPi = baseApi.injectEndpoints({
             }
         }),
         getProjectForManageCompany: builder.query({
-            query: ({page}) => {
+            query: ({ page }) => {
                 return {
                     url: `projects?page=${page}`,
                     method: "GET",
@@ -29,7 +29,7 @@ export const surveyAPi = baseApi.injectEndpoints({
             }
         }),
         getSurveyForManageCompany: builder.query({
-            query: ({page}) => {
+            query: ({ page }) => {
                 return {
                     url: `surveys?page=${page}`,
                     method: "GET",
