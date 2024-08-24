@@ -37,8 +37,15 @@ export const surveyApi = baseApi.injectEndpoints({
                 }
             },
         }),
-
+        getAllSurveyComments: builder.query({
+            query: (id) => {
+                return {
+                    url: `question-based-user?question_id=${id}`,
+                    method: "GET",
+                }
+            },
+        }),
     }),
 });
 
-export const { useCreateSurveyMutation, useGetSurveyQuery, useDeleteSurveyMutation, useGetSurveyResultReportQuery } = surveyApi;
+export const { useCreateSurveyMutation, useGetSurveyQuery, useDeleteSurveyMutation, useGetSurveyResultReportQuery, useGetAllSurveyCommentsQuery } = surveyApi;
