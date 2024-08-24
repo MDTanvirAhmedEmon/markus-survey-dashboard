@@ -32,6 +32,7 @@ import PrivateRoute from "./PrivateRoute.jsx";
 import AddQuestions from "../Pages/AddQuestions.jsx";
 import EditSurveyQuestions from "../Pages/EditSurveyQuestions.jsx";
 import SurveyReport from "../Pages/SurveyReport.jsx";
+import AllSurveyComments from "../Pages/AllSurveyComments.jsx";
 
 
 // import Otp from "../Pages/Auth/Otp.jsx";
@@ -94,6 +95,10 @@ export const router = createBrowserRouter([
             {
                 path: '/add-questions',
                 element: <AddQuestions />,
+            },
+            {
+                path: '/all-survey-comments/:id',
+                element: <AllSurveyComments />,
             },
 
             {

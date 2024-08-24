@@ -1,97 +1,90 @@
 
-import { Select } from 'antd';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-const data = [
-    {
-        name: 'Jan',
-        uv: 20,
-        mt: 10,
-    },
-    {
-        name: 'Feb',
-        uv: 30,
-        mt: 20,
-    },
-    {
-        name: 'Mar',
-        uv: 90,
-        mt: 30,
-    },
-    {
-        name: 'Apr',
-        uv: 100,
-        mt: 40,
-    },
-    {
-        name: 'May',
-        uv: 30,
-        mt: 50,
-    },
-    {
-        name: 'Jun',
-        uv: 10,
-        mt: 60,
-    },
-    {
-        name: 'Aug',
-        uv: 15,
-        mt: 70,
-    },
-    {
-        name: 'Sep',
-        uv: 20,
-        mt: 80,
-    },
-    {
-        name: 'Nov',
-        uv: 30,
-        mt: 90,
-    },
-    {
-        name: 'Dec',
-        uv: 10,
-        mt: 100,
-    },
-];
-const items = [
-    {
-        label: 2023,
-        key: "2023",
-    },
-    {
-        label: 2024,
-        key: "2024",
-    },
-    {
-        label: 2025,
-        key: "2025",
-    },
-    {
-        label: 2026,
-        key: "2026",
-    },
-];
+// import { Select } from 'antd';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { useGetDashboardAnalyticsQuery } from '../../redux/features/dashboard/dashboardApi';
+
+
+
+// const data = [
+//     {
+//         name: 'Jan',
+//         uv: 20,
+//         mt: 10,
+//     },
+//     {
+//         name: 'Feb',
+//         uv: 30,
+//         mt: 20,
+//     },
+//     {
+//         name: 'Mar',
+//         uv: 90,
+//         mt: 30,
+//     },
+//     {
+//         name: 'Apr',
+//         uv: 100,
+//         mt: 40,
+//     },
+//     {
+//         name: 'May',
+//         uv: 30,
+//         mt: 50,
+//     },
+//     {
+//         name: 'Jun',
+//         uv: 10,
+//         mt: 60,
+//     },
+//     {
+//         name: 'Aug',
+//         uv: 15,
+//         mt: 70,
+//     },
+//     {
+//         name: 'Sep',
+//         uv: 20,
+//         mt: 80,
+//     },
+//     {
+//         name: 'Nov',
+//         uv: 30,
+//         mt: 90,
+//     },
+//     {
+//         name: 'Dec',
+//         uv: 10,
+//         mt: 100,
+//     },
+// ];
+
 const DriverGrowth = () => {
-    const handleChange = (value) => {
-        console.log(`selected ${value}`);
+
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    const mapMonthNumberToName = (data) => {
+        return data?.map(item => ({
+            ...item,
+            month: monthNames[item.month - 1]
+        }));
     };
+
+    const { data: dashboardData } = useGetDashboardAnalyticsQuery();
+    console.log('data', dashboardData?.responses_by_month)
+    const processedData = mapMonthNumberToName(dashboardData?.responses_by_month || []);
+
     return (
         <>
             <div className='between-center'>
                 <p className='text-2xl'>Survey Response</p>
-                <Select
-                    defaultValue="2024"
-                    style={{ width: 120 }}
-                    onChange={handleChange}
-                    options={items}
-                />
+
             </div>
             <div className='w-full h-[400px]'>
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
                         width={500}
                         height={400}
-                        data={data}
+                        data={processedData}
                         margin={{
                             top: 10,
                             right: 30,
@@ -99,10 +92,10 @@ const DriverGrowth = () => {
                             bottom: 0,
                         }}
                     >
-                        <XAxis dataKey="name" tickLine={false} axisLine={false} tickMargin={10}/>
-                        <YAxis tickLine={false} axisLine={false} />
+                        <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={10} />
+                        <YAxis dataKey="count" tickLine={false} axisLine={false} />
                         <Tooltip />
-                        <Area type="monotone" dataKey="uv" stroke="#ECB206" opacity={1} fillOpacity={1} fill="#ECB206" />
+                        <Area type="monotone" dataKey="count" stroke="#ECB206" opacity={1} fillOpacity={1} fill="#ECB206" />
                     </AreaChart>
                 </ResponsiveContainer>
             </div>

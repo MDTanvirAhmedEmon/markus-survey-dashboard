@@ -4,22 +4,25 @@ import './App.css'
 import Overview from './Components/Dashboard/Overview'
 import DriverGrowth from './Components/Dashboard/DriverGrowth'
 import SurveyRequest from './Components/Dashboard/SurveyRequest'
+import { useGetDashboardAnalyticsQuery } from './redux/features/dashboard/dashboardApi'
 
 
 
 function App() {
+
+  const { data: dashboardData } = useGetDashboardAnalyticsQuery();
   const data = [
     {
       title: 'Total Project',
-      count: 5480,
+      count: dashboardData?.total_project,
     },
     {
       title: 'Total Survey',
-      count: 1480,
+      count: dashboardData?.total_survey,
     },
     {
       title: 'Total Responses',
-      count: 548,
+      count: dashboardData?.total_response,
     },
   ]
   return (
@@ -43,8 +46,8 @@ function App() {
       </div>
       <div className='mt-3 bg-white rounded-md'>
         <div className='between-center gap-2 mb-3 p-5'>
-          <p className='text-xl'>Project Request</p> <Link to={`/total-survey-request`}>
-          View All
+          <p className='text-xl'>Survey Request</p> <Link to={`/total-survey-request`}>
+            View All
           </Link>
         </div>
         <SurveyRequest />

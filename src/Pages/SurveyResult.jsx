@@ -259,7 +259,9 @@ const SurveyResult = () => {
                                                             />
                                                         ))}
                                                     </div>
-                                                    <p className="text-lg text-[#ECB206]">View All</p>
+                                                    <Link to={`/all-survey-comments/${question?.question_id}`} >
+                                                        <p className="text-lg text-[#ECB206]">View All</p>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
