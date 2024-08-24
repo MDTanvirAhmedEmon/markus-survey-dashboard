@@ -21,7 +21,7 @@ export const surveyApi = baseApi.injectEndpoints({
             invalidatesTags: ['Survey'],
         }),
         getSurvey: builder.query({
-            query: ({page}) => {
+            query: ({ page }) => {
                 return {
                     url: `surveys?page=${page}`,
                     method: "GET",
@@ -29,7 +29,16 @@ export const surveyApi = baseApi.injectEndpoints({
             },
             providesTags: ['Survey'],
         }),
+        getSurveyResultReport: builder.query({
+            query: ({ project_id, survey_id }) => {
+                return {
+                    url: `question-based-report?survey_id=${survey_id}&project_id=${project_id}`,
+                    method: "GET",
+                }
+            },
+        }),
+
     }),
 });
 
-export const { useCreateSurveyMutation, useGetSurveyQuery, useDeleteSurveyMutation } = surveyApi;
+export const { useCreateSurveyMutation, useGetSurveyQuery, useDeleteSurveyMutation, useGetSurveyResultReportQuery } = surveyApi;
