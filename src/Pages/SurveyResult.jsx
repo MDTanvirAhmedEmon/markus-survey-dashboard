@@ -1,14 +1,20 @@
 import { Link } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { Form, Input, Pagination, Select, Tag } from "antd";
+import { ConfigProvider, Form, Input, Pagination, Select, Spin, Tag } from "antd";
 import { CiSearch } from "react-icons/ci";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetProjectForManageCompanyQuery, useGetSurveyForManageCompanyQuery } from "../redux/features/questions/questionsApi";
+import { useGetSurveyResultReportQuery } from "../redux/features/survey/surveyApi";
 
 const SurveyResult = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [currentSurveyPage, setCurrentSurveyPage] = useState(1);
+    // const [currentSurveyPage, setCurrentSurveyPage] = useState(1);
+
+    const [selectedProject, setSelectedProject] = useState(null);
+    console.log('project', selectedProject)
+    const [selectedSurvey, setSelectedSurvey] = useState(null);
+    console.log('survey', selectedSurvey)
 
 
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
@@ -39,9 +45,9 @@ const SurveyResult = () => {
     const handlePageChangeSurvey = (page) => {
         setCurrentPageSurvey(page);
     };
-    const handleCurrentSurveyPage = (page) => {
-        setCurrentSurveyPage(page);
-    };
+    // const handleCurrentSurveyPage = (page) => {
+    //     setCurrentSurveyPage(page);
+    // };
 
     const CustomDropdown = (menu) => (
         <div>
@@ -70,6 +76,13 @@ const SurveyResult = () => {
             />
         </div>
     );
+
+
+    // fetching Result Report
+    const { data: reportData, isLoading } = useGetSurveyResultReportQuery(
+        selectedProject && selectedSurvey && { project_id: selectedProject, survey_id: selectedSurvey },
+    );
+    console.log('report Data', reportData)
 
     const onFinish = (values) => {
         console.log(values);
@@ -112,6 +125,7 @@ const SurveyResult = () => {
                                 placeholder="Select A Project"
                                 dropdownRender={CustomDropdown}
                                 options={options}
+                                onChange={setSelectedProject}
                             />
                         </Form.Item>
                         <Form.Item
@@ -131,70 +145,145 @@ const SurveyResult = () => {
                                 className="w-full h-[42px]"
                                 placeholder="Select A Survey"
                                 dropdownRender={CustomDropdownSurvey}
+                                onChange={setSelectedSurvey}
                                 options={surveyOptions}
                             />
                         </Form.Item>
                     </Form>
                 </div>
-                <div>
-                    <div className=" flex justify-between mb-6">
-                        <p>All Survey Questions (1-10)</p>
-                        <div className=" flex items-center gap-5">
-                            <div>
-                                <Tag className=" h-4" color="#ECB206"></Tag>
-                                Very Satisfied
-                            </div>
-                            <div>
-                                <Tag className=" h-4" color="#1E3042"></Tag>
-                                Satisfied
-                            </div>
-                            <div>
-                                <Tag className=" h-4" color="#F9E7B2"></Tag>
-                                Good
-                            </div>
-                            <div>
-                                <Tag className=" h-4" color="#85714D"></Tag>
-                                Bad
-                            </div>
-                            <div>
-                                <Tag className=" h-4" color="#533E02"></Tag>
-                                Angry
-                            </div>
+
+
+                <div className=" flex justify-between mb-6">
+                    <p>All Survey Questions </p>
+                    <div className=" flex items-center gap-5">
+                        <div>
+                            <Tag className=" h-4" color="#ECB206"></Tag>
+                            Very Satisfied
+                        </div>
+                        <div>
+                            <Tag className=" h-4" color="#1E3042"></Tag>
+                            Satisfied
+                        </div>
+                        <div>
+                            <Tag className=" h-4" color="#F9E7B2"></Tag>
+                            Good
+                        </div>
+                        <div>
+                            <Tag className=" h-4" color="#85714D"></Tag>
+                            Bad
+                        </div>
+                        <div>
+                            <Tag className=" h-4" color="#533E02"></Tag>
+                            Angry
                         </div>
                     </div>
-                    <div className=" flex">
-                        <div className=" w-[40%]">1.How satisfied are you with your current work environment?</div>
-                        <div className=" w-[60%]">
-                            <div>
-                                <div className="h-12 bg-slate-400 flex">
-                                    <div className=" bg-[#ECB206] w-[40%] h-12 flex items-center justify-center"><p className="text-white">40%</p></div>
-                                    <div className=" bg-[#1E3042] w-[20%] h-12 flex items-center justify-center"><p className="text-white">20%</p></div>
-                                    <div className=" bg-[#F9E7B2] w-[10%] h-12 flex items-center justify-center"><p className="text-black">10%</p></div>
-                                    <div className=" bg-[#85714D] w-[20%] h-12 flex items-center justify-center"><p className="text-white">20%</p></div>
-                                    <div className=" bg-[#533E02] w-[10%] h-12 flex items-center justify-center"><p className="text-white">10%</p></div>
-                                </div>
-                                <div className=" flex items-center  justify-between">
-                                    <p className=" text-lg font-semibold">Over all survey 500</p>
-                                    <p className=" text-[#ECB206]">QR Code 250 Use App 250</p>
-                                    <p className=" text-lg font-semibold">User Comments 200+</p>
+                </div>
 
-                                    <div className='flex justify-center items-center mb-8 mt-6'>
-                                        {
-                                            data.map(item => <img className='w-10 h-10 rounded-full -ml-4' key={item} src={item} alt="" />)
-                                        }
 
+                {
+                    isLoading ? (
+                        <div className='h-[400px] flex items-center justify-center'>
+                            <ConfigProvider
+                                theme={{
+                                    token: {
+                                        colorPrimary: "#ECB206",
+                                    },
+                                }}
+                            >
+                                <Spin size="large" />
+                            </ConfigProvider>
+                        </div>
+                    ) : reportData ? (
+                        <>
+                            {reportData.map((question, index) => (
+                                <div className="" key={index}>
+                                    <div className="flex">
+                                        <div className="w-[40%]">
+                                            {index + 1}. {question?.question}
+                                        </div>
+                                        <div className="w-[60%]">
+                                            <div>
+                                                <div className="h-12 bg-red-500 flex">
+                                                    <div
+                                                        className="bg-[#ECB206] h-12 flex items-center justify-center"
+                                                        style={{ width: `${question.option_percentages[1]}%` }}
+                                                    >
+                                                        {question.option_percentages[1] !== 0 && (
+                                                            <p className="text-white">{question.option_percentages[1]}%</p>
+                                                        )}
+                                                    </div>
+                                                    <div
+                                                        className="bg-[#1E3042] h-12 flex items-center justify-center"
+                                                        style={{ width: `${question.option_percentages[2]}%` }}
+                                                    >
+                                                        {question.option_percentages[2] !== 0 && (
+                                                            <p className="text-white">{question.option_percentages[2]}%</p>
+                                                        )}
+                                                    </div>
+                                                    <div
+                                                        className="bg-[#F9E7B2] h-12 flex items-center justify-center"
+                                                        style={{ width: `${question.option_percentages[3]}%` }}
+                                                    >
+                                                        {question.option_percentages[3] !== 0 && (
+                                                            <p className="text-black">{question.option_percentages[3]}%</p>
+                                                        )}
+                                                    </div>
+                                                    <div
+                                                        className="bg-[#85714D] h-12 flex items-center justify-center"
+                                                        style={{ width: `${question.option_percentages[4]}%` }}
+                                                    >
+                                                        {question.option_percentages[4] !== 0 && (
+                                                            <p className="text-white">{question.option_percentages[4]}%</p>
+                                                        )}
+                                                    </div>
+                                                    <div
+                                                        className="bg-[#533E02] h-12 flex items-center justify-center"
+                                                        style={{ width: `${question.option_percentages[5]}%` }}
+                                                    >
+                                                        {question.option_percentages[5] !== 0 && (
+                                                            <p className="text-white">{question.option_percentages[5]}%</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center justify-between">
+                                                    <p className="text-lg font-semibold">Overall survey 500</p>
+                                                    <p className="text-[#ECB206]">QR Code 250 Use App 250</p>
+                                                    <p className="text-lg font-semibold">User Comments {question?.total_comments}+</p>
+                                                    <div className="flex justify-center items-center mb-8 mt-6">
+                                                        {data.map((item, idx) => (
+                                                            <img
+                                                                className="w-10 h-10 rounded-full -ml-4"
+                                                                key={idx}
+                                                                src={item}
+                                                                alt=""
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    <p className="text-lg text-[#ECB206]">View All</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <p className=" text-lg text-[#ECB206]">View All</p>
                                 </div>
+                            ))}
+                            <div className="flex justify-center my-8">
+                                <button className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">
+                                    Export
+                                </button>
                             </div>
+                        </>
+                    ) : (
+                        <div className="h-[300px] w-full flex justify-center items-center">
+                            <p className="text-3xl text-black">Please Select A Project & A Survey</p>
                         </div>
-                    </div>
-                </div>
-                <div className=" flex justify-center mt-8">
-                    <button className=" text-white bg-[#ECB206] px-16 py-4 shadow rounded">Export</button>
-                </div>
-                <div className="py-10">
+                    )
+                }
+
+
+
+
+
+                {/* <div className="py-10">
                     <Pagination
                         className="custom-pagination-all"
                         current={currentSurveyPage}
@@ -202,8 +291,8 @@ const SurveyResult = () => {
                         total={50}
                         onChange={handleCurrentSurveyPage}
                     />
-                </div>
-            </div>
+                </div> */}
+            </div >
         </>
     )
 }

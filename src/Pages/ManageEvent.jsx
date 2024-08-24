@@ -1,11 +1,13 @@
-import { Form, Input, Modal, Select, Table } from 'antd';
-import React, { useState } from 'react'
+import { Form, Input, message, Modal, Pagination, Popconfirm, Select, Table } from 'antd';
+import React, { useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import { FaEdit, FaRegEye, FaStar } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
 import { IoArrowBackSharp } from 'react-icons/io5';
 import { MdCloudDownload, MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { useGetSurveyForManageCompanyQuery } from '../redux/features/questions/questionsApi';
+import { useGenerateQRCodeMutation } from '../redux/features/Event/EventApi';
 const dataSource = [
     {
         id: '1',
@@ -14,7 +16,69 @@ const dataSource = [
     }
 ]
 const ManageEvent = () => {
+
+    const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
+    const pageSize = 10;
+
+    // get surveys 
+    const { data: surveys } = useGetSurveyForManageCompanyQuery({
+        page: currentPageSurvey
+    })
+
+    const surveryOptions = surveys?.data?.data?.map(survey => ({
+        value: survey.id,
+        label: survey.survey_name
+    }));
+    // QRCode APi
+    // const [generateQRCode, { data, isSuccess, isError, error }] = useGenerateQRCodeMutation();
+    // console.log('QRCode isSuccess', isSuccess)
+    // console.log('QRCode isError', isError)
+    // console.log('QRCode Error', error)
+
+    // useEffect(() => {
+    //     if (isSuccess) {
+    //         message.success({data?.message});
+    //     }
+    //     if (isError) {
+    //         message.error({data?.message});
+    //     }
+
+    // }, [isSuccess, isError]);
+
+
+    const handlePageChangeSurvey = (page) => {
+        setCurrentPageSurvey(page);
+    };
+
+    // const confirm = (e) => {
+    //     console.log(e);
+    //     message.success('Click on Yes');
+    // };
+    // const cancel = (e) => {
+    //     console.log(e);
+    //     message.error('Click on No');
+    // };
+
+
+    const CustomDropdownSurvey = (menu) => (
+        <div>
+            {menu}
+            <Pagination
+                className="custom-pagination-all py-4"
+                current={currentPageSurvey}
+                pageSize={pageSize}
+                total={surveys?.data?.total}
+                onChange={handlePageChangeSurvey}
+                style={{ textAlign: 'center', marginTop: 10 }}
+            />
+        </div>
+    );
+
+
     const [openAddModal, setOpenAddModal] = useState(false)
+    const [showQRCodeModal, setShowQRCodeModal] = useState(false)
+
+
     const [image, setImage] = useState(null)
     const columns = [
         {
@@ -45,21 +109,33 @@ const ManageEvent = () => {
                         <MdCloudDownload className='cursor-pointer' />
                     </button>
                     <button onClick={() => {
-                        setOpenAddModal(true)
+                        setShowQRCodeModal(true)
                     }}>
                         <FaEdit className='cursor-pointer' />
                     </button>
-                    <MdOutlineDelete className='cursor-pointer' />
+                    {/* <Popconfirm
+                        title="Delete the task"
+                        description="Are you sure to delete this task?"
+                        onConfirm={confirm}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                    > */}
+                        <MdOutlineDelete className='cursor-pointer' />
+                    {/* </Popconfirm> */}
+
+
                 </div>)
             }
         },
     ];
     const onFinish = (value) => {
+        console.log(value)
+        // generateQRCode(value.surveyId)
+        console.log(value.surveyId)
 
     }
-    const handleChange = (value) => {
-        console.log(`selected ${value}`);
-    };
+
     return (
         <div className='bg-[var(--color-7)] rounded-md'>
             <div className='between-center px-3 my-2 pt-5'>
@@ -83,68 +159,47 @@ const ManageEvent = () => {
                 onCancel={() => setOpenAddModal(false)}
             >
                 <div>
-                    <p className='text-xl py-2 font-semibold'>Create new Project</p>
+                    <p className='text-xl py-2 font-semibold'>Create new Event</p>
                     <Form className=''
                         layout='vertical'
                         onFinish={onFinish}
                     >
                         <Form.Item
-                            name={`projectName`}
-                            label={`Project Name`}
+                            name={`surveyId`}
+                            label={`Survey`}
                             rules={[
                                 {
-                                    message: 'Project Name is required',
+                                    message: 'Survey Name is required',
                                     required: true
                                 }
                             ]}
                         >
                             <Select className='w-full h-[42px]'
-                                defaultValue="lucy"
-                                onChange={handleChange}
-                                options={[
-                                    {
-                                        value: 'jack',
-                                        label: 'Jack',
-                                    },
-                                    {
-                                        value: 'lucy',
-                                        label: 'Lucy',
-                                    },
-                                    {
-                                        value: 'Yiminghe',
-                                        label: 'yiminghe',
-                                    },
-                                    {
-                                        value: 'disabled',
-                                        label: 'Disabled',
-                                        disabled: true,
-                                    },
-                                ]}
+                                placeholder="Select A Survey"
+                                options={surveryOptions}
+                                dropdownRender={CustomDropdownSurvey}
                             />
                         </Form.Item>
-                        <Form.Item
-                            name={`image`}
-                            label={`Upload Qr code Image`}
-                            rules={[
-                                {
-                                    message: ' Qr code Image Name is required',
-                                    required: true
-                                }
-                            ]}
-                        >
-                            <label className='w-full block py-2 h-[200px] border rounded-md' htmlFor='qrCode'>
-                                <img className='w-full h-full object-contain' src={image ? URL.createObjectURL(image) : 'https://i.ibb.co/9c2gMyK/transparent-upload-icon-free-png.webp'} alt="" />
-                            </label>
-                            <input onChange={(e) => {
-                                setImage(e.target.files[0])
-                            }} id='qrCode' type='file' accept='image/*' style={{
-                                display: 'none'
-                            }} />
-                        </Form.Item>
-                        <button className='w-full py-2 bg-[var(--color-2)] text-white font-semibold rounded-md'>
-                            save
+
+                        <button className='w-full py-4 bg-[var(--color-2)] text-white text-md rounded-md'>
+                            Generate QRCode
                         </button>
                     </Form>
+                </div>
+            </Modal>
+
+
+
+            {/* QRCode Modal */}
+            <Modal
+                centered
+                footer={false}
+                open={showQRCodeModal}
+                onCancel={() => setShowQRCodeModal(false)}
+            >
+                <div>
+                    <p className='text-xl py-2 font-semibold'>Scan QRCode</p>
+                    <img className=' w-[500px]' src={`https://i.ibb.co/yWzpt5t/download.png`} alt="" />
                 </div>
             </Modal>
         </div>
