@@ -1,9 +1,8 @@
-import { Input, Modal, Table } from 'antd';
+import { Modal, Pagination, Table } from 'antd';
 import React, { useState } from 'react'
-import { CiSearch } from 'react-icons/ci';
-import { FaEdit, FaRegEye, FaStar } from 'react-icons/fa';
-import { MdEdit, MdOutlineDelete } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { useGetProjectsQuery } from '../../redux/projects/projectApi';
+import { useGetProjectForManageCompanyQuery } from '../../redux/features/questions/questionsApi';
+
 const dataSource = [
     {
         key: '1',
@@ -45,7 +44,16 @@ const sarvayData = [
     { name: 'Customer Feedback', id: '9' },
 ]
 const SurveyRequest = () => {
-    
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
+
+    const { data: projects } = useGetProjectForManageCompanyQuery({
+        page: currentPage
+    });
+    console.log(projects)
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
     const [openAllowModal, setOpenAllowModal] = useState(false)
     const [selectedID, setSelectedID] = useState([])
 
@@ -117,10 +125,20 @@ const SurveyRequest = () => {
                             </div>)
                         }
                     </div>
-                    <button className='p-2 mt-5 w-full bg-[var(--color-2)]'>
-                        save
-                    </button>
+
                 </div>
+                <div className="py-2 mt-4">
+                    <Pagination
+                        className="custom-pagination-all"
+                        current={currentPage}
+                        pageSize={pageSize}
+                        total={projects?.data?.total}
+                        onChange={handlePageChange}
+                    />
+                </div>
+                <button className='p-2 mt-5 w-full bg-[var(--color-2)] text-white'>
+                    save
+                </button>
             </Modal>
         </div>
     )

@@ -70,7 +70,6 @@ const DriverGrowth = () => {
     };
 
     const { data: dashboardData } = useGetDashboardAnalyticsQuery();
-    console.log('data', dashboardData?.responses_by_month)
     const processedData = mapMonthNumberToName(dashboardData?.responses_by_month || []);
 
     return (
