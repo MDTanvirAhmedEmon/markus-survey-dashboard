@@ -1,39 +1,136 @@
-import { Form, Input, Modal, Select, Table } from 'antd';
-import React, { useState } from 'react'
+import { Form, Input, message, Modal, Pagination, Popconfirm, QRCode, Select, Table } from 'antd';
+import React, { useEffect, useRef, useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import { FaEdit, FaRegEye, FaStar } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
 import { IoArrowBackSharp } from 'react-icons/io5';
 import { MdCloudDownload, MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-const dataSource = [
-    {
-        id: '1',
-        eventsName: 'Mike',
-        QrCodeImage: 'https://i.ibb.co/yWzpt5t/download.png',
-    }
-]
+import { useGetSurveyForManageCompanyQuery } from '../redux/features/questions/questionsApi';
+import { useGenerateQRCodeMutation, useGetEventWithCRCodeQuery } from '../redux/features/Event/EventApi';
+
 const ManageEvent = () => {
+
+    const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
+
+    // get surveys 
+    const { data: surveys } = useGetSurveyForManageCompanyQuery({
+        page: currentPageSurvey
+    })
+
+    const surveryOptions = surveys?.data?.data?.map(survey => ({
+        value: survey.id,
+        label: survey.survey_name
+    }));
+    // QRCode Generation APi
+    const [generateQRCode, { data }] = useGenerateQRCodeMutation();
+
+    useEffect(() => {
+        if (data) {
+            message.success(data?.message);
+        }
+
+    }, [data]);
+
+    // get event with QRCode
+    const { data: event, isLoading } = useGetEventWithCRCodeQuery({
+        page: currentPage,
+    });
+
+    console.log("event", event?.survey?.total)
+
+
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+
+    const handlePageChangeSurvey = (page) => {
+        setCurrentPageSurvey(page);
+    };
+
+    const confirm = (e) => {
+        console.log(e);
+        message.success('Click on Yes');
+    };
+    const cancel = (e) => {
+        console.log(e);
+        message.error('Click on No');
+    };
+
+
+    const CustomDropdownSurvey = (menu) => (
+        <div>
+            {menu}
+            <Pagination
+                className="custom-pagination-all py-4"
+                current={currentPageSurvey}
+                pageSize={pageSize}
+                total={surveys?.data?.total}
+                onChange={handlePageChangeSurvey}
+                style={{ textAlign: 'center', marginTop: 10 }}
+            />
+        </div>
+    );
+
+
     const [openAddModal, setOpenAddModal] = useState(false)
+    const [showQRCodeModal, setShowQRCodeModal] = useState(false)
+
+
     const [image, setImage] = useState(null)
+
+    // for qrcode modal
+    const [selectedQRCode, setSelectedQRCode] = useState(null);
+    console.log('selected code')
+
+    const handleShowQRCodeModal = (qrCodeValue) => {
+        setSelectedQRCode(qrCodeValue);
+        setShowQRCodeModal(true);
+    };
+
+    const qrRef = useRef(null);
+    // download qrcode
+    const downloadQRCode = () => {
+        const qrElement = qrRef.current?.querySelector('canvas');
+        if (qrElement) {
+          const url = qrElement.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'qrcode.png';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      };
+
+
     const columns = [
         {
             title: 'Serial No',
             dataIndex: 'id',
             key: 'id',
+            render: (text, record, index) => index + 1,
         },
         {
             title: 'Events Name',
             dataIndex: 'eventsName',
-            key: 'eventsName ',
+            key: 'eventsName',
+            render: (_, record) => <p>{record?.survey?.survey_name}</p>,
         },
         {
             title: 'Qr Code Image',
             dataIndex: 'QrCodeImage',
             key: 'QrCodeImage',
-            render: (_, record) => (<div>
-                <img className='w-28' src={record?.QrCodeImage} alt="" />
-            </div>)
+            render: (_, record) => (
+                
+                <div ref={qrRef} >
+                    <QRCode size={80} value={`http://192.168.10.188:3001/surveyAllQuestions/${record?.barcode}`} />
+                </div>
+            ),
         },
         {
             title: 'Actions',
@@ -54,8 +151,11 @@ const ManageEvent = () => {
             }
         },
     ];
-    const onFinish = (value) => {
 
+
+    const onFinish = (value) => {
+        console.log(value)
+        generateQRCode(value.surveyId)
     }
     const handleChange = (value) => {
         console.log(`selected ${value}`);
@@ -90,12 +190,12 @@ const ManageEvent = () => {
                 <div className='end-center gap-2'>
                     <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
                     <button onClick={() => setOpenAddModal(true)} className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
-                        Add New Project
+                        Add New Event
                         <FaPlus />
                     </button>
                 </div>
             </div>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table dataSource={event?.survey?.data} columns={columns} pagination={false} />
             <Modal
                 centered
                 footer={false}
@@ -103,43 +203,25 @@ const ManageEvent = () => {
                 onCancel={() => setOpenAddModal(false)}
             >
                 <div>
-                    <p className='text-xl py-2 font-semibold'>Create new Project</p>
+                    <p className='text-xl py-2 font-semibold'>Create new Event</p>
                     <Form className=''
                         layout='vertical'
                         onFinish={onFinish}
                     >
                         <Form.Item
-                            name={`projectName`}
-                            label={`Project Name`}
+                            name={`surveyId`}
+                            label={`Survey`}
                             rules={[
                                 {
-                                    message: 'Project Name is required',
+                                    message: 'Survey Name is required',
                                     required: true
                                 }
                             ]}
                         >
                             <Select className='w-full h-[42px]'
-                                defaultValue="lucy"
-                                onChange={handleChange}
-                                options={[
-                                    {
-                                        value: 'jack',
-                                        label: 'Jack',
-                                    },
-                                    {
-                                        value: 'lucy',
-                                        label: 'Lucy',
-                                    },
-                                    {
-                                        value: 'Yiminghe',
-                                        label: 'yiminghe',
-                                    },
-                                    {
-                                        value: 'disabled',
-                                        label: 'Disabled',
-                                        disabled: true,
-                                    },
-                                ]}
+                                placeholder="Select A Survey"
+                                options={surveryOptions}
+                                dropdownRender={CustomDropdownSurvey}
                             />
                         </Form.Item>
                         <Form.Item
@@ -167,6 +249,32 @@ const ManageEvent = () => {
                     </Form>
                 </div>
             </Modal>
+
+
+
+            {/* QRCode Modal */}
+            <Modal
+                centered
+                footer={false}
+                open={showQRCodeModal}
+                onCancel={() => setShowQRCodeModal(false)}
+            >
+                <div>
+                    <p className="text-xl w-full py-8 font-semibold text-center">Scan QRCode</p>
+                    {selectedQRCode && (
+                        <QRCode className=' mx-auto' size={256} value={selectedQRCode} />
+                    )}
+                </div>
+            </Modal>
+            <div className="py-6">
+                <Pagination
+                    className="custom-pagination-all"
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={event?.survey?.total}
+                    onChange={handlePageChange}
+                />
+            </div>
         </div>
     )
 }

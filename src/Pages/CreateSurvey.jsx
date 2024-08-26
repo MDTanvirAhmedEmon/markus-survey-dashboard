@@ -7,11 +7,13 @@ import { Link } from 'react-router-dom';
 import '../assets/css/style.css';
 import dayjs from 'dayjs';
 import { useGetSurveyQuery, useDeleteSurveyMutation, useCreateSurveyMutation } from '../redux/features/survey/surveyApi';
+import { useGetProjectForManageCompanyQuery } from '../redux/features/questions/questionsApi';
 
 const CreateSurvey = () => {
     const [isPeriodically, setIsPeriodically] = useState(false);
     const [openAddModal, setOpenAddModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [projectCurrentPage, setprojectCurrentPage] = useState(1);
     const pageSize = 10;
 
 
@@ -34,7 +36,6 @@ const CreateSurvey = () => {
         message.error('Survey deletion canceled');
     };
 
-
     const { data: allSurver, isLoading } = useGetSurveyQuery({
         page: currentPage,
     }, {
@@ -43,11 +44,23 @@ const CreateSurvey = () => {
 
 
 
+    const { data: projects } = useGetProjectForManageCompanyQuery({
+        page: projectCurrentPage
+    });
+
+
+    const options = projects?.data?.data?.map(project => ({
+        value: project.id,
+        label: project.project_name
+    }));
+
+
     const columns = [
         {
             title: 'Serial No',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'serial',
+            key: 'serial',
+            render: (text, record, index) => ((currentPage - 1) * pageSize) + index + 1
         },
         {
             title: 'Survey Name',
@@ -96,7 +109,7 @@ const CreateSurvey = () => {
     console.log(isError)
     console.log(error)
 
-    
+
     useEffect(() => {
         if (isSuccess) {
             message.success("Project Created Successfully");
@@ -110,34 +123,52 @@ const CreateSurvey = () => {
 
     const onFinish = (value) => {
         console.log("Form values:", value);
-        
+
         let period = "once";
         if (value.period) {
             period = value.period;
         }
-        
+
         const formData = new FormData();
         formData.append("project_id", value.projectId);
         formData.append("survey_name", value.surveyName);
         formData.append("emoji_or_star", value.emojiOrStar);
         formData.append("repeat_status", period);
         formData.append("start_date", dayjs(value.startDate).format('YYYY-MM-DD'));
-        formData.append("end_date", dayjs(value.endDate).format('YYYY-MM-DD')); 
-    
+        formData.append("end_date", dayjs(value.endDate).format('YYYY-MM-DD'));
+
         // Log FormData entries
         for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
         }
-    
+
         createSurvey(formData);
     };
-    
-    
+
+
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
+
+    const handlePageChangeProject = (page) => {
+        setprojectCurrentPage(page);
+    };
+
+    const CustomDropdown = (menu) => (
+        <div>
+            {menu}
+            <Pagination
+                className="custom-pagination-all py-4"
+                current={projectCurrentPage}
+                pageSize={pageSize}
+                total={projects?.data?.total}
+                onChange={handlePageChangeProject}
+                style={{ textAlign: 'center', marginTop: 10 }}
+            />
+        </div>
+    );
 
     return (
         <div className='bg-[var(--color-7)] rounded-md'>
@@ -155,8 +186,6 @@ const CreateSurvey = () => {
                     </button>
                 </div>
             </div>
-
-
 
             {
                 deleteLoading || isLoading ? <div className=' h-[500px] flex items-center justify-center'>
@@ -178,10 +207,6 @@ const CreateSurvey = () => {
                         columns={columns}
                     />
             }
-
-
-
-
 
             <Modal
                 open={openAddModal}
@@ -222,7 +247,7 @@ const CreateSurvey = () => {
                                 }
                             ]}
                         >
-                            <Input className='pb-6 pt-2 border outline-none' placeholder='Type survey name here...' />
+                            <Input className='pb-3 pt-2 border outline-none' placeholder='Type survey name here...' />
                         </Form.Item>
 
                         <Form.Item
@@ -235,7 +260,14 @@ const CreateSurvey = () => {
                                 }
                             ]}
                         >
-                            <Input className='pb-6 pt-2 border outline-none' placeholder='Type unique survey id here...' />
+                            <Select className='w-full h-[42px]'
+                                placeholder="Select A Project"
+                                dropdownRender={CustomDropdown}
+                                options={options}
+
+                            >
+
+                            </Select>
                         </Form.Item>
 
                         {/* Toggle Button for Once and Periodically */}

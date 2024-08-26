@@ -12,12 +12,9 @@ const AddQuestions = () => {
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
     const pageSize = 10;
 
-
-
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-
 
     const handlePageChangeSurvey = (page) => {
         setCurrentPageSurvey(page);
@@ -60,22 +57,22 @@ const AddQuestions = () => {
     const onFinish = (value) => {
         console.log(value);
         const formData = new FormData();
-    
+
         formData.append("project_id", value.projectId);
         formData.append("survey_id", value.surveyId);
-    
+
         const questions = value.questions.map(question => ({
             question_en: question.englishQuestions,
             question_jer: question.germanyQuestions,
             comment: question.comment === "enable" ? true : false
         }));
-    
+
         // Stringify the questions array before appending
         formData.append("questions", JSON.stringify(questions));
-    
+
         createQuestions(formData);
     };
-    
+
 
 
     const handleChange = (value) => {

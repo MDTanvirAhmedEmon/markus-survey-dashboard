@@ -1,5 +1,3 @@
-
-import { Select } from 'antd';
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -102,20 +100,15 @@ const Overview = ({ company_growth_by_month }) => {
     return (
         <>
             <div className='between-center'>
-                <p className='text-2xl'>Survey and User Overview</p>
-                <Select
-                    defaultValue="2024"
-                    style={{ width: 120 }}
-                    onChange={handleChange}
-                    options={items}
-                />
+                <p className='text-2xl'>Project Per Month</p>
+
             </div>
             <div className='w-full h-[400px]'>
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         width={500}
                         height={500}
-                        data={data}
+                        data={processedData}
                         margin={{
                             top: 20,
                             right: 30,
@@ -124,12 +117,12 @@ const Overview = ({ company_growth_by_month }) => {
                         }}
 
                     >
-                        <XAxis dataKey="name" tickLine={false} axisLine={false} tickMargin={10} data={false} />
+                        <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={10} data={false} />
                         <YAxis tickLine={false} axisLine={false} />
                         <Tooltip />
                         <Legend />
-                        <Bar barSize={10} dataKey="pv" stackId="a" fill="#D4A005" />
-                        <Bar radius={[10, 10, 0, 0]} dataKey="uv" stackId="a" fill="#ECB206" />
+                        <Bar barSize={10} dataKey="count" stackId="a" fill="#D4A005" />
+                        <Bar radius={[10, 10, 0, 0]} dataKey="count" stackId="a" fill="#ECB206" />
                     </BarChart>
                 </ResponsiveContainer>
             </div>

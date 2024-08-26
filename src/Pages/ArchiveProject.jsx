@@ -1,117 +1,125 @@
-import { Form, Input, Modal, Select, Table } from 'antd';
-import React, { useState } from 'react'
+import { ConfigProvider, Input, Pagination, Spin, Table } from 'antd';
+import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import { FaEdit, FaRegEye, FaStar } from 'react-icons/fa';
-import { FaPlus } from 'react-icons/fa6';
+import { FaEdit, FaRegEye } from 'react-icons/fa';
 import { IoArrowBackSharp } from 'react-icons/io5';
-import { MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-const dataSource = [
-    {
-        id: '1',
-        ProjectName: 'Mike',
-        surveyName: 'Survey 2',
-        totalQuestion: 635,
-        date: '05/12/2024',
-        totalSurveyDone: 526,
-    }
-]
-
+import { useGetCompanySurveyQuery } from '../redux/features/manageCompany/manageCompanyApi';
 
 const ArchiveProject = () => {
-    const [openAddModal, setOpenAddModal] = useState(false)
+
+    const [searchTerm, setSearchTerm] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
+
+    const { data, isLoading } = useGetCompanySurveyQuery({
+        page: currentPage,
+        search: searchTerm,
+    });
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const dataSource = data?.data?.map((item, index) => ({
+        key: item.id,
+        id: index + 1,
+        project_name: item?.project?.project_name,
+        survey_name: item?.survey_name,
+        questions_count: item?.questions_count,
+        end_date: item?.end_date,
+        answers_count: item?.answers_count,
+    })) || [];
+
     const columns = [
         {
             title: 'Serial No',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'serial',
+            key: 'serial',
+            render: (text, record, index) => ((currentPage - 1) * pageSize) + index + 1
         },
         {
             title: 'Projects Name',
-            dataIndex: 'ProjectName',
-            key: 'ProjectName ',
+            dataIndex: 'project_name',
+            key: 'project_name',
         },
         {
             title: 'Survey Name',
-            dataIndex: 'surveyName',
-            key: 'surveyName  ',
+            dataIndex: 'survey_name',
+            key: 'survey_name',
         },
         {
-            title: 'Total Question',
-            dataIndex: 'totalQuestion',
-            key: 'totalQuestion  ',
+            title: 'Total Questions',
+            dataIndex: 'questions_count',
+            key: 'questions_count',
         },
         {
             title: 'Date',
-            dataIndex: 'date',
-            key: 'date  ',
+            dataIndex: 'end_date',
+            key: 'end_date',
         },
         {
-            title: 'Total survey done',
-            dataIndex: 'totalSurveyDone',
-            key: 'totalSurveyDone  ',
+            title: 'Total Surveys Done',
+            dataIndex: 'answers_count',
+            key: 'answers_count',
         },
         {
             title: 'Actions',
-            dataIndex: 'key',
-            key: 'key',
-            render: (_, record) => {
-                return (<div className='start-center text-2xl gap-1'>
-                    <MdOutlineDelete className='cursor-pointer' />
-                </div>)
-            }
+            key: 'actions',
+            render: (_, record) => (
+                <div className='start-center text-2xl gap-1'>
+                    <Link to={`/survey-report/${record.key}`}>
+                        <FaRegEye className='cursor-pointer' />
+                    </Link>
+                    <Link to={`/edit-survey-question/${record.key}`}>
+                        <FaEdit className='cursor-pointer' />
+                    </Link>
+                </div>
+            ),
         },
     ];
-    const handleChange = (value) => {
-        console.log(`selected ${value}`);
-    };
-    const onFinish = (value) => {
 
-    }
     return (
-        <div className='bg-[var(--color-7)] rounded-md'>
+        <div className='bg-[var(--color-7)] pb-6 rounded-md'>
             <div className='between-center px-3 my-2 pt-5'>
                 <div className='start-center gap-2 mb-3 p-5'>
-                    <Link to={-1} className='bg-[var(--color-2)] py-1 px-2 rounded-md start-center gap-1 text-white'><IoArrowBackSharp />back</Link>
+                    <Link to={-1} className='bg-[var(--color-2)] py-1 px-2 rounded-md start-center gap-1 text-white'>
+                        <IoArrowBackSharp />back
+                    </Link>
                     <p className='text-xl'>Archive Project</p>
                 </div>
                 <div className='end-center gap-2'>
-                <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
+                    <Input onChange={(e) => setSearchTerm(e.target.value)} className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
                 </div>
             </div>
-            <Table dataSource={dataSource} columns={columns} />
-            <Modal
-                open={openAddModal}
-                centered
-                footer={false}
-                onCancel={() => setOpenAddModal(false)}
-            >
-                <div>
-                    <p className='text-xl py-2 font-semibold'>Create new survey</p>
-                    <Form className=''
-                        layout='vertical'
-                        onFinish={onFinish}
+
+            {isLoading ? (
+                <div className='h-[500px] flex items-center justify-center'>
+                    <ConfigProvider
+                        theme={{
+                            token: {
+                                colorPrimary: "#ECB206",
+                            },
+                        }}
                     >
-                        <Form.Item
-                            name={`surveyName`}
-                            label={`Survey Name`}
-                            rules={[
-                                {
-                                    message: 'Survey Name is required',
-                                    required: true
-                                }
-                            ]}
-                        >
-                            <Input className='pb-8 pt-2 border outline-none' placeholder='Type survey name here...' />
-                        </Form.Item>
-                        <button className='w-full py-2 bg-[var(--color-2)] text-white font-semibold rounded-md'>
-                            save
-                        </button>
-                    </Form>
+                        <Spin size="large" />
+                    </ConfigProvider>
                 </div>
-            </Modal>
+            ) : (
+                <Table className='' pagination={false} dataSource={dataSource} columns={columns} />
+            )}
+
+
+
+            <Pagination
+                className="custom-pagination-all my-6"
+                current={currentPage}
+                pageSize={pageSize}
+                total={data?.total}
+                onChange={handlePageChange}
+            />
         </div>
-    )
+    );
 }
 
-export default ArchiveProject
+export default ArchiveProject;

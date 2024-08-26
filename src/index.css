@@ -112,6 +112,15 @@ ul.ant-pagination.custom-pagination-all.css-dev-only-do-not-override-98ntnt {
   display: none;
 }
 
-.gap-5 {
+
+/* sidebar */
+.start-start.flex-col.gap-5.text-white.custom-sidebar {
   gap: .5rem;
+}
+
+.w-full.custom-submenu {
+  margin-top: 15px;
+}
+.custom-submenu-item{
+  margin-top: 10px;
 }

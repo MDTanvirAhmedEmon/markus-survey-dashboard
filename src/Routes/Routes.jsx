@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Root from "../Pages/Root";
 import App from "../App";
-import TotalSurveyRequest from "../Pages/TotalSurveyRequest";
 import DriverProfile from "../Pages/DriverProfile";
 import UserTable from "../Components/Dashboard/UserTable";
 import PrivacyPolicy from "../Pages/PrivacyPolicy";
@@ -11,12 +10,10 @@ import Profile from "../Pages/Profile";
 import CreateProject from "../Pages/CreateProject";
 import CreateSurvey from "../Pages/CreateSurvey";
 import ManageCompany from "../Pages/ManageCompany";
-import AddProject from "../Pages/AddProject";
 import ManageEvent from "../Pages/ManageEvent";
 import ArchiveProject from "../Pages/ArchiveProject";
 import SurveyResult from "../Pages/SurveyResult";
 import Notification from "../Pages/Notification.jsx";
-import ProjectDetails from "../Pages/SurveyReport.jsx";
 import SurveyComment from "../Pages/SurveyComment.jsx";
 import SurveyBasedUser from "../Pages/SurveyBasedUser.jsx";
 // import Login from "../Pages/Auth/Login.jsx";
@@ -36,7 +33,8 @@ import AllQuestionAnsPage from "../Pages/SurvayPages/AllQuestionAnsPage.jsx";
 import SelectLanguagePage from "../Pages/SurvayPages/SelectLanguagePage.jsx";
 import SurveyQuestions from "../Pages/SurvayPages/SurveyQuestions.jsx";
 import ThankYouPage from "../Pages/SurvayPages/ThankYouPage.jsx";
-
+import AllSurveyComments from "../Pages/AllSurveyComments.jsx";
+import TotalEmployeeRequest from "../Pages/TotalSurveyRequest";
 
 // import Otp from "../Pages/Auth/Otp.jsx";
 
@@ -52,8 +50,8 @@ export const router = createBrowserRouter([
                 element: <App />,
             },
             {
-                path: '/total-survey-request',
-                element: <TotalSurveyRequest />,
+                path: '/total-employee-request',
+                element: <TotalEmployeeRequest />,
             },
             {
                 path: '/driver-details/:id',
@@ -96,8 +94,12 @@ export const router = createBrowserRouter([
                 element: <ArchiveProject />,
             },
             {
-                path: '/add-project',
+                path: '/add-questions',
                 element: <AddQuestions />,
+            },
+            {
+                path: '/all-survey-comments/:id',
+                element: <AllSurveyComments />,
             },
 
             {

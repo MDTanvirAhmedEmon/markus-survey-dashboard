@@ -1,7 +1,6 @@
-import { RiEditLine } from "react-icons/ri";
-import React, { useEffect, useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { Button, Form, Input } from "antd";
+
+import React, { useState } from "react";
+import { Button, ConfigProvider, Form, Input, Spin } from "antd";
 import { CiEdit } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
@@ -92,16 +91,13 @@ const Profile = () => {
                 <div className='bg-base py-9 px-10 rounded flex items-center justify-center flex-col gap-6'>
                     <div className='relative w-[140px] h-[124px] mx-auto'>
                         <input type="file" onInput={handleChange} id='img' style={{ display: "none" }} />
+                        <input type="file" onInput={handleChange} id='img' style={{ display: "none" }} />
                         <img
                             style={{ width: 140, height: 140, borderRadius: "100%" }}
                             src={image ? URL.createObjectURL(image) : data?.user?.image ? `${imageUrl}${data?.user?.image}` : `https://dcassetcdn.com/design_img/2531172/542774/542774_13559578_2531172_d07764e6_image.png`}
                             alt=""
                         />
-                        {/* <img
-              style={{ width: 140, height: 140, borderRadius: "100%" }}
-              src={`${image ? URL.createObjectURL(image) : user?.profile_image?.includes('http') ? 'https://i.ibb.co/d4RSbKx/Ellipse-980.png' : `${ServerUrl}${user.profile_image}`}`}
-              alt=""
-            /> */}
+
                         {
                             tab === "Profile" && <label
                                 htmlFor="img"
@@ -115,12 +111,13 @@ const Profile = () => {
                         '
                             >
                                 <CiEdit color='#929394' />
+                                <CiEdit color='#929394' />
                             </label>
                         }
 
                     </div>
                     <div className='w-fit'>
-                        <p className=' text-[#575757] text-[24px] leading-[32px] font-semibold  '>{`XYZ Company`}</p>
+                        <p className=' text-[#575757] text-[24px] leading-[32px] font-semibold  '>{profileData?.user?.name}</p>
                     </div>
                 </div>
 
@@ -128,7 +125,7 @@ const Profile = () => {
                     <p
                         onClick={() => handlePageChange("Profile")}
                         className={`
-                        ${tab === "Profile" ? "border-[#F27405] border-b-2 font-semibold text-[#F27405]" : "border-b-2 border-transparent font-normal text-gray-600"}
+                        ${tab === "Profile" ? "border-[#ECB206] border-b-2 font-semibold text-[#ECB206]" : "border-b-2 border-transparent font-normal text-gray-600"}
                         pb-2 cursor-pointer text-[16px] leading-5  
                     `}
                     >
@@ -137,7 +134,7 @@ const Profile = () => {
                     <p
                         onClick={() => handlePageChange("Change Password")}
                         className={`
-                        ${tab === "Change Password" ? "border-[#F27405] border-b-2 font-semibold text-[#F27405]" : "border-b-2 border-transparent font-normal  text-gray-600"}
+                        ${tab === "Change Password" ? "border-[#ECB206] border-b-2 font-semibold text-[#ECB206]" : "border-b-2 border-transparent font-normal  text-gray-600"}
                         pb-2 cursor-pointer text-base leading-[18px]  
                     `}
                     >
@@ -174,8 +171,8 @@ const Profile = () => {
                                             color: "#919191",
                                             outline: "none"
                                         }}
+                                        defaultValue={profileData?.user?.name}
                                         className='text-[16px] leading-5'
-                                        placeholder="XYZ Company"
                                     />
                                 </Form.Item>
                                 <Form.Item
@@ -192,8 +189,8 @@ const Profile = () => {
                                             color: "#919191",
                                             outline: "none"
                                         }}
-                                        className='text-[16px] leading-5'
-                                        placeholder={`user email`}
+                                        defaultValue={profileData?.user?.email} className='text-[16px] leading-5'
+
                                     />
                                 </Form.Item>
 
@@ -211,8 +208,9 @@ const Profile = () => {
                                             color: "#919191",
                                             outline: "none"
                                         }}
+                                        defaultValue={profileData?.user?.phone_number}
                                         className='text-[16px] leading-5'
-                                        placeholder="Enter Contact Number"
+
                                     />
                                 </Form.Item>
                                 <Form.Item
@@ -228,8 +226,8 @@ const Profile = () => {
                                             color: "#919191",
                                             outline: "none"
                                         }}
+                                        defaultValue={profileData?.user?.address}
                                         className='text-[16px] leading-5'
-                                        placeholder="Enter Address"
                                     />
                                 </Form.Item>
 
@@ -251,7 +249,7 @@ const Profile = () => {
                                             color: "#FCFCFC",
                                             background: '#F27405'
                                         }}
-                                        className='font-normal text-[16px] leading-6 bg-primary'
+                                        className='font-normal text-[16px] leading-6 bg-[#ECB206]'
                                     >
                                         Changes Password
                                     </Button>
@@ -369,7 +367,7 @@ const Profile = () => {
                                             color: "#FCFCFC",
                                             background: '#F27405'
                                         }}
-                                        className='font-normal text-[16px] leading-6 bg-primary'
+                                        className='font-normal text-[16px] leading-6 bg-[#ECB206]'
                                     >
                                         Save Changes
                                     </Button>

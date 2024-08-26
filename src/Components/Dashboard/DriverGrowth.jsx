@@ -80,19 +80,14 @@ const DriverGrowth = ({ users_by_month }) => {
         <>
             <div className='between-center'>
                 <p className='text-2xl'>Survey Response</p>
-                <Select
-                    defaultValue="2024"
-                    style={{ width: 120 }}
-                    onChange={handleChange}
-                    options={items}
-                />
+
             </div>
             <div className='w-full h-[400px]'>
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
                         width={500}
                         height={400}
-                        data={data}
+                        data={processedData}
                         margin={{
                             top: 10,
                             right: 30,
@@ -103,7 +98,7 @@ const DriverGrowth = ({ users_by_month }) => {
                         <XAxis dataKey="name" tickLine={false} axisLine={false} tickMargin={10} />
                         <YAxis tickLine={false} axisLine={false} />
                         <Tooltip />
-                        <Area type="monotone" dataKey="uv" stroke="#ECB206" opacity={1} fillOpacity={1} fill="#ECB206" />
+                        <Area type="monotone" dataKey="count" stroke="#ECB206" opacity={1} fillOpacity={1} fill="#ECB206" />
                     </AreaChart>
                 </ResponsiveContainer>
             </div>

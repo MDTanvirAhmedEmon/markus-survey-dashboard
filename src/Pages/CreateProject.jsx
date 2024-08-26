@@ -7,6 +7,7 @@ import { MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useCreateProjectMutation, useDeleteProjectMutation, useGetProjectsQuery } from '../redux/projects/projectApi';
 import moment from 'moment';
+import { MakeFormData } from '../utils/FormDataHooks';
 
 const CreateProject = () => {
     const [openAddModal, setOpenAddModal] = useState(false);
@@ -14,10 +15,8 @@ const CreateProject = () => {
     const [searchTerm, setSearchTerm] = useState(null);
     const pageSize = 10;
 
-    console.log(currentPage)
-
     // delete project
-    const [ deleteProject, {isLoading:deleteLoading} ] = useDeleteProjectMutation();
+    const [deleteProject, { isLoading: deleteLoading }] = useDeleteProjectMutation();
     // Pop confirm
     const confirm = async (projectId) => {
         console.log(projectId)
@@ -59,8 +58,9 @@ const CreateProject = () => {
     const columns = [
         {
             title: 'Serial No',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'serial',
+            key: 'serial',
+            render: (text, record, index) => ((currentPage - 1) * pageSize) + index + 1
         },
         {
             title: 'Projects Name',
@@ -98,8 +98,10 @@ const CreateProject = () => {
     ];
 
     const onFinish = (value) => {
-        const formData = new FormData();
-        formData.append("project_name", value.project_name);
+        // const formData = new FormData();
+        // formData.append("project_name", value.project_name);
+
+        const formData = MakeFormData(value)
         createProject(formData);
     };
 
