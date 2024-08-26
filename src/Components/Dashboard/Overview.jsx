@@ -14,7 +14,6 @@ const Overview = () => {
     };
 
     const { data: dashboardData } = useGetDashboardAnalyticsQuery();
-    console.log('data', dashboardData?.projects_by_month)
     const processedData = mapMonthNumberToName(dashboardData?.projects_by_month || []);
 
 

@@ -5,6 +5,11 @@ import { CiSearch } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { useGetProjectForManageCompanyQuery, useGetSurveyForManageCompanyQuery } from "../redux/features/questions/questionsApi";
 import { useGetSurveyResultReportQuery } from "../redux/features/survey/surveyApi";
+import { useRef } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
+
 
 const SurveyResult = () => {
 
@@ -88,6 +93,59 @@ const SurveyResult = () => {
         console.log(values);
     };
     const data = ['https://i.ibb.co/0sF5Fk3/images-19.jpg', 'https://i.ibb.co/YpR8Mbw/Ellipse-307.png', 'https://i.ibb.co/JFZhZ7m/Ellipse-311.png', 'https://i.ibb.co/5cXN4Bw/Ellipse-310.png', 'https://i.ibb.co/gz2CbVj/1-intro-photo-final.jpg', 'https://i.ibb.co/7xc44sq/profile-picture-smiling-young-african-260nw-1873784920.webp', 'https://i.ibb.co/sQPHfnR/images-20.jpg']
+
+    // pdf
+    const printRef = useRef(null);
+
+    const handleExportAsPDF = async () => {
+        const inputData = printRef.current;
+        try {
+            const canvas = await html2canvas(inputData);
+            const imgData = canvas.toDataURL("image/png");
+    
+            const pdf = new jsPDF({
+                orientation: "landscape",
+                unit: "px",
+                format: "a4",
+            });
+    
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = imgWidth / imgHeight;
+    
+            let heightLeft = imgHeight;
+            let position = 0;
+    
+            while (heightLeft > 0) {
+                const currentHeight = Math.min(pdfHeight, heightLeft);
+                const canvasWidth = currentHeight * ratio;
+    
+                pdf.addImage(
+                    imgData,
+                    "PNG",
+                    0,
+                    position,
+                    pdfWidth,
+                    currentHeight * (pdfWidth / canvasWidth)
+                );
+    
+                heightLeft -= pdfHeight;
+                position -= pdfHeight;
+    
+                if (heightLeft > 0) {
+                    pdf.addPage();
+                }
+            }
+    
+            pdf.save("survey.pdf");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
+    
 
     return (
         <>
@@ -194,86 +252,88 @@ const SurveyResult = () => {
                             </ConfigProvider>
                         </div>
                     ) : reportData ? (
-                        <>
-                            {reportData.map((question, index) => (
-                                <div className="" key={index}>
-                                    <div className="flex">
-                                        <div className="w-[40%]">
-                                            {index + 1}. {question?.question}
-                                        </div>
-                                        <div className="w-[60%]">
-                                            <div>
-                                                <div className="h-12 bg-red-500 flex">
-                                                    <div
-                                                        className="bg-[#ECB206] h-12 flex items-center justify-center"
-                                                        style={{ width: `${question.option_percentages[1]}%` }}
-                                                    >
-                                                        {question.option_percentages[1] !== 0 && (
-                                                            <p className="text-white">{question.option_percentages[1]}%</p>
-                                                        )}
+                        <div>
+                            <div className="p-10" ref={printRef}>
+                                {reportData.map((question, index) => (
+                                    <div className="" key={index}>
+                                        <div className="flex">
+                                            <div className="w-[40%]">
+                                                {index + 1}. {question?.question}
+                                            </div>
+                                            <div className="w-[60%]">
+                                                <div>
+                                                    <div className="h-12 bg-red-500 flex">
+                                                        <div
+                                                            className="bg-[#ECB206] h-12 flex items-center justify-center"
+                                                            style={{ width: `${question.option_percentages[1]}%` }}
+                                                        >
+                                                            {question.option_percentages[1] !== 0 && (
+                                                                <p className="text-white">{question.option_percentages[1]}%</p>
+                                                            )}
+                                                        </div>
+                                                        <div
+                                                            className="bg-[#1E3042] h-12 flex items-center justify-center"
+                                                            style={{ width: `${question.option_percentages[2]}%` }}
+                                                        >
+                                                            {question.option_percentages[2] !== 0 && (
+                                                                <p className="text-white">{question.option_percentages[2]}%</p>
+                                                            )}
+                                                        </div>
+                                                        <div
+                                                            className="bg-[#F9E7B2] h-12 flex items-center justify-center"
+                                                            style={{ width: `${question.option_percentages[3]}%` }}
+                                                        >
+                                                            {question.option_percentages[3] !== 0 && (
+                                                                <p className="text-black">{question.option_percentages[3]}%</p>
+                                                            )}
+                                                        </div>
+                                                        <div
+                                                            className="bg-[#85714D] h-12 flex items-center justify-center"
+                                                            style={{ width: `${question.option_percentages[4]}%` }}
+                                                        >
+                                                            {question.option_percentages[4] !== 0 && (
+                                                                <p className="text-white">{question.option_percentages[4]}%</p>
+                                                            )}
+                                                        </div>
+                                                        <div
+                                                            className="bg-[#533E02] h-12 flex items-center justify-center"
+                                                            style={{ width: `${question.option_percentages[5]}%` }}
+                                                        >
+                                                            {question.option_percentages[5] !== 0 && (
+                                                                <p className="text-white">{question.option_percentages[5]}%</p>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                    <div
-                                                        className="bg-[#1E3042] h-12 flex items-center justify-center"
-                                                        style={{ width: `${question.option_percentages[2]}%` }}
-                                                    >
-                                                        {question.option_percentages[2] !== 0 && (
-                                                            <p className="text-white">{question.option_percentages[2]}%</p>
-                                                        )}
+                                                    <div className="flex items-center justify-between">
+                                                        <p className="text-lg font-semibold">Overall survey 500</p>
+                                                        <p className="text-[#ECB206]">QR Code 250 Use App 250</p>
+                                                        <p className="text-lg font-semibold">User Comments {question?.total_comments}+</p>
+                                                        <div className="flex justify-center items-center mb-8 mt-6">
+                                                            {data.map((item, idx) => (
+                                                                <img
+                                                                    className="w-10 h-10 rounded-full -ml-4"
+                                                                    key={idx}
+                                                                    src={item}
+                                                                    alt=""
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                        <Link to={`/all-survey-comments/${question?.question_id}`} >
+                                                            <p className="text-lg text-[#ECB206]">View All</p>
+                                                        </Link>
                                                     </div>
-                                                    <div
-                                                        className="bg-[#F9E7B2] h-12 flex items-center justify-center"
-                                                        style={{ width: `${question.option_percentages[3]}%` }}
-                                                    >
-                                                        {question.option_percentages[3] !== 0 && (
-                                                            <p className="text-black">{question.option_percentages[3]}%</p>
-                                                        )}
-                                                    </div>
-                                                    <div
-                                                        className="bg-[#85714D] h-12 flex items-center justify-center"
-                                                        style={{ width: `${question.option_percentages[4]}%` }}
-                                                    >
-                                                        {question.option_percentages[4] !== 0 && (
-                                                            <p className="text-white">{question.option_percentages[4]}%</p>
-                                                        )}
-                                                    </div>
-                                                    <div
-                                                        className="bg-[#533E02] h-12 flex items-center justify-center"
-                                                        style={{ width: `${question.option_percentages[5]}%` }}
-                                                    >
-                                                        {question.option_percentages[5] !== 0 && (
-                                                            <p className="text-white">{question.option_percentages[5]}%</p>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center justify-between">
-                                                    <p className="text-lg font-semibold">Overall survey 500</p>
-                                                    <p className="text-[#ECB206]">QR Code 250 Use App 250</p>
-                                                    <p className="text-lg font-semibold">User Comments {question?.total_comments}+</p>
-                                                    <div className="flex justify-center items-center mb-8 mt-6">
-                                                        {data.map((item, idx) => (
-                                                            <img
-                                                                className="w-10 h-10 rounded-full -ml-4"
-                                                                key={idx}
-                                                                src={item}
-                                                                alt=""
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                    <Link to={`/all-survey-comments/${question?.question_id}`} >
-                                                        <p className="text-lg text-[#ECB206]">View All</p>
-                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                             <div className="flex justify-center my-8">
-                                <button className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">
+                                <button onClick={handleExportAsPDF} className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">
                                     Export
                                 </button>
                             </div>
-                        </>
+                        </div>
                     ) : (
                         <div className="h-[300px] w-full flex justify-center items-center">
                             <p className="text-3xl text-black">Please Select A Project & A Survey</p>

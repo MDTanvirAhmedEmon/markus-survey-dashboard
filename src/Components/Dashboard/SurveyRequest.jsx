@@ -1,77 +1,71 @@
-import { Input, Modal, Table } from 'antd';
-import React, { useState } from 'react'
-import { CiSearch } from 'react-icons/ci';
-import { FaEdit, FaRegEye, FaStar } from 'react-icons/fa';
-import { MdEdit, MdOutlineDelete } from 'react-icons/md';
-import { Link } from 'react-router-dom';
-const dataSource = [
-    {
-        key: '1',
-        name: 'Mike',
-        img: 'https://i.ibb.co/F3jcwjJ/artworks-YCx-Rfx-OOf-T5l-Dm-J9-K5q-X2-A-t500x500.jpg',
-        phone: 324189454648487,
-        rating: 4.5,
-        email: 'gmail@ gmail.com',
-        regNo: '225.555.0118'
-    },
-    {
-        key: '2',
-        name: 'Mike',
-        img: 'https://i.ibb.co/F3jcwjJ/artworks-YCx-Rfx-OOf-T5l-Dm-J9-K5q-X2-A-t500x500.jpg',
-        phone: 324189454648487,
-        rating: 4.5,
-        email: 'gmail@ gmail.com',
-        regNo: '225.555.0118'
-    },
-    {
-        key: '3 ',
-        name: 'Mike',
-        img: 'https://i.ibb.co/F3jcwjJ/artworks-YCx-Rfx-OOf-T5l-Dm-J9-K5q-X2-A-t500x500.jpg',
-        phone: 324189454648487,
-        rating: 4.5,
-        email: 'gmail@ gmail.com',
-        regNo: '225.555.0118'
-    },
-]
-const sarvayData = [
-    { name: 'Customer Feedback', id: '1' },
-    { name: 'Customer Feedback', id: '2' },
-    { name: 'Customer Feedback', id: '3' },
-    { name: 'Customer Feedback', id: '4' },
-    { name: 'Customer Feedback', id: '5' },
-    { name: 'Customer Feedback', id: '6' },
-    { name: 'Customer Feedback', id: '7' },
-    { name: 'Customer Feedback', id: '8' },
-    { name: 'Customer Feedback', id: '9' },
-]
+import { ConfigProvider, message, Modal, Pagination, Spin, Table } from 'antd';
+import React, { useEffect, useState } from 'react'
+import { useAcceptRequestMutation, useGetEmployeeRequestQuery, useGetProjectsForSurveyRequestQuery } from '../../redux/features/employeeRequest/employeeRequestApi';
+import { MakeFormData } from '../../utils/FormDataHooks';
+
+
 const SurveyRequest = () => {
-    
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
+
+    // get all company
+    const { data: projects } = useGetProjectsForSurveyRequestQuery({
+        page: currentPage
+    });
+    console.log(projects)
+
+    // employee request api
+    const { data } = useGetEmployeeRequestQuery();
+
+    // accept request
+    const [acceptRequest, { isLoading, isSuccess, isError }] = useAcceptRequestMutation();
+
+    useEffect(() => {
+        if (isSuccess) {
+            message.success("Accepted Request Successfully");
+        } else if (isError) {
+            message.error("Request Acceptance Failed");
+        }
+    }, [isSuccess, isError]);
+
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
     const [openAllowModal, setOpenAllowModal] = useState(false)
     const [selectedID, setSelectedID] = useState([])
+    const [userId, setUserId] = useState(null);
+    const [Id, setId] = useState(null);
+
 
     const columns = [
         {
             title: 'Serial No',
-            dataIndex: 'key',
-            key: 'key',
+            dataIndex: 'serial',
+            key: 'serial',
+            render: (text, record, index) => index + 1
         },
         {
             title: 'Email',
             dataIndex: 'email',
             key: 'email  ',
+            render: (_, record) => {
+                return (<div className=''>
+                    <p className='font-medium'>{record?.user?.email}</p>
+                </div>)
+            }
         },
         {
             title: 'User',
             dataIndex: 'name',
             key: 'name',
             render: (_, record) => {
-                return (<div className='start-center gap-2'>
-                    <img src={record?.img} className='w-[40px] h-[40px] rounded-sm' alt="" />
-                    <p className='font-medium'>{record?.name}</p>
+                return (<div className='flex items-center gap-3'>
+                    <img src={record?.user?.image} className='w-[40px] h-[40px] rounded-sm' alt="" />
+                    <p className='font-medium'>{record?.user?.name}</p>
                 </div>)
             }
         },
-
         {
             title: 'Request',
             dataIndex: 'key',
@@ -79,7 +73,16 @@ const SurveyRequest = () => {
             key: 'key',
             render: (_, record) => {
                 return (<div className='start-center gap-1'>
-                    <button onClick={() => setOpenAllowModal(true)} className='px-4 py-2 rounded-3xl text-white font-semibold bg-green-600'> Allow </button>
+                    <button
+                        onClick={() => {
+                            setOpenAllowModal(true);
+                            setUserId(record?.user_id);
+                            setId(record?.id);
+                        }}
+                        className='px-4 py-2 rounded-3xl text-white font-semibold bg-green-600'
+                    >
+                        Allow
+                    </button>
                     <button className='px-4 py-2 rounded-3xl text-white font-semibold bg-red-600'> Cancel </button>
                 </div>)
             },
@@ -88,12 +91,42 @@ const SurveyRequest = () => {
 
     ];
 
+    const handleSave = () => {
+        console.log(selectedID)
+        console.log(userId)
+        console.log(Id)
+        const data = {
+            id: Id,
+            project_ids: selectedID,
+            user_id: userId
+        }
+        console.log("form handler", data)
+        const formData = MakeFormData(data);
+        console.log(formData)
+        acceptRequest(formData)
+    };
 
+    if (isLoading) {
+        return (
+            <div className='h-[600px] flex items-center justify-center'>
+                <ConfigProvider
+                    theme={{
+                        token: {
+                            colorPrimary: "#ECB206",
+                        },
+                    }}
+                >
+                    <Spin size="large" />
+                </ConfigProvider>
+            </div>
+        )
+    }
 
+    const slicedData = data?.data?.data?.slice(0, 3) || [];
 
     return (
         <div className='bg-[var(--color-7)] rounded-md mb-8'>
-            <Table className='dashboard-custom-table' pagination={false} dataSource={dataSource} columns={columns} />
+            <Table className='dashboard-custom-table' pagination={false} dataSource={slicedData} columns={columns} />
             <Modal
                 centered
                 footer={false}
@@ -104,7 +137,7 @@ const SurveyRequest = () => {
                     <p className='mb-5 text-left text-xl my-2'>Assign Project</p>
                     <div className='grid grid-cols-3 gap-4 justify-start items-center '>
                         {
-                            sarvayData?.map((item) => <div key={item?.id} onClick={() => {
+                            projects?.data?.data?.map((item) => <div key={item?.id} onClick={() => {
                                 const findId = selectedID.find(id => item?.id === id)
                                 if (findId) {
                                     const filterID = selectedID.filter(id => item?.id !== id)
@@ -112,15 +145,25 @@ const SurveyRequest = () => {
                                 } else {
                                     setSelectedID([...selectedID, item?.id])
                                 }
-                            }} className={`w-full p-4 py-6 rounded-md text-white font-semibold text-center cursor-pointer select-none ${selectedID.includes(item?.id) ? 'bg-[#BD8E05]' : 'bg-[var(--color-2)]'}`}>
-                                <p className='text-base'>{item?.name}</p>
+                            }} className={`w-full p-4 py-10 rounded-md text-white font-semibold text-center cursor-pointer select-none ${selectedID.includes(item?.id) ? 'bg-[#BD8E05]' : 'bg-[var(--color-2)]'}`}>
+                                <p className='text-base'>{item?.project_name}</p>
                             </div>)
                         }
                     </div>
-                    <button className='p-2 mt-5 w-full bg-[var(--color-2)]'>
-                        save
-                    </button>
+
                 </div>
+                <div className="py-2 mt-4">
+                    <Pagination
+                        className="custom-pagination-all"
+                        current={currentPage}
+                        pageSize={pageSize}
+                        total={projects?.data?.total}
+                        onChange={handlePageChange}
+                    />
+                </div>
+                <button onClick={handleSave} className='p-2 mt-5 w-full bg-[var(--color-2)] text-white text-lg rounded'>
+                    Save
+                </button>
             </Modal>
         </div>
     )
