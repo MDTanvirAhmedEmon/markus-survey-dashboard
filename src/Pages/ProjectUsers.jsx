@@ -4,7 +4,8 @@ import { CiSearch } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 import { IoArrowBackSharp } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useGetProjectDetailsQuery } from "../redux/features/manageCompany/manageCompanyApi";
 
 const dataSource = [
     {
@@ -34,6 +35,11 @@ const dataSource = [
 ];
 
 const ProjectUsers = () => {
+
+    const id = useParams()
+    // console.log(id)
+    const {data:projectDetails , isError, isLoading} = useGetProjectDetailsQuery(id?.id)
+    // console.log(projectDetails?.data)
     const columns = [
         {
             title: 'Serial No',
@@ -95,11 +101,11 @@ const ProjectUsers = () => {
                 <div className='end-center gap-2'>
                     <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />}
                         placeholder="Search" />
-                    <Link to={`/add-project`}
+                    {/* <Link to={`/add-project`}
                         className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
                         Add New Project
                         <FaPlus />
-                    </Link>
+                    </Link> */}
                 </div>
             </div>
             <Table dataSource={dataSource} columns={columns} />
