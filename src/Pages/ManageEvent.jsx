@@ -1,5 +1,5 @@
-import { Form, Input, message, Modal, Pagination, Popconfirm, Select, Table } from 'antd';
-import React, { useEffect, useState } from 'react'
+import { Form, Input, message, Modal, Pagination, Popconfirm, QRCode, Select, Table } from 'antd';
+import React, { useEffect, useRef, useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import { FaEdit, FaRegEye, FaStar } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
@@ -7,17 +7,12 @@ import { IoArrowBackSharp } from 'react-icons/io5';
 import { MdCloudDownload, MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useGetSurveyForManageCompanyQuery } from '../redux/features/questions/questionsApi';
-import { useGenerateQRCodeMutation } from '../redux/features/Event/EventApi';
-const dataSource = [
-    {
-        id: '1',
-        eventsName: 'Mike',
-        QrCodeImage: 'https://i.ibb.co/yWzpt5t/download.png',
-    }
-]
+import { useGenerateQRCodeMutation, useGetEventWithCRCodeQuery } from '../redux/features/Event/EventApi';
+
 const ManageEvent = () => {
 
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
 
     // get surveys 
@@ -29,35 +24,42 @@ const ManageEvent = () => {
         value: survey.id,
         label: survey.survey_name
     }));
-    // QRCode APi
-    // const [generateQRCode, { data, isSuccess, isError, error }] = useGenerateQRCodeMutation();
-    // console.log('QRCode isSuccess', isSuccess)
-    // console.log('QRCode isError', isError)
-    // console.log('QRCode Error', error)
+    // QRCode Generation APi
+    const [generateQRCode, { data }] = useGenerateQRCodeMutation();
 
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         message.success({data?.message});
-    //     }
-    //     if (isError) {
-    //         message.error({data?.message});
-    //     }
+    useEffect(() => {
+        if (data) {
+            message.success(data?.message);
+        }
 
-    // }, [isSuccess, isError]);
+    }, [data]);
+
+    // get event with QRCode
+    const { data: event, isLoading } = useGetEventWithCRCodeQuery({
+        page: currentPage,
+    });
+
+    console.log("event", event?.survey?.total)
+
+
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
 
     const handlePageChangeSurvey = (page) => {
         setCurrentPageSurvey(page);
     };
 
-    // const confirm = (e) => {
-    //     console.log(e);
-    //     message.success('Click on Yes');
-    // };
-    // const cancel = (e) => {
-    //     console.log(e);
-    //     message.error('Click on No');
-    // };
+    const confirm = (e) => {
+        console.log(e);
+        message.success('Click on Yes');
+    };
+    const cancel = (e) => {
+        console.log(e);
+        message.error('Click on No');
+    };
 
 
     const CustomDropdownSurvey = (menu) => (
@@ -80,61 +82,94 @@ const ManageEvent = () => {
 
 
     const [image, setImage] = useState(null)
+
+    // for qrcode modal
+    const [selectedQRCode, setSelectedQRCode] = useState(null);
+    console.log('selected code')
+
+    const handleShowQRCodeModal = (qrCodeValue) => {
+        setSelectedQRCode(qrCodeValue);
+        setShowQRCodeModal(true);
+    };
+
+    const qrRef = useRef(null);
+    // download qrcode
+    const downloadQRCode = () => {
+        const qrElement = qrRef.current?.querySelector('canvas');
+        if (qrElement) {
+          const url = qrElement.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'qrcode.png';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      };
+
+
     const columns = [
         {
             title: 'Serial No',
             dataIndex: 'id',
             key: 'id',
+            render: (text, record, index) => index + 1,
         },
         {
             title: 'Events Name',
             dataIndex: 'eventsName',
-            key: 'eventsName ',
+            key: 'eventsName',
+            render: (_, record) => <p>{record?.survey?.survey_name}</p>,
         },
         {
             title: 'Qr Code Image',
             dataIndex: 'QrCodeImage',
             key: 'QrCodeImage',
-            render: (_, record) => (<div>
-                <img className='w-28' src={record?.QrCodeImage} alt="" />
-            </div>)
+            render: (_, record) => (
+                
+                <div ref={qrRef} >
+                    <QRCode size={80} value={`http://192.168.10.188:3001/surveyAllQuestions/${record?.barcode}`} />
+                </div>
+            ),
         },
         {
             title: 'Actions',
             dataIndex: 'key',
             key: 'key',
             render: (_, record) => {
-                return (<div className='start-center text-2xl gap-1'>
-                    <button to={`/driver-details/id`}>
-                        <MdCloudDownload className='cursor-pointer' />
-                    </button>
-                    <button onClick={() => {
-                        setShowQRCodeModal(true)
-                    }}>
-                        <FaEdit className='cursor-pointer' />
-                    </button>
-                    {/* <Popconfirm
-                        title="Delete the task"
-                        description="Are you sure to delete this task?"
-                        onConfirm={confirm}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No"
-                    > */}
-                        <MdOutlineDelete className='cursor-pointer' />
-                    {/* </Popconfirm> */}
-
-
-                </div>)
-            }
+                const qrCodeValue = `http://192.168.10.188:3001/surveyAllQuestions/${record?.barcode}`;
+                return (
+                    <div className="start-center text-2xl gap-1">
+                        <button>
+                            <MdCloudDownload onClick={downloadQRCode} className="cursor-pointer" />
+                        </button>
+                        <button
+                            onClick={() => handleShowQRCodeModal(qrCodeValue)}
+                        >
+                            <FaEdit className="cursor-pointer" />
+                        </button>
+                        <Popconfirm
+                            title="Delete the task"
+                            description="Are you sure to delete this task?"
+                            onConfirm={confirm}
+                            onCancel={cancel}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <MdOutlineDelete className="cursor-pointer" />
+                        </Popconfirm>
+                    </div>
+                );
+            },
         },
     ];
+
+
     const onFinish = (value) => {
         console.log(value)
-        // generateQRCode(value.surveyId)
-        console.log(value.surveyId)
-
+        generateQRCode(value.surveyId)
     }
+
 
     return (
         <div className='bg-[var(--color-7)] rounded-md'>
@@ -151,7 +186,7 @@ const ManageEvent = () => {
                     </button>
                 </div>
             </div>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table dataSource={event?.survey?.data} columns={columns} pagination={false} />
             <Modal
                 centered
                 footer={false}
@@ -198,10 +233,21 @@ const ManageEvent = () => {
                 onCancel={() => setShowQRCodeModal(false)}
             >
                 <div>
-                    <p className='text-xl py-2 font-semibold'>Scan QRCode</p>
-                    <img className=' w-[500px]' src={`https://i.ibb.co/yWzpt5t/download.png`} alt="" />
+                    <p className="text-xl w-full py-8 font-semibold text-center">Scan QRCode</p>
+                    {selectedQRCode && (
+                        <QRCode className=' mx-auto' size={256} value={selectedQRCode} />
+                    )}
                 </div>
             </Modal>
+            <div className="py-6">
+                <Pagination
+                    className="custom-pagination-all"
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={event?.survey?.total}
+                    onChange={handlePageChange}
+                />
+            </div>
         </div>
     )
 }

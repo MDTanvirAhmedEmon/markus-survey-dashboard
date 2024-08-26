@@ -1,14 +1,24 @@
-import { Input } from 'antd';
-import React from 'react';
+import { Input, Pagination } from 'antd';
+import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { IoArrowBackSharp } from 'react-icons/io5';
 import { Link, useParams } from 'react-router-dom';
 import { useGetAllSurveyCommentsQuery } from '../redux/features/survey/surveyApi';
 
 const AllSurveyComments = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState(null);
+    const pageSize = 10;
+
     const { id } = useParams();
     const { data } = useGetAllSurveyCommentsQuery(id);
-    console.log(id)
+    console.log(data)
+
+
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     return (
         <div>
@@ -19,7 +29,7 @@ const AllSurveyComments = () => {
                     <p className='text-xl'>All Survey Comments</p>
                 </div>
                 <div className='end-center gap-2'>
-                    <Input className='max-w-[400px] h-10' prefix={<CiSearch className='text-2xl' />}
+                    <Input onChange={(e) => setSearchTerm(e.target.value)} className='max-w-[400px] h-10' prefix={<CiSearch className='text-2xl' />}
                         placeholder="Search" />
                 </div>
             </div>
@@ -32,8 +42,9 @@ const AllSurveyComments = () => {
                     <div className='w-[22%]'>User</div>
                     <div className='w-[22%]'>Email</div>
                 </div>
-                {/* table body */}
 
+
+                {/* table body */}
                 {
                     data?.data?.map((comment, index) => (
 
@@ -46,6 +57,15 @@ const AllSurveyComments = () => {
                     ))
                 }
 
+            </div>
+            <div className="mt-10 py-6">
+                <Pagination
+                    className="custom-pagination-all"
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={data?.total}
+                    onChange={handlePageChange}
+                />
             </div>
         </div>
     );

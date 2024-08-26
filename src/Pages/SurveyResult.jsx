@@ -14,7 +14,9 @@ import jsPDF from "jspdf";
 const SurveyResult = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
-    // const [currentSurveyPage, setCurrentSurveyPage] = useState(1);
+    
+    // this pagination for survey result page
+    const [currentSurveyPage, setCurrentSurveyPage] = useState(1);
 
     const [selectedProject, setSelectedProject] = useState(null);
     console.log('project', selectedProject)
@@ -50,9 +52,9 @@ const SurveyResult = () => {
     const handlePageChangeSurvey = (page) => {
         setCurrentPageSurvey(page);
     };
-    // const handleCurrentSurveyPage = (page) => {
-    //     setCurrentSurveyPage(page);
-    // };
+    const handleCurrentSurveyPage = (page) => {
+        setCurrentSurveyPage(page);
+    };
 
     const CustomDropdown = (menu) => (
         <div>
@@ -87,7 +89,7 @@ const SurveyResult = () => {
     const { data: reportData, isLoading } = useGetSurveyResultReportQuery(
         selectedProject && selectedSurvey && { project_id: selectedProject, survey_id: selectedSurvey },
     );
-    console.log('report Data', reportData)
+
 
     const onFinish = (values) => {
         console.log(values);
@@ -102,26 +104,26 @@ const SurveyResult = () => {
         try {
             const canvas = await html2canvas(inputData);
             const imgData = canvas.toDataURL("image/png");
-    
+
             const pdf = new jsPDF({
                 orientation: "landscape",
                 unit: "px",
                 format: "a4",
             });
-    
+
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
             const imgWidth = canvas.width;
             const imgHeight = canvas.height;
             const ratio = imgWidth / imgHeight;
-    
+
             let heightLeft = imgHeight;
             let position = 0;
-    
+
             while (heightLeft > 0) {
                 const currentHeight = Math.min(pdfHeight, heightLeft);
                 const canvasWidth = currentHeight * ratio;
-    
+
                 pdf.addImage(
                     imgData,
                     "PNG",
@@ -130,22 +132,22 @@ const SurveyResult = () => {
                     pdfWidth,
                     currentHeight * (pdfWidth / canvasWidth)
                 );
-    
+
                 heightLeft -= pdfHeight;
                 position -= pdfHeight;
-    
+
                 if (heightLeft > 0) {
                     pdf.addPage();
                 }
             }
-    
+
             pdf.save("survey.pdf");
         } catch (error) {
             console.log(error);
         }
     };
-    
-    
+
+
 
     return (
         <>
@@ -155,10 +157,7 @@ const SurveyResult = () => {
                         className='bg-[var(--color-2)] py-1 px-2 rounded-md start-center gap-1 text-white'><IoArrowBackSharp />back</Link>
                     <p className='text-xl'>All Survey Result</p>
                 </div>
-                <div className='end-center gap-2'>
-                    <Input className='max-w-[400px] h-10' prefix={<CiSearch className='text-2xl' />}
-                        placeholder="Search" />
-                </div>
+
             </div>
 
 
@@ -328,7 +327,7 @@ const SurveyResult = () => {
                                     </div>
                                 ))}
                             </div>
-                            <div className="flex justify-center my-8">
+                            <div className="flex justify-center my-6">
                                 <button onClick={handleExportAsPDF} className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">
                                     Export
                                 </button>
@@ -341,11 +340,7 @@ const SurveyResult = () => {
                     )
                 }
 
-
-
-
-
-                {/* <div className="py-10">
+                <div className="py-10">
                     <Pagination
                         className="custom-pagination-all"
                         current={currentSurveyPage}
@@ -353,7 +348,10 @@ const SurveyResult = () => {
                         total={50}
                         onChange={handleCurrentSurveyPage}
                     />
-                </div> */}
+                </div>
+
+
+
             </div >
         </>
     )
