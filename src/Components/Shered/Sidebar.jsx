@@ -98,18 +98,40 @@ const Sidebar = () => {
             sub_menu: false,
             icon: <SiHomeassistantcommunitystore />,
         },
-        {
-            path: '/super-admin/company-details',
-            label: 'Company Details',
-            sub_menu: false,
-            icon: <BsArchive />,
-        },
+        // {
+        //     path: '/super-admin/company-details',
+        //     label: 'Company Details',
+        //     sub_menu: false,
+        //     icon: <BsArchive />,
+        // },
         {
             path: '/profile',
             label: 'Profile',
             icon: <IoSettings />,
             sub_menu: false,
         },
+        {
+            path: '#',
+            label: 'Company',
+            icon: <IoSettings />,
+            sub_menu: [
+                {
+                    path: '/privacy-policy',
+                    label: 'Privacy Policy',
+                    icon: <></>,
+                },
+                {
+                    path: '/terms',
+                    label: 'Terms & Condition',
+                    icon: <></>,
+                },
+                {
+                    path: '/profile',
+                    label: 'Profile',
+                    icon: <></>,
+                },
+            ]
+        }
     ];
 
     const toggleAccordion = (index) => {

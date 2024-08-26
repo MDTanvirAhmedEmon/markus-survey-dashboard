@@ -1,82 +1,81 @@
 
 import { Select } from 'antd';
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis,  Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const Overview = () => {
-
+const Overview = ({ company_growth_by_month }) => {
     const data = [
         {
             name: 'Jan',
             uv: 4000,
             pv: 2400,
-            amt: 2400,
+            amt: company_growth_by_month?.[0]?.count,
         },
         {
             name: 'Feb',
             uv: 3000,
             pv: 1398,
-            amt: 2210,
+            amt: company_growth_by_month?.[1]?.count,
         },
         {
             name: 'Mar',
             uv: 2000,
             pv: 9800,
-            amt: 2290,
+            amt: company_growth_by_month?.[2]?.count,
         },
         {
             name: 'Apr',
             uv: 2780,
             pv: 3908,
-            amt: 2000,
+            amt: company_growth_by_month?.[3]?.count,
         },
         {
             name: 'May',
             uv: 1890,
             pv: 4800,
-            amt: 2181,
+            amt: company_growth_by_month?.[4]?.count,
         },
         {
             name: 'Jun',
             uv: 2390,
             pv: 3800,
-            amt: 2500,
+            amt: company_growth_by_month?.[5]?.count,
         },
         {
             name: 'Jul',
             uv: 3490,
             pv: 4300,
-            amt: 2100,
+            amt: company_growth_by_month?.[6]?.count,
         },
         {
             name: 'Aug',
             uv: 3490,
             pv: 4300,
-            amt: 2100,
+            amt: company_growth_by_month?.[7]?.count,
         },
         {
             name: 'Sept',
             uv: 1340,
             pv: 3430,
-            amt: 2100,
+            amt: company_growth_by_month?.[8]?.count,
         },
         {
             name: 'Oct',
             uv: 1740,
             pv: 1430,
-            amt: 2100,
+            amt: company_growth_by_month?.[9]?.count,
         },
         {
             name: 'Nov',
             uv: 5740,
             pv: 3430,
-            amt: 2100,
+            amt: company_growth_by_month?.[10]?.count,
         },
         {
             name: 'Dec',
             uv: 4740,
             pv: 8430,
-            amt: 2100,
+            amt: company_growth_by_month?.[11]?.count,
         },
     ]
     const handleChange = (value) => {

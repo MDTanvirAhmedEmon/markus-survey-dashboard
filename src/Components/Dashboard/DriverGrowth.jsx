@@ -71,7 +71,8 @@ const items = [
         key: "2026",
     },
 ];
-const DriverGrowth = () => {
+const DriverGrowth = ({ users_by_month }) => {
+    
     const handleChange = (value) => {
         console.log(`selected ${value}`);
     };
@@ -99,7 +100,7 @@ const DriverGrowth = () => {
                             bottom: 0,
                         }}
                     >
-                        <XAxis dataKey="name" tickLine={false} axisLine={false} tickMargin={10}/>
+                        <XAxis dataKey="name" tickLine={false} axisLine={false} tickMargin={10} />
                         <YAxis tickLine={false} axisLine={false} />
                         <Tooltip />
                         <Area type="monotone" dataKey="uv" stroke="#ECB206" opacity={1} fillOpacity={1} fill="#ECB206" />
