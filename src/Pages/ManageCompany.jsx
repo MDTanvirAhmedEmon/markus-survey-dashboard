@@ -35,8 +35,9 @@ const ManageCompany = () => {
     const columns = [
         {
             title: 'Serial No',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'serial',
+            key: 'serial',
+            render: (text, record, index) => ((currentPage - 1) * pageSize) + index + 1
         },
         {
             title: 'Projects Name',

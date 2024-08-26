@@ -51,7 +51,7 @@ const TotalEmployeeRequest = () => {
             title: 'Serial No',
             dataIndex: 'serial',
             key: 'serial',
-            render: (text, record, index) => index + 1
+            render: (text, record, index) => ((currentPageTable - 1) * pageSize) + index + 1
         },
         {
             title: 'Email',

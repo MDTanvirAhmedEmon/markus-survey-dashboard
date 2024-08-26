@@ -18,7 +18,7 @@ const CreateProject = () => {
     console.log(currentPage)
 
     // delete project
-    const [ deleteProject, {isLoading:deleteLoading} ] = useDeleteProjectMutation();
+    const [deleteProject, { isLoading: deleteLoading }] = useDeleteProjectMutation();
     // Pop confirm
     const confirm = async (projectId) => {
         console.log(projectId)
@@ -60,8 +60,9 @@ const CreateProject = () => {
     const columns = [
         {
             title: 'Serial No',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'serial',
+            key: 'serial',
+            render: (text, record, index) => ((currentPage - 1) * pageSize) + index + 1
         },
         {
             title: 'Projects Name',
@@ -101,7 +102,7 @@ const CreateProject = () => {
     const onFinish = (value) => {
         // const formData = new FormData();
         // formData.append("project_name", value.project_name);
-        
+
         const formData = MakeFormData(value)
         createProject(formData);
     };
