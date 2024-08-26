@@ -1,7 +1,6 @@
 import { ConfigProvider, message, Modal, Pagination, Spin, Table } from 'antd';
 import React, { useEffect, useState } from 'react'
-import { useGetProjectForManageCompanyQuery } from '../../redux/features/questions/questionsApi';
-import { useAcceptRequestMutation, useGetEmployeeRequestQuery } from '../../redux/features/employeeRequest/employeeRequestApi';
+import { useAcceptRequestMutation, useGetEmployeeRequestQuery, useGetProjectsForSurveyRequestQuery } from '../../redux/features/employeeRequest/employeeRequestApi';
 import { MakeFormData } from '../../utils/FormDataHooks';
 
 
@@ -10,9 +9,10 @@ const SurveyRequest = () => {
     const pageSize = 10;
 
     // get all company
-    const { data: projects } = useGetProjectForManageCompanyQuery({
+    const { data: projects } = useGetProjectsForSurveyRequestQuery({
         page: currentPage
     });
+    console.log(projects)
 
     // employee request api
     const { data } = useGetEmployeeRequestQuery();
@@ -27,7 +27,7 @@ const SurveyRequest = () => {
             message.error("Request Acceptance Failed");
         }
     }, [isSuccess, isError]);
-    
+
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -106,25 +106,27 @@ const SurveyRequest = () => {
         acceptRequest(formData)
     };
 
-    if(isLoading) {
-        return(
+    if (isLoading) {
+        return (
             <div className='h-[600px] flex items-center justify-center'>
-            <ConfigProvider
-                theme={{
-                    token: {
-                        colorPrimary: "#ECB206",
-                    },
-                }}
-            >
-                <Spin size="large" />
-            </ConfigProvider>
-        </div>
+                <ConfigProvider
+                    theme={{
+                        token: {
+                            colorPrimary: "#ECB206",
+                        },
+                    }}
+                >
+                    <Spin size="large" />
+                </ConfigProvider>
+            </div>
         )
     }
 
+    const slicedData = data?.data?.data?.slice(0, 3) || [];
+
     return (
         <div className='bg-[var(--color-7)] rounded-md mb-8'>
-            <Table className='dashboard-custom-table' pagination={false} dataSource={data?.data?.data} columns={columns} />
+            <Table className='dashboard-custom-table' pagination={false} dataSource={slicedData} columns={columns} />
             <Modal
                 centered
                 footer={false}

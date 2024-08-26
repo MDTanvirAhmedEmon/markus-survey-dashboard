@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ConfigProvider, message, Modal, Pagination, Spin, Table } from 'antd';
-import { useAcceptRequestMutation, useGetEmployeeRequestQuery } from '../redux/features/employeeRequest/employeeRequestApi';
-import { useGetProjectForManageCompanyQuery } from '../redux/features/questions/questionsApi';
+import { useAcceptRequestMutation, useGetEmployeeRequestQuery, useGetProjectsForSurveyRequestQuery } from '../redux/features/employeeRequest/employeeRequestApi';
 import { MakeFormData } from '../utils/FormDataHooks';
 
 const TotalEmployeeRequest = () => {
@@ -11,12 +10,14 @@ const TotalEmployeeRequest = () => {
     const pageSize = 10;
 
     // get all company
-    const { data: projects } = useGetProjectForManageCompanyQuery({
+    const { data: projects } = useGetProjectsForSurveyRequestQuery({
         page: currentPage
     });
 
+
     // employee request api
     const { data } = useGetEmployeeRequestQuery();
+    console.log(data)
 
     // accept request
     const [acceptRequest, { isLoading, isSuccess, isError }] = useAcceptRequestMutation();
@@ -175,7 +176,7 @@ const TotalEmployeeRequest = () => {
                 </Modal>
                 <Pagination
                     className='custom-pagination my-8'
-                    total={50}
+                    total={data?.data?.total}
                     align="center"
                     showTotal={(total, range) => `Showing ${range[0]}-${range[1]} out of ${total}`}
                     current={currentPageTable}

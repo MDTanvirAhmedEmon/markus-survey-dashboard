@@ -11,6 +11,16 @@ export const employeeRequestApi = baseApi.injectEndpoints({
                 }
             }
         }),
+        getProjectsForSurveyRequest: builder.query({
+            query: ({ page }) => ({
+                url: `projects`,
+                method: "GET",
+                params: {
+                    page,
+                    per_page: 9
+                },
+            }),
+        }),
         acceptRequest: builder.mutation({
             query: (data) => {
                 return {
@@ -23,4 +33,4 @@ export const employeeRequestApi = baseApi.injectEndpoints({
     }),
 })
 
-export const { useGetEmployeeRequestQuery, useAcceptRequestMutation } = employeeRequestApi;
+export const { useGetEmployeeRequestQuery, useAcceptRequestMutation, useGetProjectsForSurveyRequestQuery } = employeeRequestApi;

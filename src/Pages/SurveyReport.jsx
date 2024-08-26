@@ -42,7 +42,7 @@ const SurveyReport = () => {
                 <div className='start-center gap-2 mb-3 p-5'>
                     <Link to={-1}
                         className='bg-[var(--color-2)] py-1 px-2 rounded-md start-center gap-1 text-white'><IoArrowBackSharp />back</Link>
-                    <p className='text-xl'>Project Details</p>
+                    <p className='text-xl'>Survey Report</p>
                 </div>
                 <div className='end-center gap-2'>
                     <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />}
