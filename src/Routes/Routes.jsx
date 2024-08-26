@@ -29,9 +29,12 @@ import PrivateRoute from "./PrivateRoute.jsx";
 import AddQuestions from "../Pages/AddQuestions.jsx";
 import EditSurveyQuestions from "../Pages/EditSurveyQuestions.jsx";
 import SurveyReport from "../Pages/SurveyReport.jsx";
+import AllQuestionAnsPage from "../Pages/SurvayPages/AllQuestionAnsPage.jsx";
+import SelectLanguagePage from "../Pages/SurvayPages/SelectLanguagePage.jsx";
+import SurveyQuestions from "../Pages/SurvayPages/SurveyQuestions.jsx";
+import ThankYouPage from "../Pages/SurvayPages/ThankYouPage.jsx";
 import AllSurveyComments from "../Pages/AllSurveyComments.jsx";
 import TotalEmployeeRequest from "../Pages/TotalSurveyRequest";
-
 
 // import Otp from "../Pages/Auth/Otp.jsx";
 
@@ -171,5 +174,21 @@ export const router = createBrowserRouter([
     {
         path: '/auth/update-password',
         element: <UpdatePassword />
-    }
+    },
+    {
+        path: "/selectLanguagePage",
+        element: <SelectLanguagePage />
+    },
+    {
+        path: "/surveyQuestions",
+        element: <SurveyQuestions />,
+    },
+    {
+        path: "/thankYouPage",
+        element: <ThankYouPage />,
+    },
+    {
+        path: "/allQuestionAnsPage",
+        element: <AllQuestionAnsPage />,
+    },
 ]);

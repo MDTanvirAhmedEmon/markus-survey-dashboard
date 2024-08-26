@@ -3,7 +3,6 @@ import { Navigate, useLocation } from 'react-router-dom';
 
 const PrivateRoute = ({ children }) => {
   const { token, isLoading } = useSelector((state) => state.auth);
-  console.log(token)
   const location = useLocation();
 
   if (isLoading) {

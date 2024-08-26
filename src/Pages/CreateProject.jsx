@@ -15,8 +15,6 @@ const CreateProject = () => {
     const [searchTerm, setSearchTerm] = useState(null);
     const pageSize = 10;
 
-    console.log(currentPage)
-
     // delete project
     const [deleteProject, { isLoading: deleteLoading }] = useDeleteProjectMutation();
     // Pop confirm
