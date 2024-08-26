@@ -43,7 +43,7 @@ function App() {
       </div>
       <div className='mt-3 bg-white rounded-md'>
         <div className='between-center gap-2 mb-3 p-5'>
-          <p className='text-xl'>Employee Request</p> <Link to={`/total-survey-request`}>
+          <p className='text-xl'>Employee Request</p> <Link to={`/total-employee-request`}>
             View All
           </Link>
         </div>
