@@ -7,13 +7,18 @@ import { IoArrowBackSharp } from 'react-icons/io5';
 import { MdCloudDownload, MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useGetSurveyForManageCompanyQuery } from '../redux/features/questions/questionsApi';
-import { useGenerateQRCodeMutation, useGetEventWithCRCodeQuery } from '../redux/features/Event/EventApi';
+import { useDeleteQRCodeMutation, useGenerateQRCodeMutation, useGetEventWithCRCodeQuery } from '../redux/features/Event/EventApi';
 
 const ManageEvent = () => {
 
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState(null);
+    console.log(searchTerm)
     const pageSize = 10;
+
+    const [openAddModal, setOpenAddModal] = useState(false)
+    const [showQRCodeModal, setShowQRCodeModal] = useState(false)
 
     // get surveys 
     const { data: surveys } = useGetSurveyForManageCompanyQuery({
@@ -30,6 +35,7 @@ const ManageEvent = () => {
     useEffect(() => {
         if (data) {
             message.success(data?.message);
+            setOpenAddModal(false)
         }
 
     }, [data]);
@@ -37,9 +43,29 @@ const ManageEvent = () => {
     // get event with QRCode
     const { data: event, isLoading } = useGetEventWithCRCodeQuery({
         page: currentPage,
+        search: searchTerm,
     });
 
-    console.log("event", event?.survey?.total)
+    // delete qrcode
+    const [deleteQRCode, {isLoading:deleteLoading}] = useDeleteQRCodeMutation();
+
+    // Pop confirm
+    const confirm = async (projectId) => {
+        console.log(projectId)
+        try {
+            await deleteQRCode(projectId).unwrap();
+            message.success('Event deleted successfully');
+        } catch (error) {
+            message.error('Failed to delete the Event');
+            console.error('Error deleting Event:', error);
+        }
+    };
+
+
+    const cancel = (e) => {
+        console.log(e);
+        message.error('Deletion Cancle');
+    };
 
 
 
@@ -52,14 +78,7 @@ const ManageEvent = () => {
         setCurrentPageSurvey(page);
     };
 
-    const confirm = (e) => {
-        console.log(e);
-        message.success('Click on Yes');
-    };
-    const cancel = (e) => {
-        console.log(e);
-        message.error('Click on No');
-    };
+
 
 
     const CustomDropdownSurvey = (menu) => (
@@ -77,8 +96,7 @@ const ManageEvent = () => {
     );
 
 
-    const [openAddModal, setOpenAddModal] = useState(false)
-    const [showQRCodeModal, setShowQRCodeModal] = useState(false)
+
 
 
     const [image, setImage] = useState(null)
@@ -149,8 +167,8 @@ const ManageEvent = () => {
                             <FaEdit className="cursor-pointer" />
                         </button>
                         <Popconfirm
-                            title="Delete the task"
-                            description="Are you sure to delete this task?"
+                            title="Delete the Event"
+                            description="Are you sure to delete this Event?"
                             onConfirm={confirm}
                             onCancel={cancel}
                             okText="Yes"
@@ -179,7 +197,7 @@ const ManageEvent = () => {
                     <p className='text-xl'>Events Manage</p>
                 </div>
                 <div className='end-center gap-2'>
-                    <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
+                    <Input  onChange={(e) => setSearchTerm(e.target.value)} className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
                     <button onClick={() => setOpenAddModal(true)} className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
                         Add New Event
                         <FaPlus />
