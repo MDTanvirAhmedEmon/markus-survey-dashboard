@@ -15,6 +15,7 @@
     "antd": "^5.19.0",
     "axios": "^1.7.4",
     "chart.js": "^4.4.3",
+    "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
     "html2canvas": "^1.4.1",
     "jodit-react": "^4.1.2",
