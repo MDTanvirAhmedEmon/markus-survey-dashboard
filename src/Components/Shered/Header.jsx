@@ -4,16 +4,21 @@ import { Link, useNavigate } from 'react-router-dom'
 import {IoIosNotificationsOutline} from "react-icons/io";
 import { useGetProfileQuery } from '../../redux/features/auth/authApi';
 import { imageUrl } from '../../redux/api/baseApi';
+import { useGetAllNotificationQuery } from '../../redux/features/notification/notificationApi';
 
 const Header = () => {
     const navigate = useNavigate()
     const { data, isLoading, } = useGetProfileQuery() || {};
 
+    // get all notification
+    const { data: notification } = useGetAllNotificationQuery();
+
+    const unreadCount = notification?.notifications.filter(notification => notification.read_at === null).length;
     return (
         <div className='w-full py-4 bg-[var(--color-7)] end-center  gap-4 pr-2 box-border'>
             <div onClick={()=>navigate('/notification')}>
             <Link to="/feedback" style={{boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.24)"}} className=' bg-[#F2F2F2] h-10 w-10 flex justify-center items-center rounded-full p-2'>
-                <Badge  color="#C30303" count={1}>
+                <Badge  color="#C30303" count={unreadCount}>
                     <IoIosNotificationsOutline color="#6A6A6A" size={24} />
                 </Badge>
             </Link>

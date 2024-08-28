@@ -160,7 +160,7 @@ const ManageEvent = () => {
                             <FaEdit className="cursor-pointer" />
                         </button>
                         <Popconfirm
-                            title="Delete the Event"
+                            title="Delete The Event"
                             description="Are you sure to delete this Event?"
                             onConfirm={() => confirm(record)}
                             onCancel={cancel}
