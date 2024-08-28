@@ -39,9 +39,33 @@ export const manageCompanyApi = baseApi.injectEndpoints({
                     method: "GET",
                 }
             },
-            // providesTags: ['Survey'],
+            providesTags: ['Survey'],
         }),
+        updateSurveyQuestion :  builder.mutation({
+            query :  (data)=>({
+                url : 'update-questions',
+                method : "POST",
+                body : data
+            }),
+            invalidatesTags : ['Survey']
+        }),
+        getProjectDetails : builder.query({
+            query : (id)=>({
+                url : `/survey-based-user?survey_id=${id}`,
+                method : "GET"
+            }),
+            providesTags : ['GetSurveyUser']
+        }),
+        
+        deleteSurveyUser : builder.mutation({
+            query : (id) => ({
+                url : `delete-survey-user?id=${id}`,
+                method : "DELETE"
+            }),
+            invalidatesTags : ['GetSurveyUser']
+        })
+
     }),
 });
 
-export const { useGetCompanySurveyQuery, useSurveyReportQuery } = manageCompanyApi;
+export const { useGetCompanySurveyQuery, useSurveyReportQuery, useUpdateSurveyQuestionMutation, useGetProjectDetailsQuery, useDeleteSurveyUserMutation } = manageCompanyApi;

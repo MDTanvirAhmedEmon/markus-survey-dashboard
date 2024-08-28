@@ -80,7 +80,7 @@ const SurveyReport = () => {
                     data.map(item => <img className='w-20 h-20 rounded-full -ml-8' key={item} src={item} alt="" />)
                 }
                 <div onClick={() => {
-                    navigate('/project-users/2386')
+                    navigate(`/project-users/${id}`)
                 }} className='h-20 w-20 rounded-full bg-black bg-opacity-60 -ml-20 flex justify-center items-center text-white cursor-pointer select-none
                 '>
                     65+

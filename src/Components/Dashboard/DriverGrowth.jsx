@@ -39,7 +39,7 @@ const DriverGrowth = () => {
                     <AreaChart
                         width={500}
                         height={400}
-                        data={processedData}
+                        data={data}
                         margin={{
                             top: 10,
                             right: 30,

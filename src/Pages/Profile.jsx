@@ -111,13 +111,12 @@ const Profile = () => {
                         '
                             >
                                 <CiEdit color='#929394' />
-                                <CiEdit color='#929394' />
                             </label>
                         }
 
                     </div>
                     <div className='w-fit'>
-                        <p className=' text-[#575757] text-[24px] leading-[32px] font-semibold  '>{profileData?.user?.name}</p>
+                        <p className=' text-[#575757] text-[24px] leading-[32px] font-semibold  '>{data?.user?.name}</p>
                     </div>
                 </div>
 
@@ -171,7 +170,7 @@ const Profile = () => {
                                             color: "#919191",
                                             outline: "none"
                                         }}
-                                        defaultValue={profileData?.user?.name}
+                                        defaultValue={data?.user?.name}
                                         className='text-[16px] leading-5'
                                     />
                                 </Form.Item>
@@ -189,7 +188,7 @@ const Profile = () => {
                                             color: "#919191",
                                             outline: "none"
                                         }}
-                                        defaultValue={profileData?.user?.email} className='text-[16px] leading-5'
+                                        defaultValue={data?.user?.email} className='text-[16px] leading-5'
 
                                     />
                                 </Form.Item>
@@ -208,7 +207,7 @@ const Profile = () => {
                                             color: "#919191",
                                             outline: "none"
                                         }}
-                                        defaultValue={profileData?.user?.phone_number}
+                                        defaultValue={data?.user?.phone_number}
                                         className='text-[16px] leading-5'
 
                                     />
@@ -226,7 +225,7 @@ const Profile = () => {
                                             color: "#919191",
                                             outline: "none"
                                         }}
-                                        defaultValue={profileData?.user?.address}
+                                        defaultValue={data?.user?.address}
                                         className='text-[16px] leading-5'
                                     />
                                 </Form.Item>
