@@ -5,13 +5,22 @@ import { ConfigProvider, Input, Select, Spin } from "antd";
 import { FaPlus } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
 import Chart from "./Chart.jsx"
-import { useSurveyReportQuery } from '../redux/features/manageCompany/manageCompanyApi.js';
+import { useGetProjectDetailsQuery, useSurveyReportQuery } from '../redux/features/manageCompany/manageCompanyApi.js';
+import { imageUrl } from '../redux/api/baseApi.js';
 
 
 const SurveyReport = () => {
+    // const [searchTerm, setSearchTerm] = useState(null);
 
     const { id } = useParams();
-    console.log(id)
+
+    /** Get sarvay user information api */
+    const { data: projectDetails, isError, loading } = useGetProjectDetailsQuery({id},{
+        refetchOnMountOrArgChange: true,
+    })
+    console.log(projectDetails?.data)
+    const formattedUserImages = projectDetails?.data?.map((item, i) => `${imageUrl}${item?.user?.image}`)
+    console.log(formattedUserImages)
 
     const { data: report, isLoading } = useSurveyReportQuery(id);
 
@@ -77,13 +86,13 @@ const SurveyReport = () => {
 
             <div className='flex justify-center items-center mb-8 mt-6'>
                 {
-                    data.map(item => <img className='w-20 h-20 rounded-full -ml-8' key={item} src={item} alt="" />)
+                    formattedUserImages.map(item => <img className='w-20 h-20 rounded-full -ml-8' key={item} src={item} alt="" />)
                 }
                 <div onClick={() => {
-                    navigate('/project-users/2386')
+                    navigate(`/project-users/${id}`)
                 }} className='h-20 w-20 rounded-full bg-black bg-opacity-60 -ml-20 flex justify-center items-center text-white cursor-pointer select-none
                 '>
-                    65+
+                    {formattedUserImages?.length}+
                 </div>
             </div>
         </div>

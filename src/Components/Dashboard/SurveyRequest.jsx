@@ -14,7 +14,7 @@ const SurveyRequest = () => {
     const { data: projects } = useGetProjectsForSurveyRequestQuery({
         page: currentPage
     });
-    console.log(projects)
+
 
     // employee request api
     const { data } = useGetEmployeeRequestQuery();
@@ -103,7 +103,7 @@ const SurveyRequest = () => {
         }
 
         const formData = MakeFormData(data);
-        console.log(formData)
+
         acceptRequest(formData)
     };
 
