@@ -30,9 +30,9 @@ export const surveyApi = baseApi.injectEndpoints({
             providesTags: ['Survey'],
         }),
         getSurveyResultReport: builder.query({
-            query: ({ project_id, survey_id }) => {
+            query: ({ project_id, survey_id, page }) => {
                 return {
-                    url: `question-based-report?survey_id=${survey_id}&project_id=${project_id}`,
+                    url: `question-based-report?survey_id=${survey_id}&project_id=${project_id}&page=${page}`,
                     method: "GET",
                 }
             },

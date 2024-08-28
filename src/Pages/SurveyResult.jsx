@@ -14,14 +14,15 @@ import jsPDF from "jspdf";
 const SurveyResult = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
-    
+
     // this pagination for survey result page
     const [currentSurveyPage, setCurrentSurveyPage] = useState(1);
 
+
     const [selectedProject, setSelectedProject] = useState(null);
-    console.log('project', selectedProject)
+
     const [selectedSurvey, setSelectedSurvey] = useState(null);
-    console.log('survey', selectedSurvey)
+
 
 
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
@@ -87,7 +88,7 @@ const SurveyResult = () => {
 
     // fetching Result Report
     const { data: reportData, isLoading } = useGetSurveyResultReportQuery(
-        selectedProject && selectedSurvey && { project_id: selectedProject, survey_id: selectedSurvey },
+        selectedProject && selectedSurvey && { project_id: selectedProject, survey_id: selectedSurvey, page: currentSurveyPage },
     );
 
 
@@ -253,11 +254,11 @@ const SurveyResult = () => {
                     ) : reportData ? (
                         <div>
                             <div className="p-10" ref={printRef}>
-                                {reportData.map((question, index) => (
+                                {reportData?.data?.map((question, index) => (
                                     <div className="" key={index}>
                                         <div className="flex">
                                             <div className="w-[40%]">
-                                                {index + 1}. {question?.question}
+                                                {`${(currentSurveyPage - 1) * pageSize + index + 1}. ${question?.question}`}
                                             </div>
                                             <div className="w-[60%]">
                                                 <div>
@@ -332,25 +333,23 @@ const SurveyResult = () => {
                                     Export
                                 </button>
                             </div>
+                            <div className="py-10">
+                                <Pagination
+                                    className="custom-pagination-all"
+                                    current={currentSurveyPage}
+                                    pageSize={pageSize}
+                                    total={reportData?.pagination?.total}
+                                    onChange={handleCurrentSurveyPage}
+                                />
+                            </div>
                         </div>
+
                     ) : (
                         <div className="h-[300px] w-full flex justify-center items-center">
                             <p className="text-3xl text-black">Please Select A Project & A Survey</p>
                         </div>
                     )
                 }
-
-                <div className="py-10">
-                    <Pagination
-                        className="custom-pagination-all"
-                        current={currentSurveyPage}
-                        pageSize={pageSize}
-                        total={50}
-                        onChange={handleCurrentSurveyPage}
-                    />
-                </div>
-
-
 
             </div >
         </>
