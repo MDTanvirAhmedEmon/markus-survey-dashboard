@@ -5,23 +5,34 @@ export const eventApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         generateQRCode: builder.mutation({
             query: (id) => {
-                console.log("form api",id)
+
                 return {
                     url: `surveys/qrcode/${id}`,
                     method: "POST",
                 }
-            }
+            },
+            invalidatesTags: ['Event'],
+        }),
+        deleteQRCode: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `delete-event?id=${id}`,
+                    method: "DELETE",
+                }
+            },
+            invalidatesTags: ['Event'],
         }),
         getEventWithCRCode: builder.query({
-            query: ({page}) => {
+            query: ({ page, search = '' }) => {
                 return {
-                    url: `surveys-questions?page=${page}`,
+                    url: `surveys-questions?page=${page}${search ? `&search=${search}` : ''}`,
                     method: "GET",
-                }
-            }
-        }),
+                };
+            },
+            providesTags: ['Event'],
+        })
     }),
 })
 
 
-export const { useGenerateQRCodeMutation, useGetEventWithCRCodeQuery } = eventApi;
+export const { useGenerateQRCodeMutation, useGetEventWithCRCodeQuery, useDeleteQRCodeMutation } = eventApi;

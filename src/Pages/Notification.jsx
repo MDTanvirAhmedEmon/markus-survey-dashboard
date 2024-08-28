@@ -1,5 +1,7 @@
 import { Modal } from 'antd';
 import React, { useState } from 'react'
+import { useGetAllNotificationQuery } from '../redux/features/notification/notificationApi';
+import { format } from 'date-fns';
 
 const data = [
     {
@@ -27,9 +29,18 @@ const Notification = () => {
     const handleReadAll = () => {
 
     }
+
+    // get all notification
+    const {data: notification} = useGetAllNotificationQuery();
+    console.log("notification", notification?.notifications)
+
     const handleRead = (id) => {
 
     }
+
+
+
+    
     return (
         <div>
             <div className="flex justify-between items-center gap-4">
@@ -39,7 +50,7 @@ const Notification = () => {
                 </button>
             </div>
             <div className="flex justify-start items-start flex-col gap-2 py-8 px-3">
-                {data.map((item) => (
+                {notification?.notifications?.map((item) => (
                     <div
                         className={`flex justify-between items-center w-full ${item?.status ? "bg-[#FBFBFB]" : " bg-[#F8F1E6]"
                         } p-3 py-5 rounded-lg`}
@@ -47,11 +58,11 @@ const Notification = () => {
                     >
                         <div>
                             <div className="flex justify-start items-center gap-8 mb-1 text-[#919191]">
-                                <h3 className="text-[#555555] font-bold">{item?.title}</h3>
-                                <p>{item?.date}</p>
+                                <h3 className="text-[#555555] font-bold">{item?.data?.name}</h3>
+                                <p>{item?.data?.message}</p>
                             </div>
                             <div className="flex justify-start items-center gap-2 text-[#919191]">
-                                <h3>{item?.item}</h3>
+                                <p>{format(new Date(item?.data?.time), 'MMMM do yyyy, h:mm:ss a')}</p>
                                 <p>{item?.price}</p>
                             </div>
                         </div>
@@ -63,7 +74,6 @@ const Notification = () => {
                             }}
                             className="text-[#F27405] font-medium text-lg"
                         >
-
                             View
                         </button>
                     </div>
