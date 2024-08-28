@@ -78,8 +78,6 @@ const Profile = () => {
             address: data?.user?.address,
         })
     }, [form, data])
-    console.log(data?.user?.image)
-    console.log(imageUrl)
     return (
         <div>
             {(admin &&
