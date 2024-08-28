@@ -86,7 +86,7 @@ const CreateProject = () => {
                             // deleteSurvey(record?.id)
                             confirm(record?.id)
                         }}
-                        onCancel={cancel}
+
                         okText="Yes"
                         cancelText="No"
                     >

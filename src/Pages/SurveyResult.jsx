@@ -99,32 +99,35 @@ const SurveyResult = () => {
 
     // pdf
     const printRef = useRef(null);
-
     const handleExportAsPDF = async () => {
         const inputData = printRef.current;
         try {
             const canvas = await html2canvas(inputData);
             const imgData = canvas.toDataURL("image/png");
-
+    
             const pdf = new jsPDF({
                 orientation: "landscape",
                 unit: "px",
                 format: "a4",
             });
-
+    
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
             const imgWidth = canvas.width;
             const imgHeight = canvas.height;
             const ratio = imgWidth / imgHeight;
-
+    
             let heightLeft = imgHeight;
             let position = 0;
-
-            while (heightLeft > 0) {
+    
+            // Limit to two pages
+            const maxPages = 2;
+            let pagesAdded = 0;
+    
+            while (heightLeft > 0 && pagesAdded < maxPages) {
                 const currentHeight = Math.min(pdfHeight, heightLeft);
                 const canvasWidth = currentHeight * ratio;
-
+    
                 pdf.addImage(
                     imgData,
                     "PNG",
@@ -133,21 +136,23 @@ const SurveyResult = () => {
                     pdfWidth,
                     currentHeight * (pdfWidth / canvasWidth)
                 );
-
+    
                 heightLeft -= pdfHeight;
                 position -= pdfHeight;
-
-                if (heightLeft > 0) {
+    
+                pagesAdded++;
+    
+                if (heightLeft > 0 && pagesAdded < maxPages) {
                     pdf.addPage();
                 }
             }
-
+    
             pdf.save("survey.pdf");
         } catch (error) {
             console.log(error);
         }
     };
-
+    
 
 
     return (
