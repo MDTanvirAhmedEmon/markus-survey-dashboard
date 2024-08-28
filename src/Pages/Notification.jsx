@@ -37,6 +37,10 @@ const Notification = () => {
     const handleRead = (id) => {
 
     }
+
+
+
+    
     return (
         <div>
             <div className="flex justify-between items-center gap-4">
