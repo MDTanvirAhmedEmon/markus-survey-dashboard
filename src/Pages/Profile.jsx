@@ -8,6 +8,7 @@ import { useGetProfileQuery, useUpdatePasswordMutation, useUpdateProfileMutation
 import { MakeFormData } from "../utils/FormDataHooks";
 import toast from "react-hot-toast";
 import { imageUrl } from "../redux/api/baseApi";
+import { FaRegUser } from "react-icons/fa6";
 const admin = false;
 const Profile = () => {
     const [image, setImage] = useState();
@@ -59,7 +60,7 @@ const Profile = () => {
             _method: 'PUT'
         };
         if (image) {
-            data.profile_image = image;
+            data.image = image;
         }
         const formData = MakeFormData(data);
         updateProfile({ data: formData }).unwrap().then((res) => {
@@ -77,6 +78,8 @@ const Profile = () => {
             address: data?.user?.address,
         })
     }, [form, data])
+    console.log(data?.user?.image)
+    console.log(imageUrl)
     return (
         <div>
             {(admin &&
@@ -94,7 +97,7 @@ const Profile = () => {
                         <input type="file" onInput={handleChange} id='img' style={{ display: "none" }} />
                         <img
                             style={{ width: 140, height: 140, borderRadius: "100%" }}
-                            src={image ? URL.createObjectURL(image) : data?.user?.image ? `${imageUrl}${data?.user?.image}` : `https://dcassetcdn.com/design_img/2531172/542774/542774_13559578_2531172_d07764e6_image.png`}
+                            src={image ? URL.createObjectURL(image) : data?.user?.image ? `${imageUrl}${data?.user?.image}` : <FaRegUser />}
                             alt=""
                         />
 
@@ -250,7 +253,7 @@ const Profile = () => {
                                         }}
                                         className='font-normal text-[16px] leading-6 bg-[#ECB206]'
                                     >
-                                        Changes Password
+                                        Save Changes
                                     </Button>
                                 </Form.Item>
                             </Form>
@@ -368,7 +371,7 @@ const Profile = () => {
                                         }}
                                         className='font-normal text-[16px] leading-6 bg-[#ECB206]'
                                     >
-                                        Save Changes
+                                        Change Password
                                     </Button>
                                 </Form.Item>
                             </Form>
