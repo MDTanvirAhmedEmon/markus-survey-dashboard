@@ -11,7 +11,9 @@ const Header = () => {
     const { data, isLoading, } = useGetProfileQuery() || {};
 
     // get all notification
-    const { data: notification } = useGetAllNotificationQuery();
+    const { data: notification } = useGetAllNotificationQuery(undefined, {
+        refetchOnMountOrArgChange: true
+    });
 
     const unreadCount = notification?.notifications.filter(notification => notification.read_at === null).length;
     return (
