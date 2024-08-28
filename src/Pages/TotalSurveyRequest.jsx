@@ -8,6 +8,7 @@ const TotalEmployeeRequest = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [currentPageTable, setCurrentTablePage] = useState(1);
     const pageSize = 10;
+    const [openAllowModal, setOpenAllowModal] = useState(false)
 
     // get all company
     const { data: projects } = useGetProjectsForSurveyRequestQuery({
@@ -25,11 +26,13 @@ const TotalEmployeeRequest = () => {
     useEffect(() => {
         if (isSuccess) {
             message.success("Accepted Request Successfully");
+            setOpenAllowModal(false)
         } else if (isError) {
             message.error("Request Acceptance Failed");
+            setOpenAllowModal(false)
         }
     }, [isSuccess, isError]);
-    
+
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -40,7 +43,6 @@ const TotalEmployeeRequest = () => {
     };
 
 
-    const [openAllowModal, setOpenAllowModal] = useState(false)
     const [selectedID, setSelectedID] = useState([])
     const [userId, setUserId] = useState(null);
     const [Id, setId] = useState(null);
@@ -114,19 +116,19 @@ const TotalEmployeeRequest = () => {
         acceptRequest(formData)
     };
 
-    if(isLoading) {
-        return(
+    if (isLoading) {
+        return (
             <div className='h-[600px] flex items-center justify-center'>
-            <ConfigProvider
-                theme={{
-                    token: {
-                        colorPrimary: "#ECB206",
-                    },
-                }}
-            >
-                <Spin size="large" />
-            </ConfigProvider>
-        </div>
+                <ConfigProvider
+                    theme={{
+                        token: {
+                            colorPrimary: "#ECB206",
+                        },
+                    }}
+                >
+                    <Spin size="large" />
+                </ConfigProvider>
+            </div>
         )
     }
 

@@ -1,62 +1,5 @@
-
-// import { Select } from 'antd';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useGetDashboardAnalyticsQuery } from '../../redux/features/dashboard/dashboardApi';
-
-
-
-// const data = [
-//     {
-//         name: 'Jan',
-//         uv: 20,
-//         mt: 10,
-//     },
-//     {
-//         name: 'Feb',
-//         uv: 30,
-//         mt: 20,
-//     },
-//     {
-//         name: 'Mar',
-//         uv: 90,
-//         mt: 30,
-//     },
-//     {
-//         name: 'Apr',
-//         uv: 100,
-//         mt: 40,
-//     },
-//     {
-//         name: 'May',
-//         uv: 30,
-//         mt: 50,
-//     },
-//     {
-//         name: 'Jun',
-//         uv: 10,
-//         mt: 60,
-//     },
-//     {
-//         name: 'Aug',
-//         uv: 15,
-//         mt: 70,
-//     },
-//     {
-//         name: 'Sep',
-//         uv: 20,
-//         mt: 80,
-//     },
-//     {
-//         name: 'Nov',
-//         uv: 30,
-//         mt: 90,
-//     },
-//     {
-//         name: 'Dec',
-//         uv: 10,
-//         mt: 100,
-//     },
-// ];
 
 const DriverGrowth = () => {
 
@@ -72,11 +15,24 @@ const DriverGrowth = () => {
     const { data: dashboardData } = useGetDashboardAnalyticsQuery();
     const processedData = mapMonthNumberToName(dashboardData?.responses_by_month || []);
 
+    const CustomTooltip = ({ active, payload }) => {
+        if (active && payload && payload.length) {
+            const { month, count } = payload[0].payload;
+            return (
+                <div className="custom-tooltip bg-white py-3 px-2 rounded border">
+                    <p className="label">{`Month: ${month}`}</p>
+                    <p className="label">{`Responses: ${count}`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
     return (
         <>
             <div className='between-center'>
                 <p className='text-2xl'>Survey Response</p>
-
             </div>
             <div className='w-full h-[400px]'>
                 <ResponsiveContainer width="100%" height="100%">
@@ -93,7 +49,7 @@ const DriverGrowth = () => {
                     >
                         <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={10} />
                         <YAxis dataKey="count" tickLine={false} axisLine={false} />
-                        <Tooltip />
+                        <Tooltip content={<CustomTooltip />} />
                         <Area type="monotone" dataKey="count" stroke="#ECB206" opacity={1} fillOpacity={1} fill="#ECB206" />
                     </AreaChart>
                 </ResponsiveContainer>
@@ -102,4 +58,4 @@ const DriverGrowth = () => {
     )
 }
 
-export default DriverGrowth
+export default DriverGrowth;

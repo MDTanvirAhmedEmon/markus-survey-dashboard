@@ -68,7 +68,6 @@ const ManageEvent = () => {
     };
 
 
-
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
@@ -77,9 +76,6 @@ const ManageEvent = () => {
     const handlePageChangeSurvey = (page) => {
         setCurrentPageSurvey(page);
     };
-
-
-
 
     const CustomDropdownSurvey = (menu) => (
         <div>
@@ -94,9 +90,6 @@ const ManageEvent = () => {
             />
         </div>
     );
-
-
-
 
 
     const [image, setImage] = useState(null)
@@ -254,27 +247,9 @@ const ManageEvent = () => {
                                 dropdownRender={CustomDropdownSurvey}
                             />
                         </Form.Item>
-                        <Form.Item
-                            name={`image`}
-                            label={`Upload Qr code Image`}
-                            rules={[
-                                {
-                                    message: ' Qr code Image Name is required',
-                                    required: true
-                                }
-                            ]}
-                        >
-                            <label className='w-full block py-2 h-[200px] border rounded-md' htmlFor='qrCode'>
-                                <img className='w-full h-full object-contain' src={image ? URL.createObjectURL(image) : 'https://i.ibb.co/9c2gMyK/transparent-upload-icon-free-png.webp'} alt="" />
-                            </label>
-                            <input onChange={(e) => {
-                                setImage(e.target.files[0])
-                            }} id='qrCode' type='file' accept='image/*' style={{
-                                display: 'none'
-                            }} />
-                        </Form.Item>
-                        <button className='w-full py-2 bg-[var(--color-2)] text-white font-semibold rounded-md'>
-                            save
+
+                        <button className='w-full py-2 bg-[var(--color-2)] text-lg text-white font-semibold rounded-md'>
+                            Save
                         </button>
                     </Form>
                 </div>
@@ -288,11 +263,12 @@ const ManageEvent = () => {
                 footer={false}
                 open={showQRCodeModal}
                 onCancel={() => setShowQRCodeModal(false)}
+                className=''
             >
                 <div>
-                    <p className="text-xl w-full py-8 font-semibold text-center">Scan QRCode</p>
+                    <p className="text-xl w-full py-6 font-semibold text-center ">Scan QRCode</p>
                     {selectedQRCode && (
-                        <QRCode className=' mx-auto' size={256} value={selectedQRCode} />
+                        <QRCode className=' mx-auto mb-16' size={256} value={selectedQRCode} />
                     )}
                 </div>
             </Modal>
