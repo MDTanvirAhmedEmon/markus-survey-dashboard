@@ -3,6 +3,7 @@ import { BsArchive } from 'react-icons/bs';
 import { GoProjectRoadmap } from 'react-icons/go';
 import { IoIosArrowForward } from 'react-icons/io';
 import { IoSettings } from 'react-icons/io5';
+import { BiSolidUserAccount } from "react-icons/bi";
 import { LuFilePlus } from 'react-icons/lu';
 import { MdDashboard, MdEvent } from 'react-icons/md';
 import { SiHomeassistantcommunitystore } from 'react-icons/si';
@@ -64,26 +65,9 @@ const Sidebar = () => {
             sub_menu: false
         },
         {
-            path: '#',
-            label: 'Company',
-            icon: <IoSettings />,
-            sub_menu: [
-                {
-                    path: '/privacy-policy',
-                    label: 'Privacy Policy',
-                    icon: <></>,
-                },
-                {
-                    path: '/terms',
-                    label: 'Terms & Condition',
-                    icon: <></>,
-                },
-                {
-                    path: '/profile',
-                    label: 'Profile',
-                    icon: <></>,
-                },
-            ]
+            path: '/profile',
+            label: 'Profile',
+            icon: <BiSolidUserAccount />,
         }
     ] : [
         {
@@ -150,7 +134,7 @@ const Sidebar = () => {
     }, [openIndex]);
 
     return (
-        <div id='sidebar' className='w-full h-full mt-10'>
+        <div id='sidebar' className='w-full h-[100vh]] mt-10'>
             <div className="log my-5">
                 <Link to={`/`} className='text-white font-bold text-2xl'>Company Logo</Link>
             </div>
