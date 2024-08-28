@@ -6,6 +6,7 @@ import { IoArrowBackSharp } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import { useGetProjectDetailsQuery } from "../redux/features/manageCompany/manageCompanyApi";
+import { imageUrl } from "../redux/api/baseApi";
 
 const dataSource = [
     {
@@ -39,7 +40,16 @@ const ProjectUsers = () => {
     const id = useParams()
     // console.log(id)
     const {data:projectDetails , isError, isLoading} = useGetProjectDetailsQuery(id?.id)
-    // console.log(projectDetails?.data)
+    console.log(projectDetails?.data)
+
+    const formattedTableFromattedData = projectDetails?.data?.map((item, i)=>({
+        key : i+1,
+        name  :  item?.user?.name,
+        img : item?.user?.image ?  `${imageUrl}/${item?.user?.image}` : "No Image",
+        email : item?.user?.email,
+        phone : item?.user?.phone_number  ? item?.user?.phone_number : 'Not Available'
+    })) 
+    console.log(formattedTableFromattedData)
     const columns = [
         {
             title: 'Serial No',
@@ -114,3 +124,7 @@ const ProjectUsers = () => {
 }
 
 export default ProjectUsers
+
+
+
+

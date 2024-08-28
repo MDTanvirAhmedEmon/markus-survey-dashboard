@@ -2,6 +2,7 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const Overview = ({ company_growth_by_month }) => {
+    // processedData
     const data = [
         {
             name: 'Jan',
@@ -108,7 +109,7 @@ const Overview = ({ company_growth_by_month }) => {
                     <BarChart
                         width={500}
                         height={500}
-                        data={processedData}
+                        data={data}
                         margin={{
                             top: 20,
                             right: 30,
