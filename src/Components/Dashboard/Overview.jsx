@@ -40,7 +40,7 @@ const Overview = () => {
                     <BarChart
                         width={500}
                         height={500}
-                        data={data}
+                        data={processedData}
                         margin={{
                             top: 20,
                             right: 30,
