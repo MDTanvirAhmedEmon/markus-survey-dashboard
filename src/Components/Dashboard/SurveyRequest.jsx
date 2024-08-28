@@ -7,6 +7,7 @@ import { MakeFormData } from '../../utils/FormDataHooks';
 const SurveyRequest = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
+    const [openAllowModal, setOpenAllowModal] = useState(false)
 
     // get all company
     const { data: projects } = useGetProjectsForSurveyRequestQuery({
@@ -23,8 +24,10 @@ const SurveyRequest = () => {
     useEffect(() => {
         if (isSuccess) {
             message.success("Accepted Request Successfully");
+            setOpenAllowModal(false)
         } else if (isError) {
             message.error("Request Acceptance Failed");
+            setOpenAllowModal(false)
         }
     }, [isSuccess, isError]);
 
@@ -32,7 +35,7 @@ const SurveyRequest = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-    const [openAllowModal, setOpenAllowModal] = useState(false)
+
     const [selectedID, setSelectedID] = useState([])
     const [userId, setUserId] = useState(null);
     const [Id, setId] = useState(null);
