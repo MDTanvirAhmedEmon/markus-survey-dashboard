@@ -17,7 +17,7 @@ export const eventApi = baseApi.injectEndpoints({
             query: (id) => {
                 return {
                     url: `delete-event?id=${id}`,
-                    method: "DELETE",
+                    method: "GET",
                 }
             },
             invalidatesTags: ['Event'],

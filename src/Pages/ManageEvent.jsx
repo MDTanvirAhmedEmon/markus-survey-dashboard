@@ -1,4 +1,4 @@
-import { Form, Input, message, Modal, Pagination, Popconfirm, QRCode, Select, Table } from 'antd';
+import { ConfigProvider, Form, Input, message, Modal, Pagination, Popconfirm, QRCode, Select, Spin, Table } from 'antd';
 import React, { useEffect, useRef, useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import { FaEdit, FaRegEye, FaStar } from 'react-icons/fa';
@@ -47,13 +47,13 @@ const ManageEvent = () => {
     });
 
     // delete qrcode
-    const [deleteQRCode, {isLoading:deleteLoading}] = useDeleteQRCodeMutation();
+    const [deleteQRCode, { isLoading: deleteLoading }] = useDeleteQRCodeMutation();
 
     // Pop confirm
-    const confirm = async (projectId) => {
-        console.log(projectId)
+    const confirm = async (event) => {
+        console.log('event', event)
         try {
-            await deleteQRCode(projectId).unwrap();
+            await deleteQRCode(event?.id).unwrap();
             message.success('Event deleted successfully');
         } catch (error) {
             message.error('Failed to delete the Event');
@@ -108,15 +108,15 @@ const ManageEvent = () => {
     const downloadQRCode = () => {
         const qrElement = qrRef.current?.querySelector('canvas');
         if (qrElement) {
-          const url = qrElement.toDataURL('image/png');
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = 'qrcode.png';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+            const url = qrElement.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'qrcode.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
-      };
+    };
 
 
     const columns = [
@@ -137,7 +137,7 @@ const ManageEvent = () => {
             dataIndex: 'QrCodeImage',
             key: 'QrCodeImage',
             render: (_, record) => (
-                
+
                 <div ref={qrRef} >
                     <QRCode size={80} value={`http://192.168.10.188:3001/surveyAllQuestions/${record?.barcode}`} />
                 </div>
@@ -162,7 +162,7 @@ const ManageEvent = () => {
                         <Popconfirm
                             title="Delete the Event"
                             description="Are you sure to delete this Event?"
-                            onConfirm={confirm}
+                            onConfirm={() => confirm(record)}
                             onCancel={cancel}
                             okText="Yes"
                             cancelText="No"
@@ -211,14 +211,29 @@ const ManageEvent = () => {
                     <p className='text-xl'>Events Manage</p>
                 </div>
                 <div className='end-center gap-2'>
-                    <Input  onChange={(e) => setSearchTerm(e.target.value)} className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
+                    <Input onChange={(e) => setSearchTerm(e.target.value)} className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
                     <button onClick={() => setOpenAddModal(true)} className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
                         Add New Event
                         <FaPlus />
                     </button>
                 </div>
             </div>
-            <Table dataSource={event?.survey?.data} columns={columns} pagination={false} />
+            {
+                 isLoading ? <div className=' h-[500px] flex items-center justify-center'>
+                    <ConfigProvider
+                        theme={{
+                            token: {
+                                colorPrimary: "#ECB206",
+                            },
+                        }}
+                    >
+                        <Spin size="large" />
+                    </ConfigProvider>
+
+                </div>
+                    : <Table dataSource={event?.survey?.data} columns={columns} pagination={false} />
+            }
+
             <Modal
                 centered
                 footer={false}

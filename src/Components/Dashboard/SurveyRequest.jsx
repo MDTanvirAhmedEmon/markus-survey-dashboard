@@ -2,6 +2,7 @@ import { ConfigProvider, message, Modal, Pagination, Spin, Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useAcceptRequestMutation, useGetEmployeeRequestQuery, useGetProjectsForSurveyRequestQuery } from '../../redux/features/employeeRequest/employeeRequestApi';
 import { MakeFormData } from '../../utils/FormDataHooks';
+import { imageUrl } from '../../redux/api/baseApi';
 
 
 const SurveyRequest = () => {
@@ -13,7 +14,7 @@ const SurveyRequest = () => {
     const { data: projects } = useGetProjectsForSurveyRequestQuery({
         page: currentPage
     });
-    console.log(projects)
+
 
     // employee request api
     const { data } = useGetEmployeeRequestQuery();
@@ -64,7 +65,7 @@ const SurveyRequest = () => {
             key: 'name',
             render: (_, record) => {
                 return (<div className='flex items-center gap-3'>
-                    <img src={record?.user?.image} className='w-[40px] h-[40px] rounded-sm' alt="" />
+                    <img src={`${imageUrl}${record?.user?.image}`} className='w-[40px] h-[40px] rounded-sm' alt="" />
                     <p className='font-medium'>{record?.user?.name}</p>
                 </div>)
             }
@@ -95,17 +96,14 @@ const SurveyRequest = () => {
     ];
 
     const handleSave = () => {
-        console.log(selectedID)
-        console.log(userId)
-        console.log(Id)
         const data = {
             id: Id,
             project_ids: selectedID,
             user_id: userId
         }
-        console.log("form handler", data)
+
         const formData = MakeFormData(data);
-        console.log(formData)
+
         acceptRequest(formData)
     };
 

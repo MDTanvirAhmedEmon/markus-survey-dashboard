@@ -1,19 +1,23 @@
-import { Input, Pagination } from 'antd';
+import { Avatar, Input, Pagination } from 'antd';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { IoArrowBackSharp } from 'react-icons/io5';
 import { Link, useParams } from 'react-router-dom';
 import { useGetAllSurveyCommentsQuery } from '../redux/features/survey/surveyApi';
+import { imageUrl } from '../redux/api/baseApi';
 
 const AllSurveyComments = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState(null);
+
     const pageSize = 10;
 
     const { id } = useParams();
-    const { data } = useGetAllSurveyCommentsQuery(id);
-    console.log(data)
-
+    const { data } = useGetAllSurveyCommentsQuery({
+        id,
+        page: currentPage,
+        search: searchTerm,
+    });
 
 
     const handlePageChange = (page) => {
@@ -22,7 +26,7 @@ const AllSurveyComments = () => {
 
     return (
         <div>
-            <div className='between-center px-3 my-2 pt-5 '>
+            <div className='between-center px-3 my-2  '>
                 <div className='start-center gap-2 mb-3 p-5'>
                     <Link to={-1}
                         className='bg-[var(--color-2)] py-1 px-2 rounded-md start-center gap-1 text-white'><IoArrowBackSharp />back</Link>
@@ -48,10 +52,10 @@ const AllSurveyComments = () => {
                 {
                     data?.data?.map((comment, index) => (
 
-                        <div key={index} className=' w-full flex gap-3 mt-10'>
+                        <div key={index} className=' w-full flex items-center gap-3 mt-10'>
                             <div className='w-[22%]'>0{index + 1}</div>
                             <div className='w-[34%] pr-12'>{comment?.comment}</div>
-                            <div className='w-[22%] flex gap-3 items-center'><img className='w-10 rounded' src={comment?.user?.image} /> {comment?.user?.name}</div>
+                            <div className='w-[22%] flex gap-3 items-center'><Avatar size={45} shape="circle" className=' shadow' src={`${imageUrl}${comment?.user?.image}`} /> {comment?.user?.name}</div>
                             <div className='w-[22%]'>{comment?.user?.email}</div>
                         </div>
                     ))

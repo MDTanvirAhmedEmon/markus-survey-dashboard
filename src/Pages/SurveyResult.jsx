@@ -4,10 +4,11 @@ import { ConfigProvider, Form, Input, Pagination, Select, Spin, Tag } from "antd
 import { CiSearch } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { useGetProjectForManageCompanyQuery, useGetSurveyForManageCompanyQuery } from "../redux/features/questions/questionsApi";
-import { useGetSurveyResultReportQuery } from "../redux/features/survey/surveyApi";
+import { useGetAllSurveyCommentsQuery, useGetSurveyResultReportQuery } from "../redux/features/survey/surveyApi";
 import { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import SurveyResultImages from "./SurveyResultImages";
 
 
 
@@ -99,7 +100,6 @@ const SurveyResult = () => {
 
     // pdf
     const printRef = useRef(null);
-
     const handleExportAsPDF = async () => {
         const inputData = printRef.current;
         try {
@@ -121,7 +121,11 @@ const SurveyResult = () => {
             let heightLeft = imgHeight;
             let position = 0;
 
-            while (heightLeft > 0) {
+            // Limit to two pages
+            const maxPages = 2;
+            let pagesAdded = 0;
+
+            while (heightLeft > 0 && pagesAdded < maxPages) {
                 const currentHeight = Math.min(pdfHeight, heightLeft);
                 const canvasWidth = currentHeight * ratio;
 
@@ -137,7 +141,9 @@ const SurveyResult = () => {
                 heightLeft -= pdfHeight;
                 position -= pdfHeight;
 
-                if (heightLeft > 0) {
+                pagesAdded++;
+
+                if (heightLeft > 0 && pagesAdded < maxPages) {
                     pdf.addPage();
                 }
             }
@@ -148,7 +154,14 @@ const SurveyResult = () => {
         }
     };
 
-
+    const handelGetImage = (id) => {
+    // get all survey comment for image
+    const { data: comments } = useGetAllSurveyCommentsQuery({
+        id,
+        page: 1,
+        search: "",
+    });
+}
 
     return (
         <>
@@ -212,7 +225,7 @@ const SurveyResult = () => {
 
 
                 <div className=" flex justify-between mb-6">
-                    <p>All Survey Questions </p>
+                    <p className="ml-2">All Survey Questions </p>
                     <div className=" flex items-center gap-5">
                         <div>
                             <Tag className=" h-4" color="#ECB206"></Tag>
@@ -255,7 +268,7 @@ const SurveyResult = () => {
                         <div>
                             <div className="p-10" ref={printRef}>
                                 {reportData?.data?.map((question, index) => (
-                                    <div className="" key={index}>
+                                    <div  className="" key={index}>
                                         <div className="flex">
                                             <div className="w-[40%]">
                                                 {`${(currentSurveyPage - 1) * pageSize + index + 1}. ${question?.question}`}
@@ -305,18 +318,12 @@ const SurveyResult = () => {
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center justify-between">
-                                                        <p className="text-lg font-semibold">Overall survey 500</p>
-                                                        <p className="text-[#ECB206]">QR Code 250 Use App 250</p>
+                                                        <p className="text-lg font-semibold">Overall survey {question?.overall_survey}</p>
+                                                        <p className="text-[#ECB206]">QR Code {question?.qr_code_survey} Use App {question?.app_survey_count}</p>
                                                         <p className="text-lg font-semibold">User Comments {question?.total_comments}+</p>
                                                         <div className="flex justify-center items-center mb-8 mt-6">
-                                                            {data.map((item, idx) => (
-                                                                <img
-                                                                    className="w-10 h-10 rounded-full -ml-4"
-                                                                    key={idx}
-                                                                    src={item}
-                                                                    alt=""
-                                                                />
-                                                            ))}
+                                                            
+                                                            <SurveyResultImages id={question?.question_id} ></SurveyResultImages>
                                                         </div>
                                                         <Link to={`/all-survey-comments/${question?.question_id}`} >
                                                             <p className="text-lg text-[#ECB206]">View All</p>
