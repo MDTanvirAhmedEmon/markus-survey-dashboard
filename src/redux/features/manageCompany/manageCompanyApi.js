@@ -21,8 +21,8 @@ export const manageCompanyApi = baseApi.injectEndpoints({
         //     invalidatesTags: ['Survey'],
         // }),
         getCompanySurvey: builder.query({
-            
-            query: ({page, search}) => {
+
+            query: ({ page, search }) => {
                 const query = search ? `?search=${search}` : `?page=${page}`;
                 return {
                     url: `questions${query}`,
@@ -33,7 +33,7 @@ export const manageCompanyApi = baseApi.injectEndpoints({
         }),
         surveyReport: builder.query({
             query: (id) => {
-                console.log('api slice form',id)
+                console.log('api slice form', id)
                 return {
                     url: `surveys/${id}`,
                     method: "GET",
@@ -41,28 +41,36 @@ export const manageCompanyApi = baseApi.injectEndpoints({
             },
             providesTags: ['Survey'],
         }),
-        updateSurveyQuestion :  builder.mutation({
-            query :  (data)=>({
-                url : 'update-questions',
-                method : "POST",
-                body : data
+        updateSurveyQuestion: builder.mutation({
+            query: (data) => ({
+                url: 'update-questions',
+                method: "POST",
+                body: data
             }),
-            invalidatesTags : ['Survey']
+            invalidatesTags: ['Survey'] 
         }),
-        getProjectDetails : builder.query({
-            query : (id)=>({
-                url : `/survey-based-user?survey_id=${id}`,
-                method : "GET"
-            }),
-            providesTags : ['GetSurveyUser']
+        getProjectDetails: builder.query({
+            query: ({id, search, page}) => {
+                console.log(page)
+                console.log(search)
+                const searchParams = search ? `&search=${search}` : `?page=${page}`;
+
+                return {
+                    url: `/survey-based-user?survey_id=${id}${searchParams}`,
+                    method: "GET"
+                }
+            },
+            providesTags: ['GetSurveyUser']
         }),
-        
-        deleteSurveyUser : builder.mutation({
-            query : (id) => ({
-                url : `delete-survey-user?id=${id}`,
-                method : "DELETE"
-            }),
-            invalidatesTags : ['GetSurveyUser']
+
+        deleteSurveyUser: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `delete-survey-user?id=${id}`,
+                    method: "DELETE"
+                }
+            },
+            invalidatesTags: ['GetSurveyUser']
         })
 
     }),

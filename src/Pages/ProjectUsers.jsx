@@ -1,5 +1,5 @@
-import { Input, message, Popconfirm, Table } from "antd";
-import { act } from "react";
+import { Input, message, Pagination, Popconfirm, Table } from "antd";
+import { act, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 import { IoArrowBackSharp } from "react-icons/io5";
@@ -37,11 +37,15 @@ import { imageUrl } from "../redux/api/baseApi";
 
 const ProjectUsers = () => {
 
-    const id = useParams()
+    const {id} = useParams()
+    const [searchTerm, setSearchTerm] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
     /** Get Project details api  */
-    const {data:projectDetails , isError, isLoading} = useGetProjectDetailsQuery(id?.id)
+    const {data:projectDetails , isError, isLoading} = useGetProjectDetailsQuery({id,search : searchTerm,page: currentPage, },{
+        refetchOnMountOrArgChange: true,
+    })
     const [deleteSurveyUser]= useDeleteSurveyUserMutation()
-
 
 
     /** Formatted data for the table */
@@ -54,9 +58,6 @@ const ProjectUsers = () => {
         company : item?.survey?.user?.name,
         phone : item?.user?.phone_number  ? item?.user?.phone_number : 'Not Available'
     })) 
-    console.log(id)
-    console.log(formattedTableFormattedData)
-    console.log(projectDetails)
     const columns = [
         {
             title: 'Serial No',
@@ -134,6 +135,10 @@ const ProjectUsers = () => {
 
 
     }
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
  
     return (
         <div>
@@ -144,7 +149,7 @@ const ProjectUsers = () => {
                     <p className='text-xl'>Project Details</p>
                 </div>
                 <div className='end-center gap-2'>
-                    <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />}
+                    <Input onChange={(e) => setSearchTerm(e.target.value)} className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />}
                         placeholder="Search" />
                     {/* <Link to={`/add-project`}
                         className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
@@ -153,7 +158,16 @@ const ProjectUsers = () => {
                     </Link> */}
                 </div>
             </div>
-            <Table dataSource={formattedTableFormattedData} columns={columns} />
+            <Table dataSource={formattedTableFormattedData} columns={columns} pagination={false} />
+            <div className="py-6">
+                <Pagination
+                    className="custom-pagination-all"
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={projectDetails?.total}
+                    onChange={handlePageChange}
+                />
+            </div>
         </div>
     )
 }
