@@ -8,8 +8,6 @@ import { imageUrl } from '../../redux/api/baseApi';
 const Header = () => {
     const navigate = useNavigate()
     const { data, isLoading, } = useGetProfileQuery() || {};
-    const ima = `${imageUrl}${data?.user?.image}`
-    console.log(ima)
 
     return (
         <div className='w-full py-4 bg-[var(--color-7)] end-center  gap-4 pr-2 box-border'>
