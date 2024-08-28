@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ConfigProvider, message, Modal, Pagination, Spin, Table } from 'antd';
 import { useAcceptRequestMutation, useGetEmployeeRequestQuery, useGetProjectsForSurveyRequestQuery } from '../redux/features/employeeRequest/employeeRequestApi';
 import { MakeFormData } from '../utils/FormDataHooks';
+import { imageUrl } from '../redux/api/baseApi';
 
 const TotalEmployeeRequest = () => {
 
@@ -71,7 +72,7 @@ const TotalEmployeeRequest = () => {
             key: 'name',
             render: (_, record) => {
                 return (<div className='flex items-center gap-3'>
-                    <img src={record?.user?.image} className='w-[40px] h-[40px] rounded-sm' alt="" />
+                    <img src={`${imageUrl}${record?.user?.image}`} className='w-[40px] h-[40px] rounded-sm' alt="" />
                     <p className='font-medium'>{record?.user?.name}</p>
                 </div>)
             }

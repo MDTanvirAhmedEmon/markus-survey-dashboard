@@ -38,13 +38,16 @@ export const surveyApi = baseApi.injectEndpoints({
             },
         }),
         getAllSurveyComments: builder.query({
-            query: (id) => {
+            query: ({ id, page, search }) => {
+
+                const url = `question-based-user?question_id=${id}${page ? `&page=${page}` : ''}${search ? `&search=${encodeURIComponent(search)}` : ''}`;
                 return {
-                    url: `question-based-user?question_id=${id}`,
-                    method: "GET",
-                }
+                    url: url,
+                    method: 'GET',
+                };
             },
         }),
+        
     }),
 });
 
