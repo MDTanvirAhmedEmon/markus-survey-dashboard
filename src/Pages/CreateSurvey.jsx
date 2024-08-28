@@ -16,6 +16,8 @@ const CreateSurvey = () => {
     const [projectCurrentPage, setprojectCurrentPage] = useState(1);
     const pageSize = 10;
 
+    // console.log(isPeriodically)
+
 
     // delete survey
     const [deleteSurvey, { isLoading: deleteLoading }] = useDeleteSurveyMutation();
@@ -275,14 +277,14 @@ const CreateSurvey = () => {
                             label="Repeat Status"
                         >
                             <Button.Group className=''>
-                                <Button className='mr-2'
+                                <Button className={`${!isPeriodically ? ` border border-blue-500 text-blue-500` : ""} mr-2`}
                                     value="once"
                                     onClick={() => setIsPeriodically(false)}
                                 >
                                     Once
                                 </Button>
                                 <p className='font-bold pr-3 mt-2'>Or</p>
-                                <Button className='ml-2'
+                                <Button className={`${isPeriodically ? ` border border-blue-500 text-blue-500` : ""} mr-2`}
                                     value="periodically"
                                     onClick={() => setIsPeriodically(true)}
                                 >
