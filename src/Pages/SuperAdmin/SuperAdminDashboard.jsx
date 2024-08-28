@@ -4,24 +4,26 @@ import '../../App.css'
 import Overview from "../../Components/Dashboard/Overview.jsx";
 import DriverGrowth from "../../Components/Dashboard/DriverGrowth.jsx";
 import UserDeleteRequest from "../../Components/Dashboard/UserDeleteRequest.jsx";
+import { useGetOverviewQuery } from '../../redux/features/Settings/Settings.js';
 
 const SuperAdminDashboard = () => {
-
+    const { data: overview } = useGetOverviewQuery()
+    console.log(overview)
     const data = [
         {
             title: 'Total Company',
-            count: 5480,
+            count: overview?.total_company,
         },
         {
             title: 'Total Added Company',
-            count: 1480,
+            count: overview?.total_added_company,
         },
         {
             title: 'Total Removed Company',
-            count: 548,
+            count: overview?.total_removed_company,
         },
     ]
-
+    console.log(overview)
     return (
         <>
             <div className='grid-3 gap-3'>
@@ -35,17 +37,17 @@ const SuperAdminDashboard = () => {
             </div>
             <div className='grid-2 mt-3 gap-3'>
                 <div className='w-full h-full bg-white p-4 rounded-md'>
-                    <Overview />
+                    <Overview company_growth_by_month={overview?.company_growth_by_month} />
                 </div>
                 <div className='w-full h-full bg-white p-4 rounded-md'>
-                    <DriverGrowth />
+                    <DriverGrowth users_by_month={overview?.users_by_month} />
                 </div>
             </div>
             <div className='mt-3 bg-white rounded-md'>
                 <div className='between-center gap-2 mb-3 p-5'>
                     <p className='text-xl'>User Delete Request</p> <Link to={`/total-survey-request`}>
-                    View All
-                </Link>
+                        View All
+                    </Link>
                 </div>
                 <UserDeleteRequest />
 

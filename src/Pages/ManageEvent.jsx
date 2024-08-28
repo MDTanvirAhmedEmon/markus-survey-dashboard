@@ -187,8 +187,29 @@ const ManageEvent = () => {
         console.log(value)
         generateQRCode(value.surveyId)
     }
+    const handleChange = (value) => {
+        console.log(`selected ${value}`);
+    };
+    // const dataURLToBlob = (dataURL) => {
+    //     const byteString = atob(dataURL.split(',')[1]);
+    //     const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    //     const ab = new ArrayBuffer(byteString.length);
+    //     const ia = new Uint8Array(ab);
+    //     for (let i = 0; i < byteString.length; i++) {
+    //       ia[i] = byteString.charCodeAt(i);
+    //     }
+    //     return new Blob([ab], { type: mimeString });
+    //   };
 
 
+    /*
+    
+      const canvas = qrRef.current.querySelector('canvas');
+    const dataURL = canvas.toDataURL('image/png');
+    const formData = new FormData();
+    formData.append('qrImage', dataURLToBlob(dataURL), 'qrcode.png');
+    formData.forEach((value, key) => console.log(key, value))
+    */
     return (
         <div className='bg-[var(--color-7)] rounded-md'>
             <div className='between-center px-3 my-2 pt-5'>
@@ -233,9 +254,27 @@ const ManageEvent = () => {
                                 dropdownRender={CustomDropdownSurvey}
                             />
                         </Form.Item>
-
-                        <button className='w-full py-4 bg-[var(--color-2)] text-white text-md rounded-md'>
-                            Generate QRCode
+                        <Form.Item
+                            name={`image`}
+                            label={`Upload Qr code Image`}
+                            rules={[
+                                {
+                                    message: ' Qr code Image Name is required',
+                                    required: true
+                                }
+                            ]}
+                        >
+                            <label className='w-full block py-2 h-[200px] border rounded-md' htmlFor='qrCode'>
+                                <img className='w-full h-full object-contain' src={image ? URL.createObjectURL(image) : 'https://i.ibb.co/9c2gMyK/transparent-upload-icon-free-png.webp'} alt="" />
+                            </label>
+                            <input onChange={(e) => {
+                                setImage(e.target.files[0])
+                            }} id='qrCode' type='file' accept='image/*' style={{
+                                display: 'none'
+                            }} />
+                        </Form.Item>
+                        <button className='w-full py-2 bg-[var(--color-2)] text-white font-semibold rounded-md'>
+                            save
                         </button>
                     </Form>
                 </div>

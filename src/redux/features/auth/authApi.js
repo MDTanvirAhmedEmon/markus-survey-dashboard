@@ -19,8 +19,26 @@ export const authApi = baseApi.injectEndpoints({
                 }
             }
         }),
+        updateProfile: builder.mutation({
+            query: ({ data }) => {
+                return {
+                    url: `update-profile`,
+                    method: "POST",
+                    body: data,
+                }
+            },
+        }),
+        updatePassword: builder.mutation({
+            query: ({ data }) => {
+                return {
+                    url: `update-pass`,
+                    method: "POST",
+                    body: data,
+                }
+            },
+        }),
 
     }),
 })
 
-export const { useLogInCompanyMutation, useGetProfileQuery } = authApi;
+export const { useLogInCompanyMutation, useGetProfileQuery, useUpdateProfileMutation,useUpdatePasswordMutation } = authApi;

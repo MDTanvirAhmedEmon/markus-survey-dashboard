@@ -4,18 +4,18 @@ import { Button, ConfigProvider, Form, Input, Spin } from "antd";
 import { CiEdit } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { useGetProfileQuery } from "../redux/features/auth/authApi";
-
+import { useGetProfileQuery, useUpdatePasswordMutation, useUpdateProfileMutation } from "../redux/features/auth/authApi";
+import { MakeFormData } from "../utils/FormDataHooks";
+import toast from "react-hot-toast";
+import { imageUrl } from "../redux/api/baseApi";
 const admin = false;
 const Profile = () => {
-
-    // get profile api
-    const { data: profileData, isLoading } = useGetProfileQuery();
-
-
     const [image, setImage] = useState();
     const [form] = Form.useForm()
     const [tab, setTab] = useState(new URLSearchParams(window.location.search).get('tab') || "Profile");
+    const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation()
+    const [updatePassword, { isLoading: isUpdatingPass }] = useUpdatePasswordMutation()
+    const { data, isLoading, } = useGetProfileQuery() || {};
     const [passError, setPassError] = useState('')
     const handlePageChange = (tab) => {
         setTab(tab);
@@ -31,32 +31,52 @@ const Profile = () => {
     }
     const onFinish = (values) => {
         if (values?.new_password === values.current_password) {
-            return setPassError('your old password cannot be your new password')
+            return toast.error('your old password cannot be your new password')
         }
         if (values?.new_password !== values?.confirm_password) {
-            return setPassError("Confirm password doesn't match")
-        } else {
-            setPassError('')
+            return toast.error("Confirm password doesn't match")
         }
+        const data = {
+            current_password: values.current_password,
+            new_password: values.new_password,
+            confirm_password: values.confirm_password
+
+        }
+        const formData = MakeFormData(data)
+        updatePassword({ data: formData }).unwrap().then((res) => {
+            console.log(res)
+            toast.success(res.message)
+        }).catch((err) => {
+            console.log(err)
+            toast.error(err.message || 'Something went wrong')
+        })
     };
     const onEditProfile = (values) => {
-        console.log(values)
-
+        const data = {
+            name: values.name,
+            contact: values.phone_number,
+            address: values.address,
+            _method: 'PUT'
+        };
+        if (image) {
+            data.profile_image = image;
+        }
+        const formData = MakeFormData(data);
+        updateProfile({ data: formData }).unwrap().then((res) => {
+            toast.success(res.message);
+        }).catch((err) => {
+            toast.error(err.message || 'Something went wrong');
+        });
     }
-    if(isLoading){
-        <div className='h-full flex items-center justify-center'>
-        <ConfigProvider
-            theme={{
-                token: {
-                    colorPrimary: "#ECB206",
-                },
-            }}
-        >
-            <Spin size="large" />
-        </ConfigProvider>
-    </div>
-    }
-
+    useEffect(() => {
+        if (!data?.user) return
+        form.setFieldsValue({
+            name: data?.user?.name,
+            phone_number: data?.user?.phone_number,
+            email: data?.user?.email,
+            address: data?.user?.address,
+        })
+    }, [form, data])
     return (
         <div>
             {(admin &&
@@ -71,9 +91,10 @@ const Profile = () => {
                 <div className='bg-base py-9 px-10 rounded flex items-center justify-center flex-col gap-6'>
                     <div className='relative w-[140px] h-[124px] mx-auto'>
                         <input type="file" onInput={handleChange} id='img' style={{ display: "none" }} />
+                        <input type="file" onInput={handleChange} id='img' style={{ display: "none" }} />
                         <img
                             style={{ width: 140, height: 140, borderRadius: "100%" }}
-                            src={`https://dcassetcdn.com/design_img/2531172/542774/542774_13559578_2531172_d07764e6_image.png`}
+                            src={image ? URL.createObjectURL(image) : data?.user?.image ? `${imageUrl}${data?.user?.image}` : `https://dcassetcdn.com/design_img/2531172/542774/542774_13559578_2531172_d07764e6_image.png`}
                             alt=""
                         />
 
@@ -89,6 +110,7 @@ const Profile = () => {
                             cursor-pointer
                         '
                             >
+                                <CiEdit color='#929394' />
                                 <CiEdit color='#929394' />
                             </label>
                         }
@@ -173,7 +195,7 @@ const Profile = () => {
                                 </Form.Item>
 
                                 <Form.Item
-                                    name="number"
+                                    name="phone_number"
                                     label={<p className="text-[#919191] text-[16px] leading-5 font-normal">Contact
                                         Number</p>}
                                 >
@@ -229,7 +251,7 @@ const Profile = () => {
                                         }}
                                         className='font-normal text-[16px] leading-6 bg-[#ECB206]'
                                     >
-                                        Save Changes
+                                        Changes Password
                                     </Button>
                                 </Form.Item>
                             </Form>
