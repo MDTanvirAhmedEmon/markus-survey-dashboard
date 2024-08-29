@@ -197,37 +197,38 @@ const SurveyQuestions = () => {
   const renderEmojis = () => (
     <div className="flex gap-5 justify-center items-center my-12">
       <img
-        className={`btn ${selectedAnswer === "angry" ? "h-14" : "h-10"}`}
+        className={`btn cursor-pointer ${selectedAnswer === "😠" ? "h-14" : "h-10"}`}
         src={angry}
         alt="angry emoji"
-        onClick={() => handleAnswerClick("angry", "😠")}
+        onClick={() => handleAnswerClick("😠", "😠")}
       />
       <img
-        className={`btn ${selectedAnswer === "silent" ? "h-14" : "h-10"}`}
+        className={`btn cursor-pointer ${selectedAnswer === "🤐" ? "h-14" : "h-10"}`}
         src={silent}
         alt="silent emoji"
-        onClick={() => handleAnswerClick("silent", "🤐")}
+        onClick={() => handleAnswerClick("🤐", "🤐")}
       />
       <img
-        className={`btn ${selectedAnswer === "sad" ? "h-14" : "h-10"}`}
+        className={`btn cursor-pointer ${selectedAnswer === "😢" ? "h-14" : "h-10"}`}
         src={sad}
         alt="sad emoji"
-        onClick={() => handleAnswerClick("sad", "😢")}
+        onClick={() => handleAnswerClick("😢", "😢")}
       />
       <img
-        className={`btn ${selectedAnswer === "blushing" ? "h-14" : "h-10"}`}
+        className={`btn cursor-pointer ${selectedAnswer === "🙂" ? "h-14" : "h-10"}`}
         src={blushing}
         alt="blushing emoji"
-        onClick={() => handleAnswerClick("blushing", "😊")}
+        onClick={() => handleAnswerClick("🙂", "🙂")}
       />
       <img
-        className={`btn ${selectedAnswer === "smile" ? "h-14" : "h-10"}`}
+        className={`btn cursor-pointer ${selectedAnswer === "😊" ? "h-14" : "h-10"}`}
         src={smile}
         alt="smile emoji"
-        onClick={() => handleAnswerClick("smile", "😊")}
+        onClick={() => handleAnswerClick("😊", "😊")}
       />
     </div>
   );
+  
 
   return (
     <div className="container mx-auto bg-[fdfdfd] my-5">

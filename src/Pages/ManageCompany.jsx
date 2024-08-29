@@ -16,6 +16,8 @@ const ManageCompany = () => {
     const { data, isLoading } = useGetCompanySurveyQuery({
         page: currentPage,
         search: searchTerm,
+    },{
+        refetchOnMountOrArgChange: true
     });
 
     const handlePageChange = (page) => {
