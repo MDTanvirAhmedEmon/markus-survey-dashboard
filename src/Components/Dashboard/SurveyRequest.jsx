@@ -1,4 +1,4 @@
-import { ConfigProvider, message, Modal, Pagination, Spin, Table } from 'antd';
+import { Avatar, ConfigProvider, message, Modal, Pagination, Spin, Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useAcceptRequestMutation, useGetEmployeeRequestQuery, useGetProjectsForSurveyRequestQuery } from '../../redux/features/employeeRequest/employeeRequestApi';
 import { MakeFormData } from '../../utils/FormDataHooks';
@@ -10,14 +10,15 @@ const SurveyRequest = () => {
     const pageSize = 10;
     const [openAllowModal, setOpenAllowModal] = useState(false)
 
-    // get all company
+    // get all
     const { data: projects } = useGetProjectsForSurveyRequestQuery({
         page: currentPage
     });
-
+    console.log(projects)
 
     // employee request api
     const { data } = useGetEmployeeRequestQuery();
+    console.log("request",data)
 
     // accept request
     const [acceptRequest, { isLoading, isSuccess, isError }] = useAcceptRequestMutation();
@@ -55,7 +56,7 @@ const SurveyRequest = () => {
             key: 'email  ',
             render: (_, record) => {
                 return (<div className=''>
-                    <p className='font-medium'>{record?.user?.email}</p>
+                    <p className='font-medium'>{record?.user_details?.email}</p>
                 </div>)
             }
         },
@@ -65,8 +66,11 @@ const SurveyRequest = () => {
             key: 'name',
             render: (_, record) => {
                 return (<div className='flex items-center gap-3'>
-                    <img src={`${imageUrl}${record?.user?.image}`} className='w-[40px] h-[40px] rounded-sm' alt="" />
-                    <p className='font-medium'>{record?.user?.name}</p>
+                    {
+                        record?.user_details?.image ? <img src={`${imageUrl}${record?.user_details?.image}`} className='w-[40px] h-[40px] rounded-sm' alt="" /> : <Avatar shape="square"></Avatar>
+                    }
+
+                    <p className='font-medium'>{record?.user_details?.name}</p>
                 </div>)
             }
         },
@@ -98,9 +102,10 @@ const SurveyRequest = () => {
     const handleSave = () => {
         const data = {
             id: Id,
-            project_ids: selectedID,
+            project_ids: JSON.stringify(selectedID),
             user_id: userId
         }
+        console.log("accept request data", data)
 
         const formData = MakeFormData(data);
 

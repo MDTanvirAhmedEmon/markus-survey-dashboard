@@ -1,10 +1,7 @@
-import { Input, Modal, Table } from 'antd';
-import React, { useState } from 'react'
-import { CiSearch } from 'react-icons/ci';
-import { FaEdit, FaRegEye, FaStar, FaUser } from 'react-icons/fa';
-import { MdEdit, MdOutlineDelete } from 'react-icons/md';
-import { Link } from 'react-router-dom';
-import { useDeleteEmployeeQuery, useDeleteEmployeeRequestQuery } from '../../redux/features/dashboard/dashboardApi';
+import { Input, message, Modal, Table } from 'antd';
+import React, { useEffect, useState } from 'react'
+import {  FaUser } from 'react-icons/fa';
+import { useCancelEmployeeMutation, useDeleteEmployeeMutation, useDeleteEmployeeRequestQuery } from '../../redux/features/dashboard/dashboardApi';
 import { imageUrl } from '../../redux/api/baseApi';
 // const dataSource = [
 //     {
@@ -49,24 +46,51 @@ const sarvayData = [
 const UserDeleteRequest = () => {
     const [openAllowModal, setOpenAllowModal] = useState(false)
     const [selectedID, setSelectedID] = useState([])
-    const {data : deleteRequestUser,isError, isLoading} = useDeleteEmployeeRequestQuery()
-    const [userDeleteId, setUserDeleteId] = useState("")
-    const {data : deleteUser,error, loading} = useDeleteEmployeeQuery({userDeleteId})
-    
+    // get
+    const { data: deleteRequestUser, isLoading } = useDeleteEmployeeRequestQuery()
 
-    const formattedDeleteUserRequest = deleteRequestUser?.data?.map((user,i)=>({
-        id : user?.id,
-        key : i + 1 ,
-        name : user?.name ? user?.name : "",
-        img : user?.image ? `${imageUrl}${user?.image}` : <FaUser />,
-        email : user?.email
+    const [userDeleteId, setUserDeleteId] = useState(null)
+    const [cancelId, setCancelId] = useState(null)
+
+    // Deleting a user - only trigger if userDeleteId is not null
+    const [deleteEmployee, { isSuccess, isError, refetch }] = useDeleteEmployeeMutation();
+    console.log(isSuccess)
+    console.log(isError)
+
+    const [cancelEmployee, { isSuccess: cancelSuccess, isError: cancelError }] = useCancelEmployeeMutation();
+
+
+    useEffect(() => {
+        if (isSuccess) {
+            message.success("Delete Request Successful");
+            setOpenAllowModal(false);
+            refetch();
+        }
+        if (isError) {
+            message.error("Deletion Failed");
+            setOpenAllowModal(false);
+        }
+    }, [isSuccess, isError]);
 
 
 
 
+    const formattedDeleteUserRequest = deleteRequestUser?.data?.map((user, i) => ({
+        id: user?.id,
+        key: i + 1,
+        name: user?.name ? user?.name : "",
+        img: user?.image ? `${imageUrl}${user?.image}` : <FaUser />,
+        email: user?.email
     }))
+
+
     console.log(userDeleteId)
     console.log(formattedDeleteUserRequest)
+
+
+    const handleCancel = () => {
+        cancelEmployee(cancelId)
+    }
 
 
     const columns = [
@@ -101,8 +125,11 @@ const UserDeleteRequest = () => {
                     <button onClick={() => {
                         setOpenAllowModal(true)
                         setUserDeleteId(record?.id)
-                        }} className='px-4 py-2 rounded-3xl text-white font-semibold bg-green-600'> Allow </button>
-                    <button className='px-4 py-2 rounded-3xl text-white font-semibold bg-red-600'> Cancel </button>
+                    }} className='px-4 py-2 rounded-3xl text-white font-semibold bg-green-600'> Allow </button>
+                    <buttonon Click={() => {
+                        setCancelId(record?.id)
+                        
+                    }} className='px-4 py-2 rounded-3xl text-white font-semibold bg-red-600'> Cancel </buttonon>
                 </div>)
             }
         },
@@ -110,9 +137,11 @@ const UserDeleteRequest = () => {
 
     ];
 
-    const handleDeleteUser = ()=>{
-        deleteUser
+    const handleDeleteUser = () => {
+        console.log(userDeleteId)
+        deleteEmployee(userDeleteId)
     }
+
 
 
 

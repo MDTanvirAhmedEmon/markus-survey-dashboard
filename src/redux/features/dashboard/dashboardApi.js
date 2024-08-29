@@ -11,19 +11,25 @@ export const dashboardApi = baseApi.injectEndpoints({
                 }
             }
         }),
-        deleteEmployeeRequest :  builder.query({
-            query : ()=> ({
-                url : "delete-employee-request",
-                method : 'GET'
+        deleteEmployeeRequest: builder.query({
+            query: () => ({
+                url: "delete-employee-request",
+                method: 'GET'
             })
         }),
-        deleteEmployee :  builder.query({
-            query : (id)=> ({
-                url : `delete-employee-request/${id}`,
-                method : 'GET'
+        deleteEmployee: builder.mutation({
+            query: (id) => ({
+                url: `delete-employee/${id}`,
+                method: 'GET'
             })
-        })
+        }),
+        cancelEmployee: builder.mutation({
+            query: (id) => ({
+                url: `cancel-delete-employee/${id}`,
+                method: 'GET'
+            })
+        }),
     }),
 })
 
-export const { useGetDashboardAnalyticsQuery , useDeleteEmployeeRequestQuery, useDeleteEmployeeQuery } = dashboardApi;
+export const { useGetDashboardAnalyticsQuery, useDeleteEmployeeRequestQuery, useDeleteEmployeeMutation, useCancelEmployeeMutation } = dashboardApi;

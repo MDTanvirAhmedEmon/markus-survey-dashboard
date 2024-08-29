@@ -13,7 +13,6 @@ const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const [logInCompany, { data, isLoading }] = useLogInCompanyMutation();
-
     if (data?.access_token) {
         dispatch(setToken(data?.access_token))
         console.log(data?.access_token)
@@ -27,7 +26,7 @@ const Login = () => {
             password: values.password
         }
         logInCompany(formData).unwrap()
-            .then((payload) => message.success( "Successfully Logged In"))
+            .then((payload) => message.success("Successfully Logged In"))
             .catch((error) => message.error(error?.data?.message ? error?.data?.message : "Something went wrong!!"));
 
     };

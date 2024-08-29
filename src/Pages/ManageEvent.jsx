@@ -5,12 +5,11 @@ import { FaEdit, FaRegEye, FaStar } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
 import { IoArrowBackSharp } from 'react-icons/io5';
 import { MdCloudDownload, MdEdit, MdOutlineDelete } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useGetSurveyForManageCompanyQuery } from '../redux/features/questions/questionsApi';
 import { useDeleteQRCodeMutation, useGenerateQRCodeMutation, useGetEventWithCRCodeQuery } from '../redux/features/Event/EventApi';
 
 const ManageEvent = () => {
-
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState(null);
@@ -139,7 +138,7 @@ const ManageEvent = () => {
             render: (_, record) => (
 
                 <div ref={qrRef} >
-                    <QRCode size={80} value={`http://192.168.10.205:3001/surveyAllQuestions/${record?.barcode}`} />
+                    <QRCode size={80} value={`${window.location.protocol}//${window.location.host}/surveyAllQuestions/${record?.barcode}`} />
                 </div>
             ),
         },
@@ -148,7 +147,7 @@ const ManageEvent = () => {
             dataIndex: 'key',
             key: 'key',
             render: (_, record) => {
-                const qrCodeValue = `http://192.168.10.205:3001/surveyAllQuestions/${record?.barcode}`;
+                const qrCodeValue = `${window.location.protocol}//${window.location.host}/surveyAllQuestions/${record?.barcode}`;
                 return (
                     <div className="start-center text-2xl gap-1">
                         <button>
@@ -218,7 +217,7 @@ const ManageEvent = () => {
                 </div>
             </div>
             {
-                 isLoading ? <div className=' h-[500px] flex items-center justify-center'>
+                isLoading ? <div className=' h-[500px] flex items-center justify-center'>
                     <ConfigProvider
                         theme={{
                             token: {
