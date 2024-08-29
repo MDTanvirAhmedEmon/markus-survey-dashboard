@@ -10,14 +10,13 @@ import commentImg from "../../assets/images/comment.png";
 import { Progress, Select } from "antd";
 import { ConfigProvider, Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
-// import translateText from "../../translateText";
+import translateText from "../../translateText";
 // import {
 //   useGetSurveyQNQuery,
 //   usePostSurveyQnMutation,
 // } from "../../redux/api/baseapi";
 import Swal from "sweetalert2";
-import { useGetSurveyQNQuery, usePostSurveyQnMutation } from "../../redux/features/company/company";
-import translateText from "../../TranslateText";
+import { useGetSurveyQNQuery, usePostSurveyQnMutation } from "../redux/features/company/company";
 
 const SurveyQuestions = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -130,12 +129,12 @@ const SurveyQuestions = () => {
         };
         setAnswers(updatedAnswers);
 
-        const newProgress = ((currentQuestion + 1) / SVquestions.length) * 100;
+        const newProgress = ((currentQuestion + 1) / SVquestions?.length) * 100;
         setProgress(newProgress);
         // clear the comment box:
 
         // Navigate to the next question or finish
-        if (currentQuestion < SVquestions.length - 1) {
+        if (currentQuestion < SVquestions?.length - 1) {
           setCurrentQuestion(currentQuestion + 1);
           setSelectedAnswer(null);
         } else {
@@ -175,7 +174,7 @@ const SurveyQuestions = () => {
 
   const renderStars = () => (
     <div className="flex gap-5 justify-center items-center my-12">
-      {[...Array(5)].map((_, index) => (
+      {[...Array(5)]?.map((_, index) => (
         <img
           key={index}
           className={`btn ${
@@ -376,7 +375,7 @@ const SurveyQuestions = () => {
         {emoji ? renderEmojis() : renderStars()}
 
         <div className="p-5 w-11/12 mx-auto">
-          <p>Total Questions: {SVquestions.length} </p>
+          <p>Total Questions: {SVquestions?.length} </p>
           <Progress
             percent={progress}
             format={() => `${progress.toFixed()}%`}

@@ -9,6 +9,13 @@ import { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import SurveyResultImages from "./SurveyResultImages";
+import hugeSmile from "../assets/images/smile.png"
+import smile from "../assets/images/blushing.png"
+import sad from "../assets/images/sad.png"
+import silent from "../assets/images/silent.png"
+import angry from "../assets/images/angry.png"
+import star from "../assets/images/star.png"
+
 
 
 
@@ -155,13 +162,13 @@ const SurveyResult = () => {
     };
 
     const handelGetImage = (id) => {
-    // get all survey comment for image
-    const { data: comments } = useGetAllSurveyCommentsQuery({
-        id,
-        page: 1,
-        search: "",
-    });
-}
+        // get all survey comment for image
+        const { data: comments } = useGetAllSurveyCommentsQuery({
+            id,
+            page: 1,
+            search: "",
+        });
+    }
 
     return (
         <>
@@ -224,30 +231,70 @@ const SurveyResult = () => {
                 </div>
 
 
-                <div className=" flex justify-between mb-6">
+                <div className=" flex justify-between mb-6 mr-6">
                     <p className="ml-2">All Survey Questions </p>
-                    <div className=" flex items-center gap-5">
-                        <div>
-                            <Tag className=" h-4" color="#ECB206"></Tag>
-                            Very Satisfied
+
+                    {
+                        reportData?.emoji_or_star === "star" &&
+                        <div div className=" flex items-center gap-10">
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#ECB206"></Tag>
+                                <img className="w-6" src={star} alt="" />
+                                <img className="w-6" src={star} alt="" />
+                                <img className="w-6" src={star} alt="" />
+                                <img className="w-6" src={star} alt="" />
+                                <img className="w-6" src={star} alt="" />
+                            </div>
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#1E3042"></Tag>
+                                <img className="w-6" src={star} alt="" />
+                                <img className="w-6" src={star} alt="" />
+                                <img className="w-6" src={star} alt="" />
+                                <img className="w-6" src={star} alt="" />
+                            </div>
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#F9E7B2"></Tag>
+                                <img className="w-6" src={star} alt="" />
+                                <img className="w-6" src={star} alt="" />
+                                <img className="w-6" src={star} alt="" />
+                            </div>
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#85714D"></Tag>
+                                <img className="w-6" src={star} alt="" />
+                                <img className="w-6" src={star} alt="" />
+                            </div>
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#533E02"></Tag>
+                                <img className="w-6" src={star} alt="" />
+                            </div>
                         </div>
-                        <div>
-                            <Tag className=" h-4" color="#1E3042"></Tag>
-                            Satisfied
+                    }
+
+                    {
+                        reportData?.emoji_or_star === "emoji" &&
+                        <div className=" flex items-center gap-10">
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#ECB206"></Tag>
+                                <img className="w-10" src={hugeSmile} alt="" />
+                            </div>
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#1E3042"></Tag>
+                                <img className="w-10" src={smile} alt="" />
+                            </div>
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#F9E7B2"></Tag>
+                                <img className="w-11" src={sad} alt="" />
+                            </div>
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#85714D"></Tag>
+                                <img className="w-10" src={silent} alt="" />
+                            </div>
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#533E02"></Tag>
+                                <img className="w-10" src={angry} alt="" />
+                            </div>
                         </div>
-                        <div>
-                            <Tag className=" h-4" color="#F9E7B2"></Tag>
-                            Good
-                        </div>
-                        <div>
-                            <Tag className=" h-4" color="#85714D"></Tag>
-                            Bad
-                        </div>
-                        <div>
-                            <Tag className=" h-4" color="#533E02"></Tag>
-                            Angry
-                        </div>
-                    </div>
+                    }
                 </div>
 
 
@@ -268,7 +315,7 @@ const SurveyResult = () => {
                         <div>
                             <div className="p-10" ref={printRef}>
                                 {reportData?.data?.map((question, index) => (
-                                    <div  className="" key={index}>
+                                    <div className="" key={index}>
                                         <div className="flex">
                                             <div className="w-[40%]">
                                                 {`${(currentSurveyPage - 1) * pageSize + index + 1}. ${question?.question}`}
@@ -322,7 +369,7 @@ const SurveyResult = () => {
                                                         <p className="text-[#ECB206]">QR Code {question?.qr_code_survey} Use App {question?.app_survey_count}</p>
                                                         <p className="text-lg font-semibold">User Comments {question?.total_comments}+</p>
                                                         <div className="flex justify-center items-center mb-8 mt-6">
-                                                            
+
                                                             <SurveyResultImages id={question?.question_id} ></SurveyResultImages>
                                                         </div>
                                                         <Link to={`/all-survey-comments/${question?.question_id}`} >

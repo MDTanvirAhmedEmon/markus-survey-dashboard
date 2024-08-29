@@ -35,6 +35,7 @@ import SurveyQuestions from "../Pages/SurvayPages/SurveyQuestions.jsx";
 import ThankYouPage from "../Pages/SurvayPages/ThankYouPage.jsx";
 import AllSurveyComments from "../Pages/AllSurveyComments.jsx";
 import TotalEmployeeRequest from "../Pages/TotalSurveyRequest";
+import TranslateComponent from "../Components/TranslateComponent.jsx";
 
 // import Otp from "../Pages/Auth/Otp.jsx";
 
@@ -147,14 +148,14 @@ export const router = createBrowserRouter([
             },
 
             {
-                path: '/super-admin/company-manage',
+                path: '/company-manage',
                 element: <SCompanyManage />,
             },
 
             {
                 path: '/super-admin/company-details',
                 element: <SCompanyDetails />,
-            },
+            }
 
         ]
     },
@@ -191,4 +192,22 @@ export const router = createBrowserRouter([
         path: "/allQuestionAnsPage",
         element: <AllQuestionAnsPage />,
     },
+    
+    {
+        path: "/allQuestionAnsPage/:survey_id",
+        element: <AllQuestionAnsPage />,
+    },
+    
+  {
+    path: "/translateComponent",
+    element: <TranslateComponent />,
+  },
+  {
+    path: "/thankYouPage",
+    element: <ThankYouPage />,
+  },
+  {
+    path: "/surveyAllQuestions/:barcode",
+    element: <SurveyQuestions />,
+  },
 ]);

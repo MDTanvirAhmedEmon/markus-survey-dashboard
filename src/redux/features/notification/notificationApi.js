@@ -3,7 +3,7 @@ import { baseApi } from "../../api/baseApi";
 
 export const notificationApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        
+
         getAllNotification: builder.query({
             query: () => {
                 return {
@@ -26,3 +26,5 @@ export const notificationApi = baseApi.injectEndpoints({
 })
 
 export const { useGetAllNotificationQuery, useReadNotificationQuery } = notificationApi;
+
+
