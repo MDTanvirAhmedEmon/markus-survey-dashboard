@@ -19,12 +19,12 @@ export default function AllQuestionAnsPage() {
   // RTK Query for all question:
   const { survey_id } = useParams();
   const { data: allQn, error, isLoading } = useGetAllQnAnsQuery(survey_id);
-  console.log(allQn)
+
   const { language = selectedlanguage } = location.state || {};
   const ans = allQn?.answers || [];
   const emoji = allQn?.emoji_or_star === "emoji";
-  
-  
+
+
   useEffect(() => {
     const translateAllQuestions = async () => {
       if (!ans.length) return;
