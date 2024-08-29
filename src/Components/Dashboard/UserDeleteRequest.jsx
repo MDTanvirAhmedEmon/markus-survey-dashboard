@@ -100,7 +100,7 @@ const UserDeleteRequest = () => {
             >
                 <div style={{ textAlign: 'center', height: '100px' }} className='capitalize '>
                     <div className='mb-7'>
-                        <p>Do you want to delete the user?swsss</p>
+                        <p>Do you want to delete the user?</p>
                     </div>
                     <button className='p-3 px-8 mr-3 bg-[var(--color-2)]' onClick={() => handleDeleteUser()} >Yes</button>
                     <button className='p-3 px-8 mr-3 bg-[var(--color-2)]' onClick={() => setOpenAllowModal(false)}>No</button>
