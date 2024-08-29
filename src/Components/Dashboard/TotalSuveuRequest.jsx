@@ -6,47 +6,8 @@ import { MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useDeleteEmployeeQuery, useDeleteEmployeeRequestQuery } from '../../redux/features/dashboard/dashboardApi';
 import { imageUrl } from '../../redux/api/baseApi';
-// const dataSource = [
-//     {
-//         key: '1',
-//         name: 'Mike',
-//         img: 'https://i.ibb.co/F3jcwjJ/artworks-YCx-Rfx-OOf-T5l-Dm-J9-K5q-X2-A-t500x500.jpg',
-//         phone: 324189454648487,
-//         rating: 4.5,
-//         email: 'gmail@ gmail.com',
-//         regNo: '225.555.0118'
-//     },
-//     {
-//         key: '2',
-//         name: 'Mike',
-//         img: 'https://i.ibb.co/F3jcwjJ/artworks-YCx-Rfx-OOf-T5l-Dm-J9-K5q-X2-A-t500x500.jpg',
-//         phone: 324189454648487,
-//         rating: 4.5,
-//         email: 'gmail@ gmail.com',
-//         regNo: '225.555.0118'
-//     },
-//     {
-//         key: '3 ',
-//         name: 'Mike',
-//         img: 'https://i.ibb.co/F3jcwjJ/artworks-YCx-Rfx-OOf-T5l-Dm-J9-K5q-X2-A-t500x500.jpg',
-//         phone: 324189454648487,
-//         rating: 4.5,
-//         email: 'gmail@ gmail.com',
-//         regNo: '225.555.0118'
-//     },
-// ]
-const sarvayData = [
-    { name: 'Customer Feedback', id: '1' },
-    { name: 'Customer Feedback', id: '2' },
-    { name: 'Customer Feedback', id: '3' },
-    { name: 'Customer Feedback', id: '4' },
-    { name: 'Customer Feedback', id: '5' },
-    { name: 'Customer Feedback', id: '6' },
-    { name: 'Customer Feedback', id: '7' },
-    { name: 'Customer Feedback', id: '8' },
-    { name: 'Customer Feedback', id: '9' },
-]
-const UserDeleteRequest = () => {
+
+const TotalSuveuRequest = () => {
     const [openAllowModal, setOpenAllowModal] = useState(false)
     const [selectedID, setSelectedID] = useState([])
     const {data : deleteRequestUser,isError, isLoading} = useDeleteEmployeeRequestQuery()
@@ -118,7 +79,7 @@ const UserDeleteRequest = () => {
 
     return (
         <div className='bg-[var(--color-7)] rounded-md'>
-            <Table dataSource={formattedDeleteUserRequest} columns={columns} pagination={false} />
+            <Table dataSource={formattedDeleteUserRequest} columns={columns} />
             <Modal
                 centered
                 footer={false}
@@ -139,4 +100,4 @@ const UserDeleteRequest = () => {
     )
 }
 
-export default UserDeleteRequest
+export default TotalSuveuRequest

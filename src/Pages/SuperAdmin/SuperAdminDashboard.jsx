@@ -8,7 +8,6 @@ import { useGetOverviewQuery } from '../../redux/features/Settings/Settings.js';
 
 const SuperAdminDashboard = () => {
     const { data: overview } = useGetOverviewQuery()
-    console.log(overview)
     const data = [
         {
             title: 'Total Company',
@@ -23,7 +22,6 @@ const SuperAdminDashboard = () => {
             count: overview?.total_removed_company,
         },
     ]
-    console.log(overview)
     return (
         <>
             <div className='grid-3 gap-3'>
@@ -45,7 +43,8 @@ const SuperAdminDashboard = () => {
             </div>
             <div className='mt-3 bg-white rounded-md'>
                 <div className='between-center gap-2 mb-3 p-5'>
-                    <p className='text-xl'>User Delete Request</p> <Link to={`/total-survey-request`}>
+                    <p className='text-xl'>User Delete Request</p> 
+                    <Link to={`/total-survey-request`}>
                         View All
                     </Link>
                 </div>
