@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, message, Pagination, Select, Space } from 'antd';
 import { CiCircleMinus, CiCirclePlus } from 'react-icons/ci';
 import { IoArrowBackSharp } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCreateQuestionsMutation, useGetProjectForManageCompanyQuery, useGetSurveyForManageCompanyQuery } from '../redux/features/questions/questionsApi';
 
 const AddQuestions = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
     const pageSize = 10;
+    const navigate = useNavigate();
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -41,6 +42,7 @@ const AddQuestions = () => {
     useEffect(() => {
         if (isSuccess) {
             message.success('Questions Created Successfully');
+            navigate('/manage-company');
         }
         if (isError) {
             message.error('Questions Creation Failed');

@@ -24,7 +24,7 @@ const CreateSurvey = () => {
 
     // Pop confirm
     const confirm = async (surveyId) => {
-        console.log(surveyId)
+
         try {
             await deleteSurvey(surveyId).unwrap();
             message.success('Survey deleted successfully');
@@ -43,6 +43,7 @@ const CreateSurvey = () => {
     }, {
         refetchOnMountOrArgChange: true,
     });
+    console.log('survey', allSurver)
 
 
 
@@ -81,8 +82,9 @@ const CreateSurvey = () => {
         },
         {
             title: 'Status',
-            dataIndex: 'archive_status',
-            key: 'archive_status',
+            dataIndex: 'repeat_status',
+            key: 'repeat_status',
+            render: (text, record, index) => <p className=' capitalize'>{record?.repeat_status}</p>
         },
         {
             title: 'Actions',
@@ -107,8 +109,6 @@ const CreateSurvey = () => {
     ];
 
     const [createSurvey, { isSuccess, isError, error }] = useCreateSurveyMutation();
-    console.log(isError)
-    console.log(error)
 
 
     useEffect(() => {
@@ -123,7 +123,6 @@ const CreateSurvey = () => {
     }, [isSuccess, isError]);
 
     const onFinish = (value) => {
-        console.log("Form values:", value);
 
         let period = "once";
         if (value.period) {
