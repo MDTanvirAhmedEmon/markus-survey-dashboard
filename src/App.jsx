@@ -1,13 +1,22 @@
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import './App.css'
 import Overview from './Components/Dashboard/Overview'
 import DriverGrowth from './Components/Dashboard/DriverGrowth'
 import SurveyRequest from './Components/Dashboard/SurveyRequest'
 import { useGetDashboardAnalyticsQuery } from './redux/features/dashboard/dashboardApi'
+import { useGetProfileQuery } from './redux/features/auth/authApi'
 
 function App() {
 
+
+
   const { data: dashboardData } = useGetDashboardAnalyticsQuery();
+  const { data: profile } = useGetProfileQuery();
+
+  if (profile?.user?.role_type === "SUPER ADMIN") {
+    return <Navigate to={`/super-admin`} />
+  }
+
   const data = [
     {
       title: 'Total Project',

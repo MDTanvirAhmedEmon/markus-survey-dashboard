@@ -5,6 +5,7 @@ const PrivateRoute = ({ children }) => {
   const { token, isLoading } = useSelector((state) => state.auth);
   const location = useLocation();
 
+
   if (isLoading) {
     return (
     <div className=' h-screen flex items-center justify-center'>

@@ -4,25 +4,16 @@ import { CiSearch } from 'react-icons/ci';
 import { FaEdit, FaRegEye, FaStar, FaUser } from 'react-icons/fa';
 import { MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+// import { useDeleteEmployeeQuery, useDeleteEmployeeRequestQuery } from '../../redux/features/dashboard/dashboardApi';
 import { imageUrl } from '../../redux/api/baseApi';
 import { useDeleteEmployeeRequestQuery } from '../../redux/features/dashboard/dashboardApi';
 
-const sarvayData = [
-    { name: 'Customer Feedback', id: '1' },
-    { name: 'Customer Feedback', id: '2' },
-    { name: 'Customer Feedback', id: '3' },
-    { name: 'Customer Feedback', id: '4' },
-    { name: 'Customer Feedback', id: '5' },
-    { name: 'Customer Feedback', id: '6' },
-    { name: 'Customer Feedback', id: '7' },
-    { name: 'Customer Feedback', id: '8' },
-    { name: 'Customer Feedback', id: '9' },
-]
-const UserDeleteRequest = () => {
+const TotalSuveuRequestAll = () => {
     const [openAllowModal, setOpenAllowModal] = useState(false)
     const [selectedID, setSelectedID] = useState([])
     const { data: deleteRequestUser, isError, isLoading } = useDeleteEmployeeRequestQuery()
     const [userDeleteId, setUserDeleteId] = useState("")
+    // const { data: deleteUser, error, loading } = useDeleteEmployeeQuery({ userDeleteId })
 
 
     const formattedDeleteUserRequest = deleteRequestUser?.data?.map((user, i) => ({
@@ -82,14 +73,14 @@ const UserDeleteRequest = () => {
     ];
 
     const handleDeleteUser = () => {
-        console.log(userDeleteId)
+        deleteUser
     }
 
 
 
     return (
         <div className='bg-[var(--color-7)] rounded-md'>
-            <Table dataSource={formattedDeleteUserRequest} columns={columns} pagination={false} />
+            <Table dataSource={formattedDeleteUserRequest} columns={columns} />
             <Modal
                 centered
                 footer={false}
@@ -100,7 +91,7 @@ const UserDeleteRequest = () => {
             >
                 <div style={{ textAlign: 'center', height: '100px' }} className='capitalize '>
                     <div className='mb-7'>
-                        <p>Do you want to delete the user?swsss</p>
+                        <p>Do you want to delete the user?</p>
                     </div>
                     <button className='p-3 px-8 mr-3 bg-[var(--color-2)]' onClick={() => handleDeleteUser()} >Yes</button>
                     <button className='p-3 px-8 mr-3 bg-[var(--color-2)]' onClick={() => setOpenAllowModal(false)}>No</button>
@@ -110,4 +101,4 @@ const UserDeleteRequest = () => {
     )
 }
 
-export default UserDeleteRequest
+export default TotalSuveuRequestAll
