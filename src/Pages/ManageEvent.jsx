@@ -152,18 +152,17 @@ const ManageEvent = () => {
                 return (
                     <div className="start-center text-2xl gap-1">
                         <button>
-                            <MdCloudDownload onClick={downloadQRCode} className="cursor-pointer" />
+                            <MdCloudDownload onClick={downloadQRCode} className="cursor-pointer mr-1" />
                         </button>
                         <button
                             onClick={() => handleShowQRCodeModal(qrCodeValue)}
                         >
-                            <FaEdit className="cursor-pointer" />
+                            <FaRegEye className="cursor-pointer mx-2" />
                         </button>
                         <Popconfirm
                             title="Delete The Event"
                             description="Are you sure to delete this Event?"
                             onConfirm={() => confirm(record)}
-                            onCancel={cancel}
                             okText="Yes"
                             cancelText="No"
                         >
