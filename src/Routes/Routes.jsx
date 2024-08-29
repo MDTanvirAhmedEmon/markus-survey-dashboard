@@ -140,6 +140,11 @@ export const router = createBrowserRouter([
                 path: '/survey-user/id',
                 element: <SurveyBasedUser />,
             },
+            {
+                path: '/total-survey-request',
+                element: <SurveyBasedUser />,
+            },
+
 
             // super admin dashboard pages
             {

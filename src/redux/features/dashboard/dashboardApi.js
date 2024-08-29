@@ -11,7 +11,19 @@ export const dashboardApi = baseApi.injectEndpoints({
                 }
             }
         }),
+        deleteEmployeeRequest :  builder.query({
+            query : ()=> ({
+                url : "delete-employee-request",
+                method : 'GET'
+            })
+        }),
+        deleteEmployee :  builder.query({
+            query : (id)=> ({
+                url : `delete-employee-request/${id}`,
+                method : 'GET'
+            })
+        })
     }),
 })
 
-export const { useGetDashboardAnalyticsQuery } = dashboardApi;
+export const { useGetDashboardAnalyticsQuery , useDeleteEmployeeRequestQuery, useDeleteEmployeeQuery } = dashboardApi;
