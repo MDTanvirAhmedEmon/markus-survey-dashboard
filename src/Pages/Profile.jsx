@@ -17,6 +17,7 @@ const Profile = () => {
     const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation()
     const [updatePassword, { isLoading: isUpdatingPass }] = useUpdatePasswordMutation()
     const { data, isLoading, } = useGetProfileQuery() || {};
+    console.log(data)
     const [passError, setPassError] = useState('')
     const handlePageChange = (tab) => {
         setTab(tab);
@@ -53,6 +54,7 @@ const Profile = () => {
         })
     };
     const onEditProfile = (values) => {
+        console.log(values)
         const data = {
             name: values.name,
             contact: values.phone_number,
@@ -64,6 +66,7 @@ const Profile = () => {
         }
         const formData = MakeFormData(data);
         updateProfile({ data: formData }).unwrap().then((res) => {
+            console.log(res)
             toast.success(res.message);
         }).catch((err) => {
             toast.error(err.message || 'Something went wrong');

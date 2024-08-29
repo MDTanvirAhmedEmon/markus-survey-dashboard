@@ -20,13 +20,15 @@ const Login = () => {
         navigate('/')
     }
 
-    console.log('login', data)
+    // console.log('login', data)
     const onFinish = async (values) => {
         const formData = {
             email: values.email,
             password: values.password
         }
-        logInCompany(formData)
+        logInCompany(formData).unwrap()
+            .then((payload) => message.success( "Successfully Logged In"))
+            .catch((error) => message.error(error?.data?.message ? error?.data?.message : "Something went wrong!!"));
 
     };
 

@@ -19,6 +19,7 @@ const Sidebar = () => {
     const dispatch = useDispatch();
     const contentRefs = useRef([]);
     const { data } = useGetProfileQuery();
+
     const userRole = data?.user?.role_type;
 
     const links = userRole === "COMPANY" ? [
@@ -77,7 +78,7 @@ const Sidebar = () => {
             sub_menu: false,
         },
         {
-            path: '/super-admin/company-manage',
+            path: '/company-manage',
             label: 'Manage Company',
             sub_menu: false,
             icon: <SiHomeassistantcommunitystore />,

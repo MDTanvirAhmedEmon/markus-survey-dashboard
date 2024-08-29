@@ -38,9 +38,12 @@ const SCompanyManage = () => {
   const [updateCompany, { isLoading: updateLoading, isError: updateError }] = useUpdateCompaniesMutation()
   const [deleteCompany, { isLoading: deleteLoading, isError: deleteError }] = useDeleteCompaniesMutation()
   const { data, isLoading: isFetching } = useGetCompaniesQuery({ page, search })
-  console.log(data)
+  const [survey, setSurvey] = useState(false)
   const onFinish = (values) => {
     const { remember, email, ...data } = values
+    if (!survey) {
+      return toast.error('please select Unlock Tools ')
+    }
     data.role_type = "COMPANY"
     data.password_confirmation = values.password
     const formData = MakeFormData(data);
@@ -54,6 +57,7 @@ const SCompanyManage = () => {
         form.resetFields()
         setOpenAddModal(false)
       }).catch((err) => {
+        console.log(err)
         toast.error(err.message || 'Something went wrong')
       })
     } else {
@@ -354,14 +358,15 @@ const SCompanyManage = () => {
               }
 
               <Form.Item
-                name="remember"
-                valuePropName="checked"
+
                 wrapperCol={{
                   span: 16,
                 }}
               >
                 <p className="my-2">Unlock Tools</p>
-                <Checkbox>Survey</Checkbox>
+                <div onClick={() => setSurvey(!survey)} className="flex justify-start items-center cursor-pointer gap-2">
+                  <span className={`w-4 h-4 border rounded-md border-blue-300 ${survey ? 'bg-blue-500' : ''}`}></span> <p>survey</p>
+                </div>
               </Form.Item>
               <Form.Item
                 wrapperCol={{

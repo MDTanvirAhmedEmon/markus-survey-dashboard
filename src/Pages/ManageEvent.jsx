@@ -14,7 +14,7 @@ const ManageEvent = () => {
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState(null);
-    console.log(searchTerm)
+    // console.log(searchTerm)
     const pageSize = 10;
 
     const [openAddModal, setOpenAddModal] = useState(false)
@@ -139,7 +139,7 @@ const ManageEvent = () => {
             render: (_, record) => (
 
                 <div ref={qrRef} >
-                    <QRCode size={80} value={`http://192.168.10.188:3001/surveyAllQuestions/${record?.barcode}`} />
+                    <QRCode size={80} value={`http://192.168.10.205:3001/surveyAllQuestions/${record?.barcode}`} />
                 </div>
             ),
         },
@@ -148,7 +148,7 @@ const ManageEvent = () => {
             dataIndex: 'key',
             key: 'key',
             render: (_, record) => {
-                const qrCodeValue = `http://192.168.10.188:3001/surveyAllQuestions/${record?.barcode}`;
+                const qrCodeValue = `http://192.168.10.205:3001/surveyAllQuestions/${record?.barcode}`;
                 return (
                     <div className="start-center text-2xl gap-1">
                         <button>
