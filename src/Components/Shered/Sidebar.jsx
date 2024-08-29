@@ -110,11 +110,11 @@ const Sidebar = () => {
                     label: 'Terms & Condition',
                     icon: <></>,
                 },
-                {
-                    path: '/profile',
-                    label: 'Profile',
-                    icon: <></>,
-                },
+                // {
+                //     path: '/profile',
+                //     label: 'Profile',
+                //     icon: <></>,
+                // },
             ]
         }
     ];

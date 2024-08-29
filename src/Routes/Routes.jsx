@@ -36,6 +36,7 @@ import ThankYouPage from "../Pages/SurvayPages/ThankYouPage.jsx";
 import AllSurveyComments from "../Pages/AllSurveyComments.jsx";
 import TotalEmployeeRequest from "../Pages/TotalSurveyRequest";
 import TranslateComponent from "../Components/TranslateComponent.jsx";
+import TotalSuveuRequest from "../Components/Dashboard/TotalSuveuRequest.jsx";
 
 // import Otp from "../Pages/Auth/Otp.jsx";
 
@@ -142,7 +143,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/total-survey-request',
-                element: <SurveyBasedUser />,
+                element: <TotalSuveuRequest />,
             },
 
 
