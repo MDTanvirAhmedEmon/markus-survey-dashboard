@@ -220,7 +220,21 @@ const SCompanyManage = () => {
         </div>
       </div>
       {
-        isFetching ? <div className="flex justify-center items-center"><Spin size="large" /></div> : <Table className="super-admin-pagination" pagination={{
+        isFetching ? <div className="flex justify-center items-center">
+          <div className='h-[400px] flex items-center justify-center'>
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: "#ECB206",
+                },
+              }}
+            >
+              <Spin size="large" />
+            </ConfigProvider>
+          </div>
+
+
+        </div> : <Table className="super-admin-pagination" pagination={{
           pageSize: data?.per_page,
           total: data?.total,
           onChange: (page) => setPage(page),

@@ -43,7 +43,7 @@ export const surveyAPi = baseApi.injectEndpoints({
         }),
         getSurveyQN: builder.query({
             query: (barcode) => `/single-surveys-questions/${barcode}`,
-          }),
+        }),
         deleteCompanies: builder.mutation({
             query: (id) => {
                 return {
@@ -53,12 +53,20 @@ export const surveyAPi = baseApi.injectEndpoints({
             },
             invalidatesTags: ['Company'],
         }),
-        
-    getAllQnAns: builder.query({
-        query: (survey_id) => `/anonymous-survey-report?survey_id=${survey_id}`,
-      }),
+
+        getAllQnAns: builder.query({
+            query: (survey_id) => `/anonymous-survey-report?survey_id=${survey_id}`,
+        }),
+        getSurveyBasedInfo: builder.query({
+            query: (id) => {
+                return {
+                    url: `anonymous-survey-report?survey_id=${id}`,
+                    method: "GET",
+                }
+            },
+        }),
 
     }),
 })
 
-export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation,useGetSurveyQNQuery, usePostSurveyQnMutation , useGetAllQnAnsQuery } = surveyAPi;
+export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery } = surveyAPi;
