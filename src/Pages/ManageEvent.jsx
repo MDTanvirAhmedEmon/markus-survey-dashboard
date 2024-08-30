@@ -6,7 +6,7 @@ import { FaPlus } from 'react-icons/fa6';
 import { IoArrowBackSharp } from 'react-icons/io5';
 import { MdCloudDownload, MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
-import { useGetSurveyForManageCompanyQuery } from '../redux/features/questions/questionsApi';
+import { useGetSurveyForEventQuery, useGetSurveyForManageCompanyQuery } from '../redux/features/questions/questionsApi';
 import { useDeleteQRCodeMutation, useGenerateQRCodeMutation, useGetEventWithCRCodeQuery } from '../redux/features/Event/EventApi';
 
 const ManageEvent = () => {
@@ -20,7 +20,7 @@ const ManageEvent = () => {
     const [showQRCodeModal, setShowQRCodeModal] = useState(false)
 
     // get surveys 
-    const { data: surveys } = useGetSurveyForManageCompanyQuery({
+    const { data: surveys } = useGetSurveyForEventQuery({
         page: currentPageSurvey
     })
 
