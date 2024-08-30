@@ -21,6 +21,7 @@ const Sidebar = () => {
     const { data } = useGetProfileQuery();
 
     const userRole = data?.user?.role_type;
+    console.log('Sidebar', userRole)
 
     const links = userRole === "COMPANY" ? [
         {
@@ -70,7 +71,9 @@ const Sidebar = () => {
             label: 'Profile',
             icon: <BiSolidUserAccount />,
         }
-    ] : [
+    ] 
+    : 
+    [
         {
             path: '/super-admin',
             label: 'Dashboard',

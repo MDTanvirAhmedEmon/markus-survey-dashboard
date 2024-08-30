@@ -20,10 +20,11 @@ const sarvayData = [
 ]
 const UserDeleteRequest = () => {
     const [openAllowModal, setOpenAllowModal] = useState(false)
-    const [selectedID, setSelectedID] = useState([])
+
     // get request
     const { data: deleteRequestUser, isError, isLoading, refetch } = useDeleteEmployeeRequestQuery()
     const [userDeleteId, setUserDeleteId] = useState("")
+    const [userCancelId, setUserCancelId] = useState("")
 
 
 
@@ -38,6 +39,9 @@ const UserDeleteRequest = () => {
 
     // delete
     const [deleteEmployee] = useDeleteEmployeeMutation();
+
+    // cancel 
+
 
 
     const columns = [

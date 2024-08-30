@@ -8,6 +8,7 @@ import { useCreateQuestionsMutation, useGetProjectForManageCompanyQuery, useGetS
 const AddQuestions = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
+    const [selectedProjectId, setSelectedProjectId] = useState(null); // Track the selected project ID
     const pageSize = 10;
     const navigate = useNavigate();
 
@@ -25,6 +26,7 @@ const AddQuestions = () => {
 
     const { data: surveys } = useGetSurveyForManageCompanyQuery({
         page: currentPageSurvey,
+        project_id: selectedProjectId, // Pass selected project ID to survey query
     });
 
     const projectOptions = projects?.data?.data?.map((project) => ({
@@ -61,6 +63,11 @@ const AddQuestions = () => {
         formData.append('survey_id', values.surveyId);
 
         createQuestions(formData);
+    };
+
+    const handleProjectChange = (value) => {
+        setSelectedProjectId(value); // Update selected project ID when a project is selected
+        setCurrentPageSurvey(1); // Reset survey pagination when project changes
     };
 
     const CustomDropdown = (menu) => (
@@ -117,6 +124,7 @@ const AddQuestions = () => {
                             placeholder="Select A Project"
                             dropdownRender={CustomDropdown}
                             options={projectOptions}
+                            onChange={handleProjectChange} // Handle project selection
                         />
                     </Form.Item>
                     <Form.Item
