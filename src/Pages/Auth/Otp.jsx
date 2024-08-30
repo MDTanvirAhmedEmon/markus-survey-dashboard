@@ -1,25 +1,78 @@
-// import { Button, Form, Input } from "antd";
-// import React, { useState } from "react";
-// import OTPInput from "react-otp-input";
-// import { useDispatch } from "react-redux";
-import OtpInput from 'react-otp-input';
-import {Link, useNavigate} from "react-router-dom";
-import React, {useState} from "react";
-import {Button} from "antd";
-// import Swal from "sweetalert2";
-// import { ForgetPass } from "../../ReduxSlices/Authentication/ForgetPassSlice";
-// import { VerifyCode } from "../../ReduxSlices/Authentication/VerifyCodeSlice";
+import OtpInput from "react-otp-input";
+import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Button, Spin } from "antd";
+import Swal from "sweetalert2";
+import { useSetResendCodeMutation, useSetvarificationCodeMutation } from "../../redux/features/auth/authApi";
+
 
 const Otp = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState("");
-    const [err, setErr] = useState("");
-    // const dispatch = useDispatch()
-    const handleResendCode = () => {
+    const storedEmail = localStorage.getItem("myEmail");
 
-    }
-    const handleVerifyOtp = () => {
+    const [setVerificationCode, { isLoading: isVerifying }] =
+        useSetvarificationCodeMutation();
+    const [setResendOtp, { isLoading: isResending }] = useSetResendCodeMutation();
 
+    const handleVerifyOtp = async () => {
+        try {
+            const response = await setVerificationCode({ otp }).unwrap();
+            console.log("Verification successful:", response);
+
+            Swal.fire({
+                title: "Success!",
+                text: "OTP verification successful.",
+                icon: "success",
+                confirmButtonText: "OK",
+            });
+
+            if (response) {
+                navigate("/auth/update-password");
+            }
+        } catch (error) {
+            console.error("Verification failed:", error);
+            Swal.fire({
+                title: "Error!",
+                text: "OTP verification failed. Please try again.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    };
+
+    const handleResendOtp = async () => {
+        try {
+            const formData = new FormData();
+            formData.append("email", storedEmail);
+            const response = await setResendOtp(formData).unwrap();
+            console.log("OTP resent successfully:", response);
+
+            Swal.fire({
+                title: "Success!",
+                text: "OTP has been resent successfully.",
+                icon: "success",
+                confirmButtonText: "OK",
+            });
+        } catch (error) {
+            console.error("Resend OTP failed:", error);
+            Swal.fire({
+                title: "Error!",
+                text:
+                    error.data?.message ||
+                    "An unexpected error occurred. Please try again.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    };
+
+    if (isVerifying || isResending) {
+        return (
+            <div className="w-full h-screen flex items-center justify-center">
+                <Spin size="large" />
+            </div>
+        );
     }
 
     return (
@@ -30,16 +83,38 @@ const Otp = () => {
                 height: "100vh",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "center",
             }}
         >
-            <div style={{ width: "630px", background: "white", padding: "90px 57px" }}>
-                <h1 style={{ fontSize: "32px", color: "#6A6D7C", marginBottom: "13px", textAlign: "center" }}>Check your email</h1>
-                <p style={{ width: "380px", color: "#B8B8B8", margin: "0 auto 0 auto" }}>
-                    We sent a reset link to <span style={{ color: "#545454" }}> contact@dscode...com </span>
-                    enter 6 digit code that mentioned in the email
+            <div
+                style={{ width: "630px", background: "white", padding: "90px 57px" }}
+            >
+                <h1
+                    style={{
+                        fontSize: "32px",
+                        color: "#6A6D7C",
+                        marginBottom: "13px",
+                        textAlign: "center",
+                    }}
+                >
+                    Check your email
+                </h1>
+                <p
+                    style={{ width: "380px", color: "#B8B8B8", margin: "0 auto 0 auto" }}
+                >
+                    We sent a reset link to{" "}
+                    <span style={{ color: "#545454" }}>{storedEmail}</span>. Enter the
+                    6-digit code mentioned in the email.
                 </p>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: "30px", }} className="py-7">
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: "30px",
+                    }}
+                    className="py-7"
+                >
                     <OtpInput
                         value={otp}
                         onChange={setOtp}
@@ -52,7 +127,7 @@ const Otp = () => {
                             fontSize: "20px",
                             border: "1px solid #A9A9A9",
                             color: "#2B2A2A",
-                            outline: "none"
+                            outline: "none",
                         }}
                         renderInput={(props) => <input {...props} />}
                     />
@@ -70,22 +145,29 @@ const Otp = () => {
                         marginTop: "30px",
                         border: "none",
                         outline: "none",
-                        marginBottom: "20px"
+                        marginBottom: "20px",
                     }}
                 >
-
-
-                    <Link
-                        className="login-form-forgot "
-                        style={{ color: "#FFF" }}
-                        to="/auth/update-password"
-                    >
-                        Verify
-                    </Link>
+                    Verify
                 </Button>
-                <p style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <p
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                    }}
+                >
                     Didn’t receive code?
-                    <p onClick={handleResendCode} style={{ color: "#B47000", textDecoration: "underline", cursor: "pointer" }}>Resend </p>
+                    <span
+                        style={{
+                            color: "#B47000",
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                        }}
+                        onClick={handleResendOtp}
+                    >
+                        Resend
+                    </span>
                 </p>
             </div>
         </div>

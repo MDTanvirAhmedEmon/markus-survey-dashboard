@@ -22,15 +22,15 @@ const CreateProject = () => {
         console.log(projectId)
         try {
             await deleteProject(projectId).unwrap();
-            message.success('Survey deleted successfully');
+            message.success('Project Deleted Successfully');
         } catch (error) {
-            message.error('Failed to delete the survey');
-            console.error('Error deleting survey:', error);
+            message.error('Failed to delete the project');
+            console.error('Error deleting project:', error);
         }
     };
 
     const cancel = () => {
-        message.error('Survey deletion canceled');
+        message.error('Project deletion canceled');
     };
 
     // get all projects

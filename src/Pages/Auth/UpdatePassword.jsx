@@ -1,55 +1,71 @@
-
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Spin } from "antd";
 import React, { useState } from "react";
-import {Link, useNavigate} from "react-router-dom";
-// import Swal from "sweetalert2";
-// import { SetNewPass } from "../../ReduxSlices/Authentication/SetNewPassSlice";
-// import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { useSetResetPassMutation } from "../../redux/features/auth/authApi";
 
 const UpdatePassword = () => {
     const navigate = useNavigate();
     const [newPassError, setNewPassError] = useState("");
-    const [conPassError, setConPassError] = useState("");
-    const [curPassError, setCurPassError] = useState("");
-    const [err, setErr] = useState("");
-    // const dispatch = useDispatch()
-    // const onFinish = (values) => {
-    //     const { password, confirmPassword } = values;
-    //     if (confirmPassword !== password) {
-    //         return Swal.fire({
-    //             position: "center",
-    //             icon: "error",
-    //             title: "confirm password doesn't match",
-    //             showConfirmButton: false,
-    //             timer: 1500,
-    //             imageWidth: 300,
-    //             imageHeight: 400,
-    //         })
-    //     }
-    //     dispatch(SetNewPass({ email: localStorage.getItem('resetEmail'), password: password, confirmPassword: confirmPassword }))
-    //         .then((res) => {
-    //             if (res.type === 'SetNewPass/fulfilled') {
-    //                 Swal.fire({
-    //                     position: "top-end",
-    //                     icon: "success",
-    //                     text: "Your password has been updated, please change your password regularly to avoid this happening",
-    //                     showConfirmButton: false,
-    //                     timer: 1500
-    //                 }).then(() => {
-    //                     navigate("/")
-    //                 });
-    //             } else {
-    //                 Swal.fire({
-    //                     icon: "error",
-    //                     title: "Oops...",
-    //                     text: "Something went wrong!",
-    //                     timer: 1500,
-    //                     showConfirmButton: false,
-    //                     showCloseButton: false
-    //                 });
-    //             }
-    //         })
-    // };
+    const [confirmPassError, setConfirmPassError] = useState("");
+
+    const [setNewPass, { data: newPass, isLoading }] = useSetResetPassMutation();
+
+    console.log(newPass);
+
+    const onFinish = async (values) => {
+        const { password, confirmPassword } = values;
+        const storedEmail = localStorage.getItem("myEmail");
+
+        if (password !== confirmPassword) {
+            setConfirmPassError("Passwords do not match");
+            return;
+        }
+
+        console.log({
+            email: storedEmail,
+            password: password,
+            comfirm: confirmPassword
+        })
+
+        try {
+            const formData = new FormData();
+            formData.append("email", storedEmail);
+            formData.append("password", password);
+            formData.append("password_confirmation", confirmPassword);
+
+            const result = await setNewPass(formData).unwrap();
+            console.log("Result:", result);
+            if (result) {
+                localStorage.removeItem("myEmail")
+                Swal.fire({
+                    title: "Success!",
+                    text: "Your Password has been successfully changed.",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+                navigate("/");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            Swal.fire({
+                title: "Error!",
+                text:
+                    error.data?.password?.[0] ||
+                    "Something went wrong. Please try again.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className="w-full h-screen flex items-center justify-center">
+                <Spin size="large" />
+            </div>
+        );
+    }
 
     return (
         <div
@@ -59,7 +75,7 @@ const UpdatePassword = () => {
                 height: "100vh",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "center",
             }}
         >
             <Form
@@ -69,15 +85,39 @@ const UpdatePassword = () => {
                     remember: true,
                 }}
                 style={{ width: "630px", background: "white", padding: "90px 57px" }}
-                // onFinish={onFinish}
+                onFinish={onFinish}
             >
-                <h1 style={{ fontSize: "32px", color: "#38393E", marginBottom: "13px", textAlign: "center", fontWeight: "bold" }}>New Password</h1>
-                <p style={{ width: "275px", color: "#7D7E8A", fontSize: "14px", fontWeight: 400, textAlign: "center", margin: "0 auto 0 auto" }}>
+                <h1
+                    style={{
+                        fontSize: "32px",
+                        color: "#38393E",
+                        marginBottom: "13px",
+                        textAlign: "center",
+                        fontWeight: "bold",
+                    }}
+                >
+                    New Password
+                </h1>
+                <p
+                    style={{
+                        width: "275px",
+                        color: "#7D7E8A",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        textAlign: "center",
+                        margin: "0 auto 0 auto",
+                    }}
+                >
                     Create Your New Password.
                 </p>
 
                 <div style={{ margin: "45px 0 20px 0" }}>
-                    <label style={{ display: "block", color: "#38393E", marginBottom: "5px" }} htmlFor="">New Password</label>
+                    <label
+                        style={{ display: "block", color: "#38393E", marginBottom: "5px" }}
+                        htmlFor=""
+                    >
+                        New Password
+                    </label>
                     <Form.Item
                         name="password"
                         rules={[
@@ -89,7 +129,6 @@ const UpdatePassword = () => {
                         style={{ marginBottom: 0 }}
                     >
                         <Input.Password
-                            type="password"
                             placeholder="Enter New password"
                             style={{
                                 border: "1px solid #E0E4EC",
@@ -100,11 +139,20 @@ const UpdatePassword = () => {
                             }}
                         />
                     </Form.Item>
-                    {newPassError && <label style={{ display: "block", color: "red" }} htmlFor="error">{newPassError}</label>}
+                    {newPassError && (
+                        <label style={{ display: "block", color: "red" }} htmlFor="error">
+                            {newPassError}
+                        </label>
+                    )}
                 </div>
 
                 <div style={{ marginBottom: "40px" }}>
-                    <label style={{ display: "block", color: "#38393E", marginBottom: "5px" }} htmlFor="email">Confirm Password</label>
+                    <label
+                        style={{ display: "block", color: "#38393E", marginBottom: "5px" }}
+                        htmlFor="confirmPassword"
+                    >
+                        Confirm Password
+                    </label>
                     <Form.Item
                         style={{ marginBottom: 0 }}
                         name="confirmPassword"
@@ -116,7 +164,6 @@ const UpdatePassword = () => {
                         ]}
                     >
                         <Input.Password
-                            type="password"
                             placeholder="Enter Confirm password"
                             style={{
                                 border: "1px solid #E0E4EC",
@@ -127,7 +174,11 @@ const UpdatePassword = () => {
                             }}
                         />
                     </Form.Item>
-                    {conPassError && <label style={{ display: "block", color: "red" }} htmlFor="error">{conPassError}</label>}
+                    {confirmPassError && (
+                        <label style={{ display: "block", color: "red" }} htmlFor="error">
+                            {confirmPassError}
+                        </label>
+                    )}
                 </div>
 
                 <Form.Item>
@@ -142,17 +193,9 @@ const UpdatePassword = () => {
                             color: "white",
                             borderRadius: "8px",
                             outline: "none",
-                            marginTop: ""
                         }}
                     >
-
-                        <Link
-                            className="login-form-forgot "
-                            style={{ color: "#FFF" }}
-                            to="/"
-                        >
-                            Update
-                        </Link>
+                        Update
                     </Button>
                 </Form.Item>
             </Form>

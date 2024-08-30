@@ -29,9 +29,9 @@ export const surveyAPi = baseApi.injectEndpoints({
             }
         }),
         getSurveyForManageCompany: builder.query({
-            query: ({ page }) => {
+            query: ({ project_id,page }) => {
                 return {
-                    url: `surveys?page=${page}`,
+                    url: `surveys?project_id=${project_id}&page=${page}`,
                     method: "GET",
                 }
             }
