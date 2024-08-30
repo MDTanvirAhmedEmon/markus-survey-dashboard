@@ -29,15 +29,19 @@ const ManageEvent = () => {
         label: survey.survey_name
     }));
     // QRCode Generation APi
-    const [generateQRCode, { data }] = useGenerateQRCodeMutation();
+    const [generateQRCode, { data, error }] = useGenerateQRCodeMutation();
 
     useEffect(() => {
         if (data) {
             message.success(data?.message);
             setOpenAddModal(false)
         }
+        if (error?.originalStatus === 404) {
+            message.error('Please Add Question Before Creating Event');
+            setOpenAddModal(false)
+        }
 
-    }, [data]);
+    }, [data, error]);
 
     // get event with QRCode
     const { data: event, isLoading } = useGetEventWithCRCodeQuery({
