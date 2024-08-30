@@ -37,8 +37,36 @@ export const authApi = baseApi.injectEndpoints({
                 }
             },
         }),
+        setForgetPass: builder.mutation({
+            query: (values) => ({
+                url: "/forget-pass",
+                method: "POST",
+                body: values,
+            }),
+        }),
+        setResendCode: builder.mutation({
+            query: (resendOtp) => ({
+                url: "/resend-otp",
+                method: "POST",
+                body: resendOtp,
+            }),
+        }),
+        setvarificationCode: builder.mutation({
+            query: (otp) => ({
+                url: "/email-verified",
+                method: "POST",
+                body: otp,
+            }),
+        }),
+        setResetPass: builder.mutation({
+            query: (values) => ({
+                url: "/reset-pass",
+                method: "POST",
+                body: values,
+            }),
+        }),
 
     }),
 })
 
-export const { useLogInCompanyMutation, useGetProfileQuery, useUpdateProfileMutation,useUpdatePasswordMutation } = authApi;
+export const { useLogInCompanyMutation, useGetProfileQuery, useUpdateProfileMutation, useUpdatePasswordMutation, useSetForgetPassMutation, useSetResendCodeMutation, useSetvarificationCodeMutation, useSetResetPassMutation } = authApi;
