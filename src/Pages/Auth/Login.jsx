@@ -1,12 +1,9 @@
-
 import { Button, Checkbox, Form, Input, message } from "antd";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGetProfileQuery, useLogInCompanyMutation } from "../../redux/features/auth/authApi";
 import { useDispatch } from "react-redux";
 import { setToken } from "../../redux/features/auth/authSlice";
-
-
 
 
 const Login = () => {
@@ -18,8 +15,6 @@ const Login = () => {
     const [logInCompany, { data, isLoading }] = useLogInCompanyMutation();
 
 
-
-
     // console.log('login', data)
     const onFinish = async (values) => {
         const formData = {
@@ -28,17 +23,14 @@ const Login = () => {
         }
         logInCompany(formData).unwrap()
             .then((payload) => {
-                console.log('payload',payload)
                 message.success("Successfully Logged In")
                 dispatch(setToken(payload?.access_token))
-                console.log(payload?.access_token)
                 navigate('/')
                 refetch();
             })
             .catch((error) => message.error(error?.data?.message ? error?.data?.message : "Something went wrong!!"));
 
     };
-
 
 
 

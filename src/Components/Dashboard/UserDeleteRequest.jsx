@@ -5,7 +5,7 @@ import { FaEdit, FaRegEye, FaStar, FaUser } from 'react-icons/fa';
 import { MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { imageUrl } from '../../redux/api/baseApi';
-import { useDeleteEmployeeMutation, useDeleteEmployeeRequestQuery } from '../../redux/features/dashboard/dashboardApi';
+import { useCancelEmployeeMutation, useDeleteEmployeeMutation, useDeleteEmployeeRequestQuery } from '../../redux/features/dashboard/dashboardApi';
 
 const sarvayData = [
     { name: 'Customer Feedback', id: '1' },
@@ -41,8 +41,19 @@ const UserDeleteRequest = () => {
     const [deleteEmployee] = useDeleteEmployeeMutation();
 
     // cancel 
+    const [cancelEmployee] = useCancelEmployeeMutation();
 
 
+    const handleCancel = () => {
+        try {
+            cancelEmployee(userCancelId).unwrap();
+            message.success('User Deletion Cancel Successfully');
+            refetch()
+
+        } catch (err) {
+            message.error('Failed to cancel');
+        }
+    }
 
     const columns = [
         {
@@ -76,8 +87,9 @@ const UserDeleteRequest = () => {
                     <button onClick={() => {
                         setOpenAllowModal(true)
                         setUserDeleteId(record?.id)
+                        setUserCancelId(record?.id)
                     }} className='px-4 py-2 rounded-3xl text-white font-semibold bg-green-600'> Allow </button>
-                    <button className='px-4 py-2 rounded-3xl text-white font-semibold bg-red-600'> Cancel </button>
+                    <button onClick={() =>handleCancel() } className='px-4 py-2 rounded-3xl text-white font-semibold bg-red-600'> Cancel </button>
                 </div>)
             }
         },
@@ -96,7 +108,6 @@ const UserDeleteRequest = () => {
             message.error('Failed to delete user');
         }
     }
-
 
 
     return (

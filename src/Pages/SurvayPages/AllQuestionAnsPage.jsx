@@ -7,7 +7,7 @@ import silent from "../../assets/images/silent.png";
 import sad from "../../assets/images/sad.png";
 import blushing from "../../assets/images/blushing.png";
 import starImage from "../../assets/images/star.png";
-import { useGetAllQnAnsQuery } from "../../redux/features/company/company";
+import { useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery } from "../../redux/features/company/company";
 // import translateText from "../../translateText";
 // import { useGetAllQnAnsQuery } from "../../redux/api/baseapi";
 
@@ -19,6 +19,9 @@ export default function AllQuestionAnsPage() {
   // RTK Query for all question:
   const { survey_id } = useParams();
   const { data: allQn, error, isLoading } = useGetAllQnAnsQuery(survey_id);
+
+  // get info about survey and project
+  const { data } = useGetSurveyBasedInfoQuery(survey_id);
 
   const { language = selectedlanguage } = location.state || {};
   const ans = allQn?.answers || [];
@@ -74,15 +77,15 @@ export default function AllQuestionAnsPage() {
       <div className="space-y-2">
         <p>
           Company Name:
-          <span className="text-[#ecb206] pl-2">Creative IT Institute</span>
+          <span className="text-[#ecb206] pl-2">{data?.company_name}</span>
         </p>
         <p>
           Project Name:
-          <span className="text-[#ecb206] pl-2">Employee Feedback</span>
+          <span className="text-[#ecb206] pl-2">{data?.project_name}</span>
         </p>
         <p>
           Survey Name:
-          <span className="text-[#ecb206] pl-2"> Survey No 01</span>
+          <span className="text-[#ecb206] pl-2">{data?.survey_name}</span>
         </p>
         <p>
           Total Questions:
