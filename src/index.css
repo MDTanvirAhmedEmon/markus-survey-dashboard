@@ -124,3 +124,8 @@ ul.ant-pagination.custom-pagination-all.css-dev-only-do-not-override-98ntnt {
 .custom-submenu-item{
   margin-top: 10px;
 }
+
+/* super admin company manage pagination */
+:where(.css-dev-only-do-not-override-98ntnt).ant-table-wrapper .ant-table-pagination-right {
+  justify-content: center;
+}
