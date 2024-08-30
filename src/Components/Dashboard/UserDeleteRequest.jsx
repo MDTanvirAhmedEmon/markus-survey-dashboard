@@ -1,11 +1,11 @@
-import { Input, Modal, Table } from 'antd';
+import { Input, message, Modal, Table } from 'antd';
 import React, { useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import { FaEdit, FaRegEye, FaStar, FaUser } from 'react-icons/fa';
 import { MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { imageUrl } from '../../redux/api/baseApi';
-import { useDeleteEmployeeRequestQuery } from '../../redux/features/dashboard/dashboardApi';
+import { useDeleteEmployeeMutation, useDeleteEmployeeRequestQuery } from '../../redux/features/dashboard/dashboardApi';
 
 const sarvayData = [
     { name: 'Customer Feedback', id: '1' },
@@ -21,8 +21,10 @@ const sarvayData = [
 const UserDeleteRequest = () => {
     const [openAllowModal, setOpenAllowModal] = useState(false)
     const [selectedID, setSelectedID] = useState([])
-    const { data: deleteRequestUser, isError, isLoading } = useDeleteEmployeeRequestQuery()
+    // get request
+    const { data: deleteRequestUser, isError, isLoading, refetch } = useDeleteEmployeeRequestQuery()
     const [userDeleteId, setUserDeleteId] = useState("")
+
 
 
     const formattedDeleteUserRequest = deleteRequestUser?.data?.map((user, i) => ({
@@ -31,13 +33,11 @@ const UserDeleteRequest = () => {
         name: user?.name ? user?.name : "",
         img: user?.image ? `${imageUrl}${user?.image}` : <FaUser />,
         email: user?.email
-
-
-
-
     }))
-    // console.log(deleteRequestUser)
-    // console.log(formattedDeleteUserRequest)
+
+
+    // delete
+    const [deleteEmployee] = useDeleteEmployeeMutation();
 
 
     const columns = [
@@ -82,7 +82,15 @@ const UserDeleteRequest = () => {
     ];
 
     const handleDeleteUser = () => {
-        console.log(userDeleteId)
+        try {
+            deleteEmployee(userDeleteId).unwrap();
+            message.success('User deleted successfully');
+            setOpenAllowModal(false)
+            refetch()
+
+        } catch (err) {
+            message.error('Failed to delete user');
+        }
     }
 
 
