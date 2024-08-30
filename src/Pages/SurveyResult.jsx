@@ -3,7 +3,7 @@ import { IoArrowBackSharp } from "react-icons/io5";
 import { ConfigProvider, Form, Input, Pagination, Select, Spin, Tag } from "antd";
 import { CiSearch } from "react-icons/ci";
 import { useEffect, useState } from "react";
-import { useGetProjectForManageCompanyQuery, useGetSurveyForManageCompanyQuery } from "../redux/features/questions/questionsApi";
+import { useGetProjectForManageCompanyQuery, useGetSurveyForEventQuery, useGetSurveyForManageCompanyQuery } from "../redux/features/questions/questionsApi";
 import { useGetAllSurveyCommentsQuery, useGetSurveyResultReportQuery } from "../redux/features/survey/surveyApi";
 import { useRef } from "react";
 import html2canvas from "html2canvas";
@@ -45,7 +45,7 @@ const SurveyResult = () => {
         label: project.project_name
     }));
 
-    const { data: surveys } = useGetSurveyForManageCompanyQuery({
+    const { data: surveys } = useGetSurveyForEventQuery({
         page: currentPageSurvey
     });
 
