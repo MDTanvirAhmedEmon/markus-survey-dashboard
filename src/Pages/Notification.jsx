@@ -58,7 +58,7 @@ const Notification = () => {
                     >
                         <div>
                             <div className="flex justify-start items-center gap-8 mb-1 text-[#919191]">
-                                <h3 className="text-[#555555] font-bold">{item?.data?.name}</h3>
+                                <h3 className="text-[#555555] font-bold">{item?.data?.name ? item?.data?.name : "Employee"}</h3>
                                 <p>{item?.data?.message}</p>
                             </div>
                             <div className="flex justify-start items-center gap-2 text-[#919191]">
