@@ -153,8 +153,7 @@ const Profile = () => {
                                 boxShadow: "rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px"
                             }}
                         >
-                            <h1 className='text-center text-secondary leading-7 text-2xl font-medium mb-7'>Edit Company
-                                Profile</h1>
+                            <h1 className='text-center text-secondary leading-7 text-2xl font-medium mb-7'>Edit Profile</h1>
                             <Form
                                 onFinish={onEditProfile}
                                 layout="vertical"
@@ -162,8 +161,7 @@ const Profile = () => {
                             >
                                 <Form.Item
                                     name="name"
-                                    label={<p className="text-[#919191] text-[16px] leading-5 font-normal">Company
-                                        Name</p>}
+                                    label={<p className="text-[#919191] text-[16px] leading-5 font-normal">Name</p>}
                                 >
                                     <Input
                                         style={{
