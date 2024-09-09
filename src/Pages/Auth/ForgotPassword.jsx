@@ -15,13 +15,12 @@ const ForgotPassword = () => {
     console.log(forgetPassData);
 
     const onFinish = async (values) => {
-        console.log("this is forgot password", values);
         localStorage.setItem('myEmail', values.email);
         try {
             const formData = new FormData();
             formData.append("email", values.email);
             const result = await setForgetPass(formData).unwrap();
-            console.log("Result:", result); // Check the API response here
+            console.log("Result:", result); 
             if (result) {
                 Swal.fire({
                     title: "Success!",
@@ -35,9 +34,9 @@ const ForgotPassword = () => {
             console.error("Error:", error);
             Swal.fire({
                 title: "Error!",
-                text: "Something went wrong. Please try again.",
-                icon: "error",
+                text: error?.data?.message,
                 confirmButtonText: "OK",
+                confirmButtonColor: "#ECB206"
             });
         }
     };

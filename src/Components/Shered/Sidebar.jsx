@@ -8,12 +8,12 @@ import { LuFilePlus } from 'react-icons/lu';
 import { MdDashboard, MdEvent } from 'react-icons/md';
 import { SiHomeassistantcommunitystore } from 'react-icons/si';
 import { Link, NavLink } from 'react-router-dom';
-import { RiBarChart2Line } from "react-icons/ri";
+import { RiAdminLine, RiBarChart2Line } from "react-icons/ri";
 import { CiLogout } from "react-icons/ci";
 import { useDispatch } from 'react-redux';
 import { logOut } from '../../redux/features/auth/authSlice.js';
 import { useGetProfileQuery } from '../../redux/features/auth/authApi.js';
-
+import logo from '../../assets/images/logo1.png'
 const Sidebar = () => {
     const [openIndex, setOpenIndex] = useState(null);
     const dispatch = useDispatch();
@@ -21,7 +21,6 @@ const Sidebar = () => {
     const { data } = useGetProfileQuery();
 
     const userRole = data?.user?.role_type;
-    console.log('Sidebar', userRole)
 
     const links = userRole === "COMPANY" ? [
         {
@@ -44,7 +43,7 @@ const Sidebar = () => {
         },
         {
             path: '/manage-company',
-            label: 'Manage Company',
+            label: 'Manage Surveys',
             icon: <SiHomeassistantcommunitystore />,
             sub_menu: false
         },
@@ -86,6 +85,12 @@ const Sidebar = () => {
             sub_menu: false,
             icon: <SiHomeassistantcommunitystore />,
         },
+        {
+            path: '/manage-admin',
+            label: 'Make Admin',
+            sub_menu: false,
+            icon: <RiAdminLine />,
+        },
         // {
         //     path: '/super-admin/company-details',
         //     label: 'Company Details',
@@ -110,7 +115,7 @@ const Sidebar = () => {
                 },
                 {
                     path: '/terms',
-                    label: 'Terms & Condition',
+                    label: 'Terms & Conditions',
                     icon: <></>,
                 },
                 // {
@@ -138,9 +143,11 @@ const Sidebar = () => {
     }, [openIndex]);
 
     return (
-        <div id='sidebar' className='w-full h-[100vh]] mt-10'>
-            <div className="log my-5">
-                <Link to={`/`} className='text-white font-bold text-2xl'>Company Logo</Link>
+        <div id='sidebar' className='w-full h-[100vh]] mt-4'>
+            <div className="log ">
+                <Link to={`/`} className='text-white '>
+                <img src={logo} className='h-12 w-20  mx-auto' />
+                </Link>
             </div>
 
             <div className='start-start flex-col gap-5 text-white custom-sidebar'>

@@ -15,13 +15,14 @@ import sad from "../assets/images/sad.png"
 import silent from "../assets/images/silent.png"
 import angry from "../assets/images/angry.png"
 import star from "../assets/images/star.png"
-
+import { CSVLink, CSVDownload } from "react-csv";
 
 
 
 const SurveyResult = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
+    const [csvDataDisplay, setCsvDataDisplay] = useState()
 
     // this pagination for survey result page
     const [currentSurveyPage, setCurrentSurveyPage] = useState(1);
@@ -65,6 +66,14 @@ const SurveyResult = () => {
         setCurrentSurveyPage(page);
     };
 
+
+
+
+
+
+
+
+
     const CustomDropdown = (menu) => (
         <div>
             {menu}
@@ -98,12 +107,21 @@ const SurveyResult = () => {
     const { data: reportData, isLoading } = useGetSurveyResultReportQuery(
         selectedProject && selectedSurvey && { project_id: selectedProject, survey_id: selectedSurvey, page: currentSurveyPage },
     );
+    
 
+    
+
+    const csvfileDataFormat = reportData?.data?.map(value=>(
+            [value?.project , value?.question,value?.survey]
+    ))
+csvfileDataFormat?.unshift(["Project", "Question", "Survey"]);
+    
 
     const onFinish = (values) => {
         console.log(values);
-    };
-    const data = ['https://i.ibb.co/0sF5Fk3/images-19.jpg', 'https://i.ibb.co/YpR8Mbw/Ellipse-307.png', 'https://i.ibb.co/JFZhZ7m/Ellipse-311.png', 'https://i.ibb.co/5cXN4Bw/Ellipse-310.png', 'https://i.ibb.co/gz2CbVj/1-intro-photo-final.jpg', 'https://i.ibb.co/7xc44sq/profile-picture-smiling-young-african-260nw-1873784920.webp', 'https://i.ibb.co/sQPHfnR/images-20.jpg']
+    };  
+    // const data = ['https://i.ibb.co/0sF5Fk3/images-19.jpg', 'https://i.ibb.co/YpR8Mbw/Ellipse-307.png', 'https://i.ibb.co/JFZhZ7m/Ellipse-311.png', 'https://i.ibb.co/5cXN4Bw/Ellipse-310.png', 'https://i.ibb.co/gz2CbVj/1-intro-photo-final.jpg', 'https://i.ibb.co/7xc44sq/profile-picture-smiling-young-african-260nw-1873784920.webp', 'https://i.ibb.co/sQPHfnR/images-20.jpg']
+  
 
     // pdf
     const printRef = useRef(null);
@@ -160,6 +178,14 @@ const SurveyResult = () => {
             console.log(error);
         }
     };
+
+
+
+
+
+
+
+
 
     const handelGetImage = (id) => {
         // get all survey comment for image
@@ -383,9 +409,10 @@ const SurveyResult = () => {
                                 ))}
                             </div>
                             <div className="flex justify-center my-6">
-                                <button onClick={handleExportAsPDF} className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">
+                                {/* <button onClick={handleExportAsPDF} className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">
                                     Export
-                                </button>
+                                </button> */}
+                                <CSVLink data={csvfileDataFormat} filename={"survey.csv"} className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">Export</CSVLink>
                             </div>
                             <div className="py-10">
                                 <Pagination

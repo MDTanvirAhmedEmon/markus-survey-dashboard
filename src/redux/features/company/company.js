@@ -66,7 +66,35 @@ export const surveyAPi = baseApi.injectEndpoints({
             },
         }),
 
+        getAdmin : builder.query({
+            query : ()=>({
+                url : 'admins',
+                method : 'GET'
+            }),
+            providesTags : ['admin']
+        }),
+        deletAdmin :  builder.mutation({
+            query :  (id)=>{
+                return {
+                    url : `/admins/${id}`,
+                    method : 'DELETE'
+                }
+            },
+            invalidatesTags : ['admin']
+        }),
+        createAdmins :  builder.mutation({
+            query : (data)=>{
+                return {
+                    url : '/admins',
+                    method : "POST",
+                    body : data
+                }
+            },
+            invalidatesTags : ['admin']
+        })
+
+
     }),
 })
 
-export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery } = surveyAPi;
+export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery, useGetAdminQuery , useDeletAdminMutation, useCreateAdminsMutation } = surveyAPi;

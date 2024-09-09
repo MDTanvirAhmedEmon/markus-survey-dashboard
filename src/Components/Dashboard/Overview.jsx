@@ -49,11 +49,11 @@ const Overview = () => {
                         }}
                     >
                         <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={10} />
-                        <YAxis tickLine={false} axisLine={false} />
+                        <YAxis tickLine={false} axisLine={false}  />
                         <Tooltip content={<CustomTooltip />} />
                         <Legend />
-                        <Bar barSize={10} dataKey="count" stackId="a" fill="#D4A005" />
-                        <Bar radius={[10, 10, 0, 0]} dataKey="count" stackId="a" fill="#ECB206" />
+                        {/* <Bar barSize={10} dataKey="count" stackId="a" fill="#D4A005" /> */}
+                        <Bar radius={[10, 10, 0, 0]}   barSize={10} dataKey="count" stackId="a" fill="#ECB206" />
                     </BarChart>
                 </ResponsiveContainer>
             </div>

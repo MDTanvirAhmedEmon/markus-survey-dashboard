@@ -9,7 +9,7 @@ import { useUpdateSurveyQuestionMutation } from '../redux/features/manageCompany
 const EditSurveyQuestions = () => {
     const [updateQuestion] = useUpdateSurveyQuestionMutation()
     const { id } = useParams();
-    const { data, isLoading } = useGetSurveyBasedQuestionQuery(id);
+    const { data, isLoading , refetch } = useGetSurveyBasedQuestionQuery(id);
     // State to manage the edited questions
     const [editedQuestions, setEditedQuestions] = useState([]);
 
@@ -37,7 +37,10 @@ const EditSurveyQuestions = () => {
     
         // Send the FormData to the API
         updateQuestion(formData).unwrap()
-            .then((payload) => message.success("Question Update Successfully!"))
+            .then((payload) => {
+                message.success("Question Update Successfully!")
+                refetch()
+            })
             .catch((error) => console.error('rejected', error));
     };
     return (

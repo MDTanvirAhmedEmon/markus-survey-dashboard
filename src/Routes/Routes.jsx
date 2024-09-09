@@ -38,6 +38,7 @@ import TotalEmployeeRequest from "../Pages/TotalSurveyRequest";
 import TranslateComponent from "../Components/TranslateComponent.jsx";
 import TotalSuveuRequest from "../Components/Dashboard/TotalSuveuRequestAll.jsx";
 import TotalSuveuRequestAll from "../Components/Dashboard/TotalSuveuRequestAll.jsx";
+import ManageAdmin from "../Pages/SuperAdmin/ManageAdmin.jsx";
 
 // import Otp from "../Pages/Auth/Otp.jsx";
 
@@ -152,6 +153,12 @@ export const router = createBrowserRouter([
             {
                 path: '/super-admin',
                 element: <SuperAdminDashboard />,
+            },
+
+            {
+                path : '/manage-admin',
+                element  : <ManageAdmin/>
+                
             },
 
             {

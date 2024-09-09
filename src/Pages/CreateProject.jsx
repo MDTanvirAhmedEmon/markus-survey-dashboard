@@ -14,6 +14,7 @@ const CreateProject = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState(null);
     const pageSize = 10;
+    const [form] = Form.useForm();
 
     // delete project
     const [deleteProject, { isLoading: deleteLoading }] = useDeleteProjectMutation();
@@ -81,8 +82,8 @@ const CreateProject = () => {
             render: (_, record) => (
                 <div className='start-center text-2xl gap-1 text-red-600'>
                     <Popconfirm
-                        title="Delete the survey"
-                        description="Are you sure to delete this survey?"
+                        title="Delete the project"
+                        description="Are you sure to delete this project?"
                         onConfirm={() => {
                             // deleteSurvey(record?.id)
                             confirm(record?.id)
@@ -104,6 +105,7 @@ const CreateProject = () => {
 
         const formData = MakeFormData(value)
         createProject(formData);
+        form.resetFields();
     };
 
     return (
@@ -154,7 +156,7 @@ const CreateProject = () => {
             >
                 <div>
                     <p className='text-xl py-2 font-semibold'>Create new Project</p>
-                    <Form layout='vertical' onFinish={onFinish}>
+                    <Form layout='vertical' form={form}  onFinish={onFinish}>
                         <Form.Item
                             name='project_name'
                             label='Project Name'

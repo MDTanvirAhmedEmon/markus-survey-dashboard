@@ -133,8 +133,9 @@ const SCompanyManage = () => {
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: " delete"
+                cancelButtonColor: "#1E3042",
+                confirmButtonText: "delete",
+                cancelButtonText: "cancel",
               }).then((result) => {
                 if (result.isConfirmed) {
                   deleteCompany(record.id).unwrap().then((res) => toast.success(res.message)).catch((err) => toast.error(err.message))
@@ -211,6 +212,8 @@ const SCompanyManage = () => {
             onClick={() => {
               setAddForm(true)
               setOpenAddModal(true)
+              form.resetFields();  
+              setSelectedRow(null)
             }}
             className="bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap"
           >

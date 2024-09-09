@@ -104,6 +104,8 @@ const SurveyQuestions = () => {
               title: "Good job!",
               text: "Thank You!",
               icon: "success",
+              confirmButtonColor :"#ECB206"
+              // background : '#ECB206'
             });
             setCurrentQuestion(currentQuestion + 1);
           })
@@ -113,6 +115,8 @@ const SurveyQuestions = () => {
               text:
                 err?.data?.message || "You have already submitted that survey",
               icon: "success",
+              confirmButtonColor :"#ECB206"
+
             });
 
             if (err?.status === 409) {

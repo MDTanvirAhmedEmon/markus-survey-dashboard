@@ -19,11 +19,11 @@ function App() {
 
   const data = [
     {
-      title: 'Total Project',
+      title: 'Total Projects',
       count: dashboardData?.total_project,
     },
     {
-      title: 'Total Survey',
+      title: 'Total Surveys',
       count: dashboardData?.total_survey,
     },
     {

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://94.130.57.216:80/api/',
+  baseUrl: 'http://115.127.156.13:8000/api',
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
 
@@ -13,6 +13,10 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+// http://94.130.57.216:80/api/
+
+// http://94.130.57.216:80/
+
 export const baseApi = createApi({
   reducerPath: 'baseApi',
   baseQuery: baseQuery,
@@ -20,4 +24,4 @@ export const baseApi = createApi({
   endpoints: () => ({}),
 })
 
-export const imageUrl = 'http://94.130.57.216:80/'
+export const imageUrl = 'http://115.127.156.13:8000'

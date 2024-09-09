@@ -1,4 +1,4 @@
-import { ConfigProvider, Form, Input, Modal, Pagination, Select, Spin, Table } from 'antd';
+import { ConfigProvider, Form, Input, Modal, Pagination, Select, Spin, Table, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FaEdit, FaRegEye } from 'react-icons/fa';
@@ -16,7 +16,7 @@ const ManageCompany = () => {
     const { data, isLoading } = useGetCompanySurveyQuery({
         page: currentPage,
         search: searchTerm,
-    },{
+    }, {
         refetchOnMountOrArgChange: true
     });
 
@@ -69,16 +69,29 @@ const ManageCompany = () => {
         {
             title: 'Actions',
             key: 'actions',
-            render: (_, record) => (
-                <div className='start-center text-2xl gap-1'>
-                    <Link to={`/survey-report/${record.key}`}>
-                        <FaRegEye className='cursor-pointer' />
-                    </Link>
-                    <Link to={`/edit-survey-question/${record.key}`}>
-                        <FaEdit className='cursor-pointer' />
-                    </Link>
-                </div>
-            ),
+            render: (_, record) => {
+                console.log(record?.answers_count);
+
+                return (
+                    <div className='start-center text-2xl gap-1'>
+                        <Link to={`/survey-report/${record.key}`}>
+                            <FaRegEye className='cursor-pointer' />
+                        </Link>
+
+                        {record?.answers_count >= 1 ? (
+                            <Tooltip className='mr-5' title="You can't edit question after start survey!">
+                                <span className="text-gray-400 cursor-not-allowed">
+                                    <FaEdit />
+                                </span>
+                            </Tooltip>
+                        ) : (
+                            <Link to={`/edit-survey-question/${record.key}`}>
+                                <FaEdit className='cursor-pointer' />
+                            </Link>
+                        )}
+                    </div>
+                )
+            },
         },
     ];
 
@@ -89,10 +102,10 @@ const ManageCompany = () => {
                     <Link to={-1} className='bg-[var(--color-2)] py-1 px-2 rounded-md start-center gap-1 text-white'>
                         <IoArrowBackSharp />back
                     </Link>
-                    <p className='text-xl'>Company Manage</p>
+                    <p className='text-xl'>Manage Surveys</p>
                 </div>
                 <div className='end-center gap-2'>
-                    <Input  onChange={(e) => setSearchTerm(e.target.value)} className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
+                    <Input onChange={(e) => setSearchTerm(e.target.value)} className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
                     <Link to={`/add-questions`} className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
                         Add New Question
                         <FaPlus />

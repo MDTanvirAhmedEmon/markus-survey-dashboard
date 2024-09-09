@@ -105,12 +105,15 @@ const SurveyQuestions = () => {
               title: "Good job!",
               text: "Thank You!",
               icon: "success",
+              confirmButtonColor : '#ECB206',
+              
             });
             setCurrentQuestion(currentQuestion + 1);
           })
           .catch((err) => {
             Swal.fire({
               title: "Good job!",
+              confirmButtonColor : '#ECB206',
               text:
                 err?.data?.message || "You have already submitted that survey",
               icon: "success",
