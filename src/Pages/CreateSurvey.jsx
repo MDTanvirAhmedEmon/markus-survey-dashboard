@@ -6,17 +6,22 @@ import { MdOutlineDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import '../assets/css/style.css';
 import dayjs from 'dayjs';
-import { useGetSurveyQuery, useDeleteSurveyMutation, useCreateSurveyMutation } from '../redux/features/survey/surveyApi';
+import { useGetSurveyQuery, useDeleteSurveyMutation, useCreateSurveyMutation, useUpdateSurveyDateMutation } from '../redux/features/survey/surveyApi';
 import { useGetProjectForManageCompanyQuery } from '../redux/features/questions/questionsApi';
+import { CiEdit } from 'react-icons/ci';
 
 const CreateSurvey = () => {
+    const [surveydate, setSurvayDate] = useState()
+    const [openEditSurvay, setOpenEditSurvay] = useState(false)
     const [isPeriodically, setIsPeriodically] = useState(false);
     const [openAddModal, setOpenAddModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [projectCurrentPage, setprojectCurrentPage] = useState(1);
     const pageSize = 10;
+    const [createForm] = Form.useForm();
+    const [editForm] = Form.useForm();
+    const [updateSurvaydate] = useUpdateSurveyDateMutation()
 
-    // console.log(isPeriodically)
 
 
     // delete survey
@@ -30,7 +35,6 @@ const CreateSurvey = () => {
             message.success('Survey deleted successfully');
         } catch (error) {
             message.error('Failed to delete the survey');
-            console.error('Error deleting survey:', error);
         }
     };
 
@@ -43,7 +47,6 @@ const CreateSurvey = () => {
     }, {
         refetchOnMountOrArgChange: true,
     });
-    console.log('survey', allSurver)
 
 
 
@@ -103,6 +106,7 @@ const CreateSurvey = () => {
                     >
                         <MdOutlineDelete className='cursor-pointer' />
                     </Popconfirm>
+                    <CiEdit onClick={() => handleOpenEditDataModal(record)} size={25} className='text-gray-500 cursor-pointer' />
                 </div>
             ),
         },
@@ -143,6 +147,7 @@ const CreateSurvey = () => {
         }
 
         createSurvey(formData);
+        createForm.resetFields();
     };
 
 
@@ -169,6 +174,31 @@ const CreateSurvey = () => {
             />
         </div>
     );
+    const handleOpenEditDataModal = (value) => {
+        setOpenEditSurvay(true)
+        setSurvayDate(value)
+    }
+
+    const handleDateChange = (value) => {
+        const id = surveydate?.id
+        const startDate = dayjs(value.start_date).format('YYYY-MM-DD');
+        const enddate = dayjs(value.end_date).format('YYYY-MM-DD')
+        const formData = new FormData()
+        formData.append("start_date", startDate);
+        formData.append("end_date",enddate );
+        formData.append("_method", 'PUT');
+        
+        updateSurvaydate({id,formData}).unwrap()
+            .then((payload) => {
+                message.success("Date update successfully!!")
+                setOpenEditSurvay(false)
+            })
+            .catch((error) => console.error('rejected', error));
+
+            editForm.resetFields()
+
+    }
+
 
     return (
         <div className='bg-[var(--color-7)] rounded-md'>
@@ -219,6 +249,7 @@ const CreateSurvey = () => {
                     <Form
                         layout='vertical'
                         onFinish={onFinish}
+                        form={createForm}
                     >
                         {/* Toggle Choice Option */}
                         <Form.Item
@@ -350,6 +381,70 @@ const CreateSurvey = () => {
 
                         <button className='w-full py-2 bg-[var(--color-2)] text-white font-semibold rounded-md'>
                             Save
+                        </button>
+                    </Form>
+                </div>
+            </Modal>
+
+            {/* Edit survey Modal */}
+            <Modal
+                open={openEditSurvay}
+                centered
+                footer={false}
+                onCancel={() => setOpenEditSurvay(false)}
+            >
+                <div>
+                    <p className='text-xl py-2 font-bold'>Edit Survey Date</p>
+                    <Form
+                        layout='vertical'
+                        onFinish={handleDateChange}
+                        form={editForm}
+                    >
+
+
+
+
+                        <Form.Item
+                            name="start_date"
+                            label="Start Date"
+                            rules={[
+                                {
+                                    message: 'Start Date is required',
+                                    required: true
+                                }
+                            ]}
+                        // initialValue={surveydate?.end_date}
+                        // style={{ width: '48%' }}
+                        >
+                            <DatePicker
+                                className='w-full pb-2 pt-2 border outline-none'
+                                format='DD-MM-YYYY'
+                                placeholder='Select End Date'
+
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="end_date"
+                            label="End Date"
+                            rules={[
+                                {
+                                    message: 'End Date is required',
+                                    required: true
+                                }
+                            ]}
+                        // style={{ width: '48%' }}
+                        >
+                            <DatePicker
+                                className='w-full pb-2 pt-2 border outline-none'
+                                format='DD-MM-YYYY'
+                                placeholder='Select End Date'
+                            />
+                        </Form.Item>
+
+
+
+                        <button className='w-full py-2 bg-[var(--color-2)] text-white font-semibold rounded-md'>
+                            Change Survey Date
                         </button>
                     </Form>
                 </div>

@@ -10,9 +10,19 @@ export const surveyApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['Survey'],
         }),
+        updateSurveyDate : builder.mutation({
+            query : ({id,formData})=>{
+                console.log(formData);
+                return {
+                    url : `/surveys/${id}`,
+                    method : "POST",
+                    body :  formData,
+                }
+            },
+            invalidatesTags: ['Survey'],
+        }),
         deleteSurvey: builder.mutation({
             query: (id) => {
-                console.log("form Api", id);
                 return {
                     url: `surveys/${id}`,
                     method: "DELETE",
@@ -51,4 +61,4 @@ export const surveyApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useCreateSurveyMutation, useGetSurveyQuery, useDeleteSurveyMutation, useGetSurveyResultReportQuery, useGetAllSurveyCommentsQuery } = surveyApi;
+export const { useCreateSurveyMutation, useGetSurveyQuery, useDeleteSurveyMutation, useGetSurveyResultReportQuery, useGetAllSurveyCommentsQuery, useUpdateSurveyDateMutation } = surveyApi;

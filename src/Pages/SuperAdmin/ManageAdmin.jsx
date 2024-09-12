@@ -18,6 +18,7 @@ const ManageAdmin = () => {
     const { data: getAdmind, isLoading } = useGetAdminQuery();
     const [deleteAdmin] = useDeletAdminMutation();
     const [createAdmin] = useCreateAdminsMutation()
+    console.log(getAdmind);
     const formattedTableData = getAdmind?.data?.map((admin, i) => (
         {
             id: admin?.id,
@@ -50,7 +51,7 @@ const ManageAdmin = () => {
             render: (_, record) => {
                 return (
                     <div className="start-center text-2xl gap-1 ">
-                        <MdEdit className="cursor-pointer" />
+                        {/* <MdEdit className="cursor-pointer" /> */}
                         <MdOutlineDelete onClick={() => {
                             Swal.fire({
                                 title: "Are you sure?",
@@ -74,6 +75,7 @@ const ManageAdmin = () => {
     ];
 
     const onFinish = (values) => {
+        console.log(values);
         const formData = MakeFormData(values)
         createAdmin(formData).unwrap()
             .then((payload) => {
@@ -169,7 +171,7 @@ const ManageAdmin = () => {
                             form={form}
                         >
                             <Form.Item
-                                name="names"
+                                name="name"
                                 rules={[
                                     {
                                         required: true,

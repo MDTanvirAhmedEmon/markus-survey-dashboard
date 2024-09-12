@@ -91,7 +91,8 @@ export const surveyAPi = baseApi.injectEndpoints({
                 }
             },
             invalidatesTags : ['admin']
-        })
+        }),
+        
 
 
     }),
