@@ -39,6 +39,7 @@ import TranslateComponent from "../Components/TranslateComponent.jsx";
 import TotalSuveuRequest from "../Components/Dashboard/TotalSuveuRequestAll.jsx";
 import TotalSuveuRequestAll from "../Components/Dashboard/TotalSuveuRequestAll.jsx";
 import ManageAdmin from "../Pages/SuperAdmin/ManageAdmin.jsx";
+import Trash from "../Pages/SuperAdmin/Trash.jsx";
 
 // import Otp from "../Pages/Auth/Otp.jsx";
 
@@ -164,6 +165,10 @@ export const router = createBrowserRouter([
             {
                 path: '/company-manage',
                 element: <SCompanyManage />,
+            },
+            {
+                path: '/trash',
+                element: <Trash/>,
             },
 
             {

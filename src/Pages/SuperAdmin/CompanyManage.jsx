@@ -38,6 +38,8 @@ const SCompanyManage = () => {
   const [updateCompany, { isLoading: updateLoading, isError: updateError }] = useUpdateCompaniesMutation()
   const [deleteCompany, { isLoading: deleteLoading, isError: deleteError }] = useDeleteCompaniesMutation()
   const { data, isLoading: isFetching } = useGetCompaniesQuery({ page, search })
+
+  console.log(data);
   const [survey, setSurvey] = useState(false)
   const onFinish = (values) => {
     const { remember, email, ...data } = values

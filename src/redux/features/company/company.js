@@ -23,6 +23,23 @@ export const surveyAPi = baseApi.injectEndpoints({
             providesTags: ['Company'],
             refetchOnMountOrArgChange: true,
         }),
+        getTrashCompany: builder.query({
+            query: ({ page }) => ({
+                url: `show-trash-users?per_page=${page}`,
+                method: 'GET'
+
+            }),
+            providesTags : ['trashCompany']
+        }),
+        deletCompanyPermanently: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `/delete-user-permanently/${id}`,
+                    method: 'DELETE'
+                }
+            },
+            invalidatesTags : ['trashCompany']
+        }),
         updateCompanies: builder.mutation({
             query: ({ data, id }) => {
                 return {
@@ -66,36 +83,36 @@ export const surveyAPi = baseApi.injectEndpoints({
             },
         }),
 
-        getAdmin : builder.query({
-            query : ()=>({
-                url : 'admins',
-                method : 'GET'
+        getAdmin: builder.query({
+            query: () => ({
+                url: 'admins',
+                method: 'GET'
             }),
-            providesTags : ['admin']
+            providesTags: ['admin']
         }),
-        deletAdmin :  builder.mutation({
-            query :  (id)=>{
+        deletAdmin: builder.mutation({
+            query: (id) => {
                 return {
-                    url : `/admins/${id}`,
-                    method : 'DELETE'
+                    url: `/admins/${id}`,
+                    method: 'DELETE'
                 }
             },
-            invalidatesTags : ['admin']
+            invalidatesTags: ['admin']
         }),
-        createAdmins :  builder.mutation({
-            query : (data)=>{
+        createAdmins: builder.mutation({
+            query: (data) => {
                 return {
-                    url : '/admins',
-                    method : "POST",
-                    body : data
+                    url: '/admins',
+                    method: "POST",
+                    body: data
                 }
             },
-            invalidatesTags : ['admin']
+            invalidatesTags: ['admin']
         }),
-        
+
 
 
     }),
 })
 
-export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery, useGetAdminQuery , useDeletAdminMutation, useCreateAdminsMutation } = surveyAPi;
+export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery, useGetAdminQuery, useDeletAdminMutation, useCreateAdminsMutation, useGetTrashCompanyQuery , useDeletCompanyPermanentlyMutation } = surveyAPi;
