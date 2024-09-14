@@ -1,4 +1,4 @@
-import { Table } from 'antd'
+import { Table, Tabs } from 'antd'
 import React, { useState } from 'react'
 import { IoArrowBackSharp } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
@@ -9,12 +9,30 @@ import toast from 'react-hot-toast'
 import { TbRestore } from 'react-icons/tb'
 
 const Trash = () => {
+    const [role_type, setRoleType] =  useState('COMPANY')
     const [id, setCompanyId] = useState()
     const [page, setPage] = useState(10);
-    const { data: getTrashCompany, refetch } = useGetTrashCompanyQuery({ page });
+    const { data: getTrashCompany, refetch } = useGetTrashCompanyQuery({ role_type,page });
     const [deleteCompanyPermanently] = useDeletCompanyPermanentlyMutation()
     // const { data: restoreCompany } = useResotreCompanyQuery(id)
     const [restoreCompany] = useResotreCompanyMutation()
+
+
+    const onChange = (key) => {
+        setRoleType(key)
+      };
+
+     const items = [
+    {
+      key: 'COMPANY',
+      label: 'Company',
+    },
+    {
+      key: 'EMPLOYEE',
+      label: 'Employee',
+    },
+
+  ]
 
     const formattedTableData = getTrashCompany?.data?.map((company, i) => ({
         id: company?.id,
@@ -92,6 +110,10 @@ const Trash = () => {
                 </Link>
                 <p className="text-xl">Company Trash</p>
             </div>
+
+             <div className='p-5 '>
+        <Tabs defaultActiveKey="1" items={items} onChange={onChange} className="custom-tabs " />
+      </div> 
 
 
             <Table

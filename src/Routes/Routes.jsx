@@ -175,6 +175,10 @@ export const router = createBrowserRouter([
                 path: '/trash',
                 element: <Trash/>,
             },
+            {
+                path: '/user-trash',
+                element: <ManageUser/>,
+            },
 
             {
                 path: '/super-admin/company-details',

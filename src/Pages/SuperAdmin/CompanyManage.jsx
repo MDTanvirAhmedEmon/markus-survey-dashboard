@@ -35,7 +35,7 @@ const SCompanyManage = () => {
   const [updateCompany, { isLoading: updateLoading, isError: updateError }] = useUpdateCompaniesMutation()
   // const [deleteCompany, { isLoading: deleteLoading, isError: deleteError }] = useDeleteCompaniesMutation()
   // const [companyId, setCompanyId] = useState('')
-  const { data, isLoading: isFetching , refetch } = useGetCompaniesQuery({ page, search })
+  const { data, isLoading: isFetching } = useGetCompaniesQuery({ page, search })
   const [ softDelteCompany] = useSoftDeleteCompanyMutation()
   const [survey, setSurvey] = useState(false)
   const onFinish = (values) => {

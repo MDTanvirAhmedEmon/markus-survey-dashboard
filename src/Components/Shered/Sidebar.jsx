@@ -43,12 +43,7 @@ const Sidebar = () => {
             icon: <LuFilePlus />,
             sub_menu: false
         },
-        {
-            path: '/manage-user',
-            label: 'Manage User',
-            icon: <FaUserFriends />,
-            sub_menu: false
-        },
+       
         {
             path: '/manage-company',
             label: 'Manage Surveys',
@@ -99,6 +94,12 @@ const Sidebar = () => {
             sub_menu: false,
             icon: <RiAdminLine />,
         },
+        {
+            path: '/manage-user',
+            label: 'Manage User',
+            icon: <FaUserFriends />,
+            sub_menu: false
+        },
         // {
         //     path: '/super-admin/company-details',
         //     label: 'Company Details',
@@ -138,7 +139,7 @@ const Sidebar = () => {
             label : 'Trash',
             icon : <FaRegTrashCan />,
             sub_menu: false,
-        }
+        },
     ];
 
     const toggleAccordion = (index) => {

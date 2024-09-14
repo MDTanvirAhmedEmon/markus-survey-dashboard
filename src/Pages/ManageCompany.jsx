@@ -70,7 +70,6 @@ const ManageCompany = () => {
             title: 'Actions',
             key: 'actions',
             render: (_, record) => {
-                console.log(record?.answers_count);
 
                 return (
                     <div className='start-center text-2xl gap-1'>

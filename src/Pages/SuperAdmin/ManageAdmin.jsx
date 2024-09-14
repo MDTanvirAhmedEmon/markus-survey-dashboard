@@ -18,7 +18,6 @@ const ManageAdmin = () => {
     const { data: getAdmind, isLoading } = useGetAdminQuery();
     const [deleteAdmin] = useDeletAdminMutation();
     const [createAdmin] = useCreateAdminsMutation()
-    console.log(getAdmind);
     const formattedTableData = getAdmind?.data?.map((admin, i) => (
         {
             id: admin?.id,

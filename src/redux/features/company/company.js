@@ -24,14 +24,25 @@ export const surveyAPi = baseApi.injectEndpoints({
             refetchOnMountOrArgChange: true,
         }),
         getTrashCompany: builder.query({
-            query: ({ page }) => ({
-                url: `show-trash-users?per_page=${page}`,
+            query: ({ role_type,page }) => ({
+                url: `show-trash-users?per_page=${page}&role_type=${role_type}`,
                 method: 'GET'
 
             }),
-            providesTags : ['trashCompany']
+            providesTags: ['trashCompany']
         }),
-        
+
+        getUsers: builder.query({
+            query: ( {userType, page} ) => {
+                return {
+                    url: `/manage-users?role_type=${userType}&page=${page}`,
+                        method: 'GET'
+                }
+
+            },
+            providesTags: ['users']
+        }),
+
         deletCompanyPermanently: builder.mutation({
             query: (id) => {
                 return {
@@ -39,17 +50,18 @@ export const surveyAPi = baseApi.injectEndpoints({
                     method: 'DELETE'
                 }
             },
-            invalidatesTags : ['trashCompany']
+            invalidatesTags: ['trashCompany']
         }),
-        resotreCompany : builder.mutation({
-            query : (id)=>{
+        resotreCompany: builder.mutation({
+            query: (id) => {
                 return {
-                    url : `/restore-trash-user/${id}`,
-                    method : 'PATCH'
+                    url: `/restore-trash-user/${id}`,
+                    method: 'PATCH'
                 }
             },
-            invalidatesTags : ['Company',"trashCompany"]
+            invalidatesTags: ['Company', "trashCompany", "users"]
         }),
+
         updateCompanies: builder.mutation({
             query: ({ data, id }) => {
                 return {
@@ -80,14 +92,14 @@ export const surveyAPi = baseApi.injectEndpoints({
             },
             invalidatesTags: ['Company'],
         }),
-        softDeleteCompany : builder.mutation({
-            query : (id) =>{
+        softDeleteCompany: builder.mutation({
+            query: (id) => {
                 return {
-                    url : `/delete-employee/${id}`,
-                    method : "PATCH"
+                    url: `/delete-employee/${id}`,
+                    method: "PATCH"
                 }
             },
-            invalidatesTags : ['Company','trashCompany']
+            invalidatesTags: ['Company', 'trashCompany','users']
         }),
 
         getAllQnAns: builder.query({
@@ -134,4 +146,4 @@ export const surveyAPi = baseApi.injectEndpoints({
     }),
 })
 
-export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery, useGetAdminQuery, useDeletAdminMutation, useCreateAdminsMutation, useGetTrashCompanyQuery , useDeletCompanyPermanentlyMutation, useResotreCompanyMutation, useSoftDeleteCompanyMutation } = surveyAPi;
+export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery, useGetAdminQuery, useDeletAdminMutation, useCreateAdminsMutation, useGetTrashCompanyQuery, useDeletCompanyPermanentlyMutation, useResotreCompanyMutation, useSoftDeleteCompanyMutation, useGetUsersQuery } = surveyAPi;
