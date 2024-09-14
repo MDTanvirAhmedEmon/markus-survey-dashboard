@@ -15,6 +15,7 @@ import { logOut } from '../../redux/features/auth/authSlice.js';
 import { useGetProfileQuery } from '../../redux/features/auth/authApi.js';
 import logo from '../../assets/images/logo1.png'
 import { FaRegTrashCan } from 'react-icons/fa6';
+import { FaUserFriends } from 'react-icons/fa';
 const Sidebar = () => {
     const [openIndex, setOpenIndex] = useState(null);
     const dispatch = useDispatch();
@@ -40,6 +41,12 @@ const Sidebar = () => {
             path: '/create-survey',
             label: 'Create Survey',
             icon: <LuFilePlus />,
+            sub_menu: false
+        },
+        {
+            path: '/manage-user',
+            label: 'Manage User',
+            icon: <FaUserFriends />,
             sub_menu: false
         },
         {

@@ -40,6 +40,7 @@ import TotalSuveuRequest from "../Components/Dashboard/TotalSuveuRequestAll.jsx"
 import TotalSuveuRequestAll from "../Components/Dashboard/TotalSuveuRequestAll.jsx";
 import ManageAdmin from "../Pages/SuperAdmin/ManageAdmin.jsx";
 import Trash from "../Pages/SuperAdmin/Trash.jsx";
+import ManageUser from "../Pages/ManageUser.jsx";
 
 // import Otp from "../Pages/Auth/Otp.jsx";
 
@@ -89,6 +90,10 @@ export const router = createBrowserRouter([
             {
                 path: '/manage-company',
                 element: <ManageCompany />,
+            },
+            {
+                path: '/manage-user',
+                element: <ManageUser />,
             },
             {
                 path: '/manage-event',

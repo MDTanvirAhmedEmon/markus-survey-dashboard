@@ -2,15 +2,19 @@ import { Table } from 'antd'
 import React, { useState } from 'react'
 import { IoArrowBackSharp } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
-import { useDeletCompanyPermanentlyMutation, useGetTrashCompanyQuery } from '../../redux/features/company/company'
+import { useDeletCompanyPermanentlyMutation, useGetTrashCompanyQuery, useResotreCompanyMutation,  } from '../../redux/features/company/company'
 import { MdOutlineDelete } from 'react-icons/md'
 import Swal from 'sweetalert2'
 import toast from 'react-hot-toast'
+import { TbRestore } from 'react-icons/tb'
 
 const Trash = () => {
+    const [id, setCompanyId] = useState()
     const [page, setPage] = useState(10);
-    const { data: getTrashCompany } = useGetTrashCompanyQuery({ page });
+    const { data: getTrashCompany, refetch } = useGetTrashCompanyQuery({ page });
     const [deleteCompanyPermanently] = useDeletCompanyPermanentlyMutation()
+    // const { data: restoreCompany } = useResotreCompanyQuery(id)
+    const [restoreCompany] = useResotreCompanyMutation()
 
     const formattedTableData = getTrashCompany?.data?.map((company, i) => ({
         id: company?.id,
@@ -46,7 +50,14 @@ const Trash = () => {
                 return (
 
                     <div className="start-center text-2xl gap-1 ">
+                        <TbRestore onClick={() => {
+                            // setCompanyId(record?.id)
+                            // toast.success('Restore user Successfully!')
+                            // refetch()
+                            restoreCompany(record?.id).unwrap().then((res) => toast.success(res.message)).catch((err) => toast.error(err.message))
 
+                        }
+                        } className='text-yellow-500 cursor-pointer' />
                         <MdOutlineDelete onClick={() => {
                             Swal.fire({
                                 title: "Are you sure delete permanently?",
@@ -63,13 +74,12 @@ const Trash = () => {
                                 }
                             });
 
-                        }} className="cursor-pointer" />
+                        }} className="cursor-pointer text-red-600" />
                     </div>
                 );
             },
         },
     ];
-
     return (
         <div className="bg-[var(--color-7)] rounded-md">
             <div className="start-center gap-2 mb-3 p-5">

@@ -31,6 +31,7 @@ export const surveyAPi = baseApi.injectEndpoints({
             }),
             providesTags : ['trashCompany']
         }),
+        
         deletCompanyPermanently: builder.mutation({
             query: (id) => {
                 return {
@@ -39,6 +40,15 @@ export const surveyAPi = baseApi.injectEndpoints({
                 }
             },
             invalidatesTags : ['trashCompany']
+        }),
+        resotreCompany : builder.mutation({
+            query : (id)=>{
+                return {
+                    url : `/restore-trash-user/${id}`,
+                    method : 'PATCH'
+                }
+            },
+            invalidatesTags : ['Company',"trashCompany"]
         }),
         updateCompanies: builder.mutation({
             query: ({ data, id }) => {
@@ -69,6 +79,15 @@ export const surveyAPi = baseApi.injectEndpoints({
                 }
             },
             invalidatesTags: ['Company'],
+        }),
+        softDeleteCompany : builder.mutation({
+            query : (id) =>{
+                return {
+                    url : `/delete-employee/${id}`,
+                    method : "PATCH"
+                }
+            },
+            invalidatesTags : ['Company','trashCompany']
         }),
 
         getAllQnAns: builder.query({
@@ -115,4 +134,4 @@ export const surveyAPi = baseApi.injectEndpoints({
     }),
 })
 
-export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery, useGetAdminQuery, useDeletAdminMutation, useCreateAdminsMutation, useGetTrashCompanyQuery , useDeletCompanyPermanentlyMutation } = surveyAPi;
+export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery, useGetAdminQuery, useDeletAdminMutation, useCreateAdminsMutation, useGetTrashCompanyQuery , useDeletCompanyPermanentlyMutation, useResotreCompanyMutation, useSoftDeleteCompanyMutation } = surveyAPi;

@@ -1,6 +1,4 @@
 import {
-  Button,
-  Checkbox,
   ConfigProvider,
   Form,
   Input,
@@ -12,18 +10,17 @@ import {
 import { FaPlus, FaUpload } from "react-icons/fa6";
 import { IoArrowBackSharp } from "react-icons/io5";
 import { MdEdit, MdOutlineDelete } from "react-icons/md";
-import { IoEyeOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import "../../assets/css/style.css";
 import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { MakeFormData } from "../../utils/FormDataHooks";
-import { useCreateCompanyMutation, useDeleteCompaniesMutation, useGetCompaniesQuery, useUpdateCompaniesMutation } from "../../redux/features/company/company";
+import { useCreateCompanyMutation,  useGetCompaniesQuery, useSoftDeleteCompanyMutation,  useUpdateCompaniesMutation } from "../../redux/features/company/company";
 import toast from "react-hot-toast";
 import { imageUrl } from "../../redux/api/baseApi";
 import Swal from "sweetalert2";
 import { CiSearch } from "react-icons/ci";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink, } from "react-csv";
 import { RxCross2 } from "react-icons/rx";
 
 const SCompanyManage = () => {
@@ -36,10 +33,10 @@ const SCompanyManage = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [createCompany, { isLoading, isError }] = useCreateCompanyMutation()
   const [updateCompany, { isLoading: updateLoading, isError: updateError }] = useUpdateCompaniesMutation()
-  const [deleteCompany, { isLoading: deleteLoading, isError: deleteError }] = useDeleteCompaniesMutation()
-  const { data, isLoading: isFetching } = useGetCompaniesQuery({ page, search })
-
-  console.log(data);
+  // const [deleteCompany, { isLoading: deleteLoading, isError: deleteError }] = useDeleteCompaniesMutation()
+  // const [companyId, setCompanyId] = useState('')
+  const { data, isLoading: isFetching , refetch } = useGetCompaniesQuery({ page, search })
+  const [ softDelteCompany] = useSoftDeleteCompanyMutation()
   const [survey, setSurvey] = useState(false)
   const onFinish = (values) => {
     const { remember, email, ...data } = values
@@ -59,7 +56,6 @@ const SCompanyManage = () => {
         form.resetFields()
         setOpenAddModal(false)
       }).catch((err) => {
-        console.log(err)
         toast.error(err.message || 'Something went wrong')
       })
     } else {
@@ -131,7 +127,7 @@ const SCompanyManage = () => {
             <MdOutlineDelete onClick={() => {
               Swal.fire({
                 title: "Are you sure?",
-                text: "You won't be able to revert this!",
+                text: "You will be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -140,7 +136,7 @@ const SCompanyManage = () => {
                 cancelButtonText: "cancel",
               }).then((result) => {
                 if (result.isConfirmed) {
-                  deleteCompany(record.id).unwrap().then((res) => toast.success(res.message)).catch((err) => toast.error(err.message))
+                  softDelteCompany(record.id).unwrap().then((res) => toast.success(res.message)).catch((err) => toast.error(err.message))
                 }
               });
 
@@ -184,9 +180,9 @@ const SCompanyManage = () => {
   }, [selectedRow, form])
   return (
     <div className="bg-[var(--color-7)] rounded-md">
-      {
-        deleteLoading && <div className="flex justify-center items-center w-full h-screen absolute left-0 top-0"><Spin size="large" /></div>
-      }
+      {/* {
+        loadingUserDelete && <div className="flex justify-center items-center w-full h-screen absolute left-0 top-0"><Spin size="large" /></div>
+      } */}
       <div className="between-center px-3 my-2 pt-5">
         <div className="start-center gap-2 mb-3 p-5">
           <Link
@@ -214,7 +210,7 @@ const SCompanyManage = () => {
             onClick={() => {
               setAddForm(true)
               setOpenAddModal(true)
-              form.resetFields();  
+              form.resetFields();
               setSelectedRow(null)
             }}
             className="bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap"
@@ -394,7 +390,7 @@ const SCompanyManage = () => {
                 className="flex justify-center items-center"
               >
                 <button disabled={isLoading} className="bg-[#ecb206] w-96 py-3 mt-5 mx-auto block rounded ">
-                  {(isLoading || updateLoading) ? <Spin size="medium" /> : addForm ? "Add Company" : "Update Company"}
+                  {(isLoading || updateLoading) ? <Spin size="medium" /> : addForm ? "Add Companys" : "Update Company"}
                 </button>
               </Form.Item>
             </Form>
