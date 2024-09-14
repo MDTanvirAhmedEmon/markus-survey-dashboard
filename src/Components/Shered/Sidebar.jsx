@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { logOut } from '../../redux/features/auth/authSlice.js';
 import { useGetProfileQuery } from '../../redux/features/auth/authApi.js';
 import logo from '../../assets/images/logo1.png'
-import { FaRegTrashCan } from 'react-icons/fa6';
+import { FaRegTrashCan, FaUsers } from 'react-icons/fa6';
 import { FaUserFriends } from 'react-icons/fa';
 const Sidebar = () => {
     const [openIndex, setOpenIndex] = useState(null);
@@ -54,6 +54,12 @@ const Sidebar = () => {
             path: '/manage-event',
             label: 'Manage Event',
             icon: <MdEvent />,
+            sub_menu: false
+        },
+        {
+            path: '/manage-users',
+            label: 'Manage Users',
+            icon: <FaUsers />,
             sub_menu: false
         },
         {

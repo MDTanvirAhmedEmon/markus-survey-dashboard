@@ -140,10 +140,29 @@ export const surveyAPi = baseApi.injectEndpoints({
             },
             invalidatesTags: ['admin']
         }),
+        showJoinedUsed : builder.query({
+            query : ()=>{
+                return { 
+                    url : '/show-joined-users',
+                    method : 'GET'
+                }
+            },
+            providesTags : ['joinedUser']
+        }),
+        deJoinedUser : builder.mutation({
+            query : ({data , id})=>{
+                return {
+                    url : `/de-joined-users/${id}`,
+                    method :  "POST",
+                    body  : data,
+                }
+            },
+            invalidatesTags : ['joinedUser']
+        })
 
 
 
     }),
 })
 
-export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery, useGetAdminQuery, useDeletAdminMutation, useCreateAdminsMutation, useGetTrashCompanyQuery, useDeletCompanyPermanentlyMutation, useResotreCompanyMutation, useSoftDeleteCompanyMutation, useGetUsersQuery } = surveyAPi;
+export const { useCreateCompanyMutation, useGetCompaniesQuery, useUpdateCompaniesMutation, useDeleteCompaniesMutation, useGetSurveyQNQuery, usePostSurveyQnMutation, useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery, useGetAdminQuery, useDeletAdminMutation, useCreateAdminsMutation, useGetTrashCompanyQuery, useDeletCompanyPermanentlyMutation, useResotreCompanyMutation, useSoftDeleteCompanyMutation, useGetUsersQuery, useShowJoinedUsedQuery, useDeJoinedUserMutation } = surveyAPi;
