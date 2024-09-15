@@ -13,7 +13,6 @@ const Notification = () => {
 
     // get all notification
     const { data: notification } = useGetAllNotificationQuery();
-    console.log("notification", notification?.notifications)
 
 
     // const handlePageChange = (page) => {

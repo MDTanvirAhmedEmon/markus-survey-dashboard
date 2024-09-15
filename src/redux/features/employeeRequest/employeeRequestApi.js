@@ -9,7 +9,8 @@ export const employeeRequestApi = baseApi.injectEndpoints({
                     url: `show-request`,
                     method: "GET",
                 }
-            }
+            },
+            providesTags : ['employeeRequest']
         }),
         getProjectsForSurveyRequest: builder.query({
             query: ({ page }) => ({
@@ -28,9 +29,27 @@ export const employeeRequestApi = baseApi.injectEndpoints({
                     method: "POST",
                     body: data,
                 }
-            }
+            },
+            invalidatesTags : ['employeeRequest']
         }),
+        editUserRequest : builder.query({
+            query : (id)=>{
+                return {
+                    url : `show-assign-projects/${id}`,
+                    method : 'GET'
+                }
+            }
+        }) ,
+        assignProject : builder.mutation({
+            query : (data)=>{
+                return {
+                    url : 'assign-projects',
+                    method : 'POST',
+                    body : data
+                }
+            }
+        })
     }),
 })
 
-export const { useGetEmployeeRequestQuery, useAcceptRequestMutation, useGetProjectsForSurveyRequestQuery } = employeeRequestApi;
+export const { useGetEmployeeRequestQuery, useAcceptRequestMutation, useGetProjectsForSurveyRequestQuery, useEditUserRequestQuery , useAssignProjectMutation } = employeeRequestApi;

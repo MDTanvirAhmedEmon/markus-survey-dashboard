@@ -18,13 +18,13 @@ const Header = () => {
     const unreadCount = notification?.notifications.filter(notification => notification.read_at === null).length;
     return (
         <div className='w-full py-4 bg-[var(--color-7)] end-center  gap-4 pr-2 box-border'>
-            <div onClick={()=>navigate('/notification')}>
-            <Link to="/feedback" style={{boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.24)"}} className=' bg-[#F2F2F2] h-10 w-10 flex justify-center items-center rounded-full p-2'>
+            {/* <div onClick={()=>navigate('/notification')}> */}
+            <Link to="/notification" style={{boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.24)"}} className=' bg-[#F2F2F2] h-10 w-10 flex justify-center items-center rounded-full p-2'>
                 <Badge  color="#C30303" count={unreadCount}>
                     <IoIosNotificationsOutline color="#6A6A6A" size={24} />
                 </Badge>
             </Link>
-            </div>
+            {/* </div> */}
             <div style={{boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.24)"}} onClick={()=>navigate('/profile')} className='end-center py-2 gap-1 border-gray-400 p-[2px] px-4 rounded-md cursor-pointer'>
                 <img className='h-10 w-10 rounded-full ' src={`${imageUrl}${data?.user?.image}`} alt="" />
                 <p className='font-medium'>{data?.user?.name}</p>

@@ -107,21 +107,22 @@ const SurveyResult = () => {
     const { data: reportData, isLoading } = useGetSurveyResultReportQuery(
         selectedProject && selectedSurvey && { project_id: selectedProject, survey_id: selectedSurvey, page: currentSurveyPage },
     );
-    
 
-    
 
-    const csvfileDataFormat = reportData?.data?.map(value=>(
-            [value?.project , value?.question,value?.survey]
+
+
+    const csvfileDataFormat = reportData?.data?.map(value => (
+        [value?.project, value?.question, value?.survey]
     ))
-csvfileDataFormat?.unshift(["Project", "Question", "Survey"]);
-    
+    console.log(csvfileDataFormat);
+    // csvfileDataFormat?.unshift(["Project", "Question", "Survey"]);
+
 
     const onFinish = (values) => {
         console.log(values);
-    };  
+    };
     // const data = ['https://i.ibb.co/0sF5Fk3/images-19.jpg', 'https://i.ibb.co/YpR8Mbw/Ellipse-307.png', 'https://i.ibb.co/JFZhZ7m/Ellipse-311.png', 'https://i.ibb.co/5cXN4Bw/Ellipse-310.png', 'https://i.ibb.co/gz2CbVj/1-intro-photo-final.jpg', 'https://i.ibb.co/7xc44sq/profile-picture-smiling-young-african-260nw-1873784920.webp', 'https://i.ibb.co/sQPHfnR/images-20.jpg']
-  
+
 
     // pdf
     const printRef = useRef(null);
@@ -215,8 +216,8 @@ csvfileDataFormat?.unshift(["Project", "Question", "Survey"]);
                             className="w-full"
                             name="projectId"
                             label="Project Name"
-                            labelCol={{ span: 24 }} // Set label to occupy full width
-                            wrapperCol={{ span: 24 }} // Set wrapper to occupy full width
+                            labelCol={{ span: 24 }}
+                            wrapperCol={{ span: 24 }}
                             rules={[
                                 {
                                     message: 'Project Id is required',
@@ -236,8 +237,8 @@ csvfileDataFormat?.unshift(["Project", "Question", "Survey"]);
                             className="w-full"
                             name="surveyId"
                             label="Survey Name"
-                            labelCol={{ span: 24 }} // Set label to occupy full width
-                            wrapperCol={{ span: 24 }} // Set wrapper to occupy full width
+                            labelCol={{ span: 24 }}
+                            wrapperCol={{ span: 24 }}
                             rules={[
                                 {
                                     message: 'Survey Id is required',
@@ -412,7 +413,19 @@ csvfileDataFormat?.unshift(["Project", "Question", "Survey"]);
                                 {/* <button onClick={handleExportAsPDF} className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">
                                     Export
                                 </button> */}
-                                <CSVLink data={csvfileDataFormat} filename={"survey.csv"} className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">Export</CSVLink>
+
+                                {csvfileDataFormat && csvfileDataFormat.length > 0 ? (
+                                    <CSVLink
+                                        data={csvfileDataFormat}
+                                        filename={"survey.csv"}
+                                        className="text-white bg-[#ECB206] px-16 py-4 shadow rounded"
+                                    >
+                                        Export
+                                    </CSVLink>
+                                ) : (
+                                    <p>No data available to export</p>
+                                )}
+                                {/* <CSVLink data={csvfileDataFormat} filename={"survey.csv"} className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">Export</CSVLink> */}
                             </div>
                             <div className="py-10">
                                 <Pagination
