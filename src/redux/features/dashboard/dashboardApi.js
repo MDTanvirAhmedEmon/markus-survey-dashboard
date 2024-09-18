@@ -35,7 +35,15 @@ export const dashboardApi = baseApi.injectEndpoints({
                 }
             },
         }),
+        getSuperAdminAnalytics :  builder.query({
+            query : ()=>{
+                return {
+                    url : 'admin-dashboard',
+                    method : 'GET'
+                }
+            }
+        })
     }),
 })
 
-export const { useGetDashboardAnalyticsQuery, useDeleteEmployeeRequestQuery, useDeleteEmployeeMutation, useCancelEmployeeMutation } = dashboardApi;
+export const {useGetSuperAdminAnalyticsQuery, useGetDashboardAnalyticsQuery, useDeleteEmployeeRequestQuery, useDeleteEmployeeMutation, useCancelEmployeeMutation } = dashboardApi;

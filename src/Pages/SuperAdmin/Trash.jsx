@@ -17,7 +17,7 @@ const Trash = () => {
     // const { data: restoreCompany } = useResotreCompanyQuery(id)
     const [restoreCompany] = useResotreCompanyMutation()
 
-
+    console.log(getTrashCompany);
     const onChange = (key) => {
         setRoleType(key)
       };

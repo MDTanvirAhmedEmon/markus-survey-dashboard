@@ -9,7 +9,6 @@ import { useGetAllNotificationQuery } from '../../redux/features/notification/no
 const Header = () => {
     const navigate = useNavigate()
     const { data, isLoading, } = useGetProfileQuery() || {};
-
     // get all notification
     const { data: notification } = useGetAllNotificationQuery(undefined, {
         refetchOnMountOrArgChange: true
@@ -26,7 +25,7 @@ const Header = () => {
             </Link>
             {/* </div> */}
             <div style={{boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.24)"}} onClick={()=>navigate('/profile')} className='end-center py-2 gap-1 border-gray-400 p-[2px] px-4 rounded-md cursor-pointer'>
-                <img className='h-10 w-10 rounded-full ' src={`${imageUrl}${data?.user?.image}`} alt="" />
+                <img className='h-10 w-10 rounded-full object-cover ' src={`${imageUrl}${data?.user?.image}`} alt="" />
                 <p className='font-medium'>{data?.user?.name}</p>
             </div>
         </div>

@@ -36,7 +36,6 @@ const SCompanyManage = () => {
   // const [deleteCompany, { isLoading: deleteLoading, isError: deleteError }] = useDeleteCompaniesMutation()
   // const [companyId, setCompanyId] = useState('')
   const { data, isLoading: isFetching } = useGetCompaniesQuery({ page, search })
-  console.log(data);
   const [ softDelteCompany] = useSoftDeleteCompanyMutation()
   const [survey, setSurvey] = useState(false)
   const onFinish = (values) => {
@@ -55,16 +54,20 @@ const SCompanyManage = () => {
       createCompany(formData).unwrap().then((res) => {
         toast.success(res.message)
         form.resetFields()
+        setFileList([])
         setOpenAddModal(false)
+        setSurvey(false)
       }).catch((err) => {
-        toast.error(err.message || 'Something went wrong')
+        toast.error(err.message || 'Password at least 6 characther ')
       })
     } else {
       formData.append('_method', 'PUT')
       updateCompany({ data: formData, id: selectedRow?.id }).unwrap().then((res) => {
         toast.success(res.message)
         form.resetFields()
+        setFileList([])
         setOpenAddModal(false)
+        
       }).catch((err) => {
         toast.error(err.message || 'Something went wrong')
       })

@@ -97,6 +97,7 @@ const Profile = () => {
                         <input type="file" onInput={handleChange} id='img' style={{ display: "none" }} />
                         <input type="file" onInput={handleChange} id='img' style={{ display: "none" }} />
                         <img
+                        className="object-cover"
                             style={{ width: 140, height: 140, borderRadius: "100%" }}
                             src={image ? URL.createObjectURL(image) : data?.user?.image ? `${imageUrl}${data?.user?.image}` : <FaRegUser />}
                             alt=""

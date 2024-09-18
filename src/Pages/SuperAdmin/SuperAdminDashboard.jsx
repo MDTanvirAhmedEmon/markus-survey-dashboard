@@ -5,6 +5,8 @@ import Overview from "../../Components/Dashboard/Overview.jsx";
 import DriverGrowth from "../../Components/Dashboard/DriverGrowth.jsx";
 import UserDeleteRequest from "../../Components/Dashboard/UserDeleteRequest.jsx";
 import { useGetOverviewQuery } from '../../redux/features/Settings/Settings.js';
+import SuperAdminOverview from '../../Components/Dashboard/SuperAdminOverview.jsx';
+import CompanyGrowth from '../../Components/Dashboard/CompanyGrowth.jsx';
 
 const SuperAdminDashboard = () => {
     const { data: overview } = useGetOverviewQuery()
@@ -35,10 +37,12 @@ const SuperAdminDashboard = () => {
             </div>
             <div className='grid-2 mt-3 gap-3'>
                 <div className='w-full h-full bg-white p-4 rounded-md'>
-                    <Overview company_growth_by_month={overview?.company_growth_by_month} />
+                    {/* <Overview company_growth_by_month={overview?.company_growth_by_month} /> */}
+                    <SuperAdminOverview/>
                 </div>
                 <div className='w-full h-full bg-white p-4 rounded-md'>
-                    <DriverGrowth users_by_month={overview?.users_by_month} />
+                    {/* <DriverGrowth users_by_month={overview?.users_by_month} /> */}
+                    <CompanyGrowth/>
                 </div>
             </div>
             <div className='mt-3 bg-white rounded-md'>
