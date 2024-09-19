@@ -26,7 +26,9 @@ export default function AllQuestionAnsPage() {
   const { language = selectedlanguage } = location.state || {};
   const ans = allQn?.answers || [];
   const emoji = allQn?.emoji_or_star === "emoji";
-
+  if(sessionStorage.getItem('uniqueId')){
+    sessionStorage.removeItem('uniqueId')
+  }
 
   useEffect(() => {
     const translateAllQuestions = async () => {

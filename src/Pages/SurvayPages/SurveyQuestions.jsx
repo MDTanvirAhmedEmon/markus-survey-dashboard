@@ -10,6 +10,7 @@ import commentImg from "../../assets/images/comment.png";
 import { Progress, Select } from "antd";
 import { ConfigProvider, Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { v1 as uuidv1 } from 'uuid';
 // import translateText from "../../translateText";
 // import {
 //   useGetSurveyQNQuery,
@@ -83,19 +84,25 @@ const SurveyQuestions = () => {
     setSelectedAnswer(displayValue,answer);
   };
 
+  const uniqueId = uuidv1();
+
+  if(!sessionStorage.getItem('uniqueId')){
+    sessionStorage.setItem("uniqueId",uniqueId)
+  }
+
   // Handle "Next" button click
   const handleNextClick = async () => {
+    console.log(sessionStorage.getItem('uniqueId'));
     try {
       if (selectedAnswer) {
         const questionId = SVquestions[currentQuestion]?.id;
         const commentText = document.querySelector("textarea")?.value || "";
-
-
         // Create FormData and append the question, answer, and comment
         let data = new FormData();
         data.append("question_id", questionId);
         data.append("answer", selectedAnswer);
         data.append("comment", currentComment === 1 ? commentText : "");
+        data.append("unique_id", sessionStorage.getItem('uniqueId') );
 
         // Submit current answer to the server
         const response = await postSurveyQn(data)
