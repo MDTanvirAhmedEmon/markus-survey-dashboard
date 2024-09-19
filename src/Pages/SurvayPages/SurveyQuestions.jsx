@@ -92,7 +92,7 @@ const SurveyQuestions = () => {
 
   // Handle "Next" button click
   const handleNextClick = async () => {
-    console.log(sessionStorage.getItem('uniqueId'));
+    // console.log("selected",selectedAnswer);
     try {
       if (selectedAnswer) {
         const questionId = SVquestions[currentQuestion]?.id;
@@ -102,7 +102,7 @@ const SurveyQuestions = () => {
         data.append("question_id", questionId);
         data.append("answer", selectedAnswer);
         data.append("comment", currentComment === 1 ? commentText : "");
-        data.append("unique_id", sessionStorage.getItem('uniqueId') );
+        data.append("unique_id", sessionStorage.getItem('uniqueId'));
 
         // Submit current answer to the server
         const response = await postSurveyQn(data)
@@ -195,7 +195,6 @@ const SurveyQuestions = () => {
           alt={`star ${index + 1}`}
           onClick={() => {
             handleAnswerClick(index + 1, "⭐");
-            // handleAnswerClick(index + 1, "⭐");
             setAnswerIndex(index);
           }}
         />
