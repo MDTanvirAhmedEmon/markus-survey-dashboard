@@ -22,11 +22,7 @@ const UpdatePassword = () => {
             return;
         }
 
-        console.log({
-            email: storedEmail,
-            password: password,
-            comfirm: confirmPassword
-        })
+       
 
         try {
             const formData = new FormData();

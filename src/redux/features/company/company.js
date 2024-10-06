@@ -9,6 +9,9 @@ export const surveyAPi = baseApi.injectEndpoints({
                     url: `companies`,
                     method: "POST",
                     body: companyData,
+                    headers: {
+                        Accept: 'application/json', 
+                      },
                 }
             },
             invalidatesTags: ['Company'],

@@ -50,7 +50,7 @@ const Profile = () => {
         updatePassword({ data: formData }).unwrap().then((res) => {
             toast.success(res.message)
         }).catch((err) => {
-            toast.error(err.message || 'Something went wrong')
+            toast.error(err?.data?.message)
         })
     };
     const onEditProfile = (values) => {

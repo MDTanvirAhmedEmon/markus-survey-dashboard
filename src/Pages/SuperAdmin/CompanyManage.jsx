@@ -58,7 +58,7 @@ const SCompanyManage = () => {
         setOpenAddModal(false)
         setSurvey(false)
       }).catch((err) => {
-        toast.error(err.message || 'Password at least 6 characther ')
+        toast.error(err?.data?.message)
       })
     } else {
       formData.append('_method', 'PUT')
@@ -69,7 +69,7 @@ const SCompanyManage = () => {
         setOpenAddModal(false)
         
       }).catch((err) => {
-        toast.error(err.message || 'Something went wrong')
+        toast.error(err?.data?.message)
       })
     }
 
