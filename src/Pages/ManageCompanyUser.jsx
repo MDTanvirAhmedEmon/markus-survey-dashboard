@@ -63,7 +63,7 @@ const ManageCompanyUser = () => {
             text: "Remove this user!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
+            confirmButtonColor: "#ECB206",
             cancelButtonColor: "#1E3042",
             confirmButtonText: "delete",
             cancelButtonText: "cancel",

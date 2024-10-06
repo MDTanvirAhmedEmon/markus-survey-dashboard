@@ -47,10 +47,8 @@ const SurveyQuestions = () => {
   if (questionsId && Array.isArray(questionsId)) {
     questionsId.forEach((question) => {
       const questionId = question?.id;
-      // console.log(questionId)
     });
   } else {
-    // console.log("error");
   }
 
   const currentComment = SVquestions[currentQuestion]?.comment;
@@ -79,7 +77,7 @@ const SurveyQuestions = () => {
 
   // Handle answer selection
   const handleAnswerClick = (answer, displayValue) => {
-    setSelectedAnswer(displayValue,answer);
+    setSelectedAnswer(displayValue, answer);
   };
 
   // Handle "Next" button click
@@ -104,7 +102,8 @@ const SurveyQuestions = () => {
               title: "Good job!",
               text: "Thank You!",
               icon: "success",
-              confirmButtonColor :"#ECB206"
+              confirmButtonColor: "#ECB206",
+              cancelButtonColor: "#1E3042",
               // background : '#ECB206'
             });
             setCurrentQuestion(currentQuestion + 1);
@@ -115,7 +114,8 @@ const SurveyQuestions = () => {
               text:
                 err?.data?.message || "You have already submitted that survey",
               icon: "success",
-              confirmButtonColor :"#ECB206"
+              confirmButtonColor: "#ECB206",
+              cancelButtonColor: "#1E3042",
 
             });
 
@@ -143,7 +143,6 @@ const SurveyQuestions = () => {
           setSelectedAnswer(null);
         } else {
           if (!survey_id) {
-            console.error("Survey ID is not defined");
             Swal.fire({
               title: "Error",
               text: "Survey ID is missing. Cannot navigate.",
@@ -181,9 +180,8 @@ const SurveyQuestions = () => {
       {[...Array(5)]?.map((_, index) => (
         <img
           key={index}
-          className={`btn ${
-            selectedAnswer && answerIndex === index ? "h-16" : "h-10"
-          } cursor-pointer`}
+          className={`btn ${selectedAnswer && answerIndex === index ? "h-16" : "h-10"
+            } cursor-pointer`}
           src={starImage}
           alt={`star ${index + 1}`}
           onClick={() => {

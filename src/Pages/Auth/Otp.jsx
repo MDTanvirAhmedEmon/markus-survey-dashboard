@@ -53,9 +53,10 @@ const Otp = () => {
                 text: "OTP has been resent successfully.",
                 icon: "success",
                 confirmButtonText: "OK",
+                confirmButtonColor: "#ECB206",
             });
         } catch (error) {
-            console.error("Resend OTP failed:", error);
+            
             Swal.fire({
                 title: "Error!",
                 text:
@@ -63,6 +64,8 @@ const Otp = () => {
                     "An unexpected error occurred. Please try again.",
                 icon: "error",
                 confirmButtonText: "OK",
+                confirmButtonColor: "#ECB206",
+
             });
         }
     };

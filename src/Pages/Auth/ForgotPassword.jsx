@@ -27,6 +27,7 @@ const ForgotPassword = () => {
                     text: "A reset code has been sent to your email.",
                     icon: "success",
                     confirmButtonText: "OK",
+                    confirmButtonColor: "#ECB206",
                 });
                 navigate("/auth/otp");
             }
@@ -36,7 +37,7 @@ const ForgotPassword = () => {
                 title: "Error!",
                 text: error?.data?.message,
                 confirmButtonText: "OK",
-                confirmButtonColor: "#ECB206"
+                confirmButtonColor: "#ECB206",
             });
         }
     };

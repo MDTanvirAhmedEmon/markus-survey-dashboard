@@ -8,7 +8,7 @@ import { MdOutlineDelete } from 'react-icons/md';
 import Swal from 'sweetalert2';
 
 const ManageUser = () => {
-  const [ softDelteCompany] = useSoftDeleteCompanyMutation()
+  const [softDelteCompany] = useSoftDeleteCompanyMutation()
   const userType = 'EMPLOYEE'
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
@@ -22,7 +22,7 @@ const ManageUser = () => {
     email: user?.email,
     phone: user?.phone_number
   }))
- 
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -60,7 +60,7 @@ const ManageUser = () => {
                   text: "You will be able to revert this!",
                   icon: "warning",
                   showCancelButton: true,
-                  confirmButtonColor: "#3085d6",
+                  confirmButtonColor: "#ECB206",
                   cancelButtonColor: "#1E3042",
                   confirmButtonText: "delete",
                   cancelButtonText: "cancel",
@@ -69,7 +69,7 @@ const ManageUser = () => {
                     softDelteCompany(record.id).unwrap().then((res) => toast.success(res.message)).catch((err) => toast.error(err.message))
                   }
                 });
-              }} 
+              }}
               className="cursor-pointer" />
           </div>
         );
@@ -105,17 +105,17 @@ const ManageUser = () => {
           dataSource={formattedUserList}
           columns={columns}
         />
-         <Pagination
-        className="custom-pagination-all my-6"
-        current={currentPage}
-        pageSize={pageSize}
-        total={getUsers?.total}
-        onChange={handlePageChange}
-      />
+        <Pagination
+          className="custom-pagination-all my-6"
+          current={currentPage}
+          pageSize={pageSize}
+          total={getUsers?.total}
+          onChange={handlePageChange}
+        />
       </div>
 
 
-     
+
 
     </div>
   )
