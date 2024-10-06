@@ -111,10 +111,14 @@ const SurveyResult = () => {
 
 
 
-    const csvfileDataFormat = reportData?.data?.map(value => (
-        [value?.project, value?.question, value?.survey]
-    ))
-    console.log(csvfileDataFormat);
+    const csvfileDataFormat = reportData?.data?.map((item, index) => {
+        const optionPercentagesString = JSON.stringify(item.option_percentages);
+        return {
+            key: index + 1,
+            ...item,
+            option_percentages: optionPercentagesString 
+          }
+})
     // csvfileDataFormat?.unshift(["Project", "Question", "Survey"]);
 
 
