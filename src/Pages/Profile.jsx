@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Button, ConfigProvider, Form, Input, Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 import { CiEdit } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
@@ -9,6 +10,7 @@ import { MakeFormData } from "../utils/FormDataHooks";
 import toast from "react-hot-toast";
 import { imageUrl } from "../redux/api/baseApi";
 import { FaRegUser } from "react-icons/fa6";
+import { VscLightbulb } from "react-icons/vsc";
 const admin = false;
 const Profile = () => {
     const [image, setImage] = useState();
@@ -17,7 +19,7 @@ const Profile = () => {
     const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation()
     const [updatePassword, { isLoading: isUpdatingPass }] = useUpdatePasswordMutation()
     const { data, isLoading, } = useGetProfileQuery() || {};
-    // console.log(data)
+    console.log(data)
     const [passError, setPassError] = useState('')
     const handlePageChange = (tab) => {
         setTab(tab);
@@ -33,7 +35,7 @@ const Profile = () => {
     }
     const onFinish = (values) => {
         if (values?.new_password === values.current_password) {
-            return toast.error('your old password cannot be your new password')
+            return toast.error('Your old password cannot be your new password')
         }
         if (values?.new_password !== values?.confirm_password) {
             return toast.error("Confirm password doesn't match")
@@ -46,19 +48,17 @@ const Profile = () => {
         }
         const formData = MakeFormData(data)
         updatePassword({ data: formData }).unwrap().then((res) => {
-            console.log(res)
             toast.success(res.message)
         }).catch((err) => {
-            console.log(err)
             toast.error(err.message || 'Something went wrong')
         })
     };
     const onEditProfile = (values) => {
-        console.log(values)
+        console.log(values?.phone_number);
         const data = {
-            name: values.name,
-            contact: values.phone_number,
-            address: values.address,
+            name: values?.name,
+            phone_number: values?.phone_number,
+            address: values?.address,
             _method: 'PUT'
         };
         if (image) {
@@ -66,10 +66,9 @@ const Profile = () => {
         }
         const formData = MakeFormData(data);
         updateProfile({ data: formData }).unwrap().then((res) => {
-            console.log(res)
             toast.success(res.message);
         }).catch((err) => {
-            toast.error(err.message || 'Something went wrong');
+            toast.error(err?.data?.name?.[0] || 'Please enter your name!');
         });
     }
     useEffect(() => {
@@ -81,6 +80,9 @@ const Profile = () => {
             address: data?.user?.address,
         })
     }, [form, data])
+
+    /** loading indicator */
+    const spinIcon = <LoadingOutlined style={{ fontSize: 24, color: '#ECB206' }} spin />;
     return (
         <div>
             {(admin &&
@@ -253,7 +255,7 @@ const Profile = () => {
                                         }}
                                         className='font-normal text-[16px] leading-6 bg-[#ECB206]'
                                     >
-                                        Save Changes
+                                        {isUpdating ? <Spin indicator={spinIcon} /> :'Save Changes'}
                                     </Button>
                                 </Form.Item>
                             </Form>
