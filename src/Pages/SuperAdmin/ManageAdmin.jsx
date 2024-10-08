@@ -63,7 +63,9 @@ const ManageAdmin = () => {
                                 cancelButtonText: "cancel",
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    deleteAdmin(record.id).unwrap().then((res) => toast.success(res.message)).catch((err) => toast.error(err.message));
+                                    deleteAdmin(record.id).unwrap()
+                                    .then((res) => toast.success(res.message))
+                                    .catch((err) => toast.error(err?.data?.message));
                                 }
                             });
                         }} className="cursor-pointer" />
@@ -74,7 +76,6 @@ const ManageAdmin = () => {
     ];
 
     const onFinish = (values) => {
-        console.log(values);
         const formData = MakeFormData(values)
         createAdmin(formData).unwrap()
             .then((payload) => {
@@ -225,7 +226,7 @@ const ManageAdmin = () => {
                             >
                                 <Select placeholder="Select Role">
                                     <Option value="ADMIN">ADMIN</Option>
-                                    <Option value="SUPER ADMIN">SUPER ADMIN</Option>
+                                    {/* <Option value="SUPER ADMIN">SUPER ADMIN</Option> */}
                                 </Select>
                             </Form.Item>
 
