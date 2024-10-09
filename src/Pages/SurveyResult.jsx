@@ -200,6 +200,7 @@ const SurveyResult = () => {
             search: "",
         });
     }
+    console.log(reportData);
 
     return (
         <>
@@ -305,25 +306,29 @@ const SurveyResult = () => {
                         reportData?.emoji_or_star === "emoji" &&
                         <div className=" flex items-center gap-10">
                             <div className="flex items-center">
-                                <Tag className=" h-6 w-6" color="#ECB206"></Tag>
-                                <img className="w-10" src={hugeSmile} alt="" />
+                                <Tag className=" h-6 w-6" color="#FF0000"></Tag>
+                                <img className="w-10" src={angry} alt="" />
                             </div>
                             <div className="flex items-center">
-                                <Tag className=" h-6 w-6" color="#1E3042"></Tag>
-                                <img className="w-10" src={smile} alt="" />
-                            </div>
-                            <div className="flex items-center">
-                                <Tag className=" h-6 w-6" color="#F9E7B2"></Tag>
+                                <Tag className=" h-6 w-6" color="#ff9100"></Tag>
                                 <img className="w-11" src={sad} alt="" />
                             </div>
                             <div className="flex items-center">
-                                <Tag className=" h-6 w-6" color="#85714D"></Tag>
+                                <Tag className=" h-6 w-6" color="#FFD500"></Tag>
                                 <img className="w-10" src={silent} alt="" />
                             </div>
-                            <div className="flex items-center">
-                                <Tag className=" h-6 w-6" color="#533E02"></Tag>
-                                <img className="w-10" src={angry} alt="" />
+                               <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#B5D900"></Tag>
+                                <img className="w-10" src={smile} alt="" />
                             </div>
+                           
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6"  color="#07CC00"></Tag>
+                                <img className="w-10" src={hugeSmile} alt="" />
+                            </div>
+                         
+                          
+                            
                         </div>
                     }
                 </div>
@@ -355,43 +360,48 @@ const SurveyResult = () => {
                                                 <div>
                                                     <div className="h-12 bg-red-500 flex">
                                                         <div
-                                                            className="bg-[#ECB206] h-12 flex items-center justify-center"
+                                                            className="bg-[#FF0000] h-12 flex items-center justify-center"
                                                             style={{ width: `${question.option_percentages[1]}%` }}
                                                         >
                                                             {question.option_percentages[1] !== 0 && (
-                                                                <p className="text-white">{question.option_percentages[1]}%</p>
+                                                                <p className="text-white">{question.option_percentages[1]?.toFixed(1)}%</p>
                                                             )}
                                                         </div>
+
+
                                                         <div
-                                                            className="bg-[#1E3042] h-12 flex items-center justify-center"
+                                                            className="bg-[#ff9100] h-12 flex items-center justify-center"
                                                             style={{ width: `${question.option_percentages[2]}%` }}
                                                         >
                                                             {question.option_percentages[2] !== 0 && (
-                                                                <p className="text-white">{question.option_percentages[2]}%</p>
+                                                                <p className="text-white">{question.option_percentages[2]?.toFixed(1)}%</p>
                                                             )}
                                                         </div>
+
+
+
                                                         <div
-                                                            className="bg-[#F9E7B2] h-12 flex items-center justify-center"
+                                                            className="bg-[#FFD500] h-12 flex items-center justify-center"
                                                             style={{ width: `${question.option_percentages[3]}%` }}
                                                         >
                                                             {question.option_percentages[3] !== 0 && (
-                                                                <p className="text-black">{question.option_percentages[3]}%</p>
+                                                                <p className="text-black">{question.option_percentages[3]?.toFixed(1)}%</p>
                                                             )}
                                                         </div>
                                                         <div
-                                                            className="bg-[#85714D] h-12 flex items-center justify-center"
+                                                            className="bg-[#B5D900] h-12 flex items-center justify-center"
                                                             style={{ width: `${question.option_percentages[4]}%` }}
                                                         >
                                                             {question.option_percentages[4] !== 0 && (
-                                                                <p className="text-white">{question.option_percentages[4]}%</p>
+                                                                <p className="text-white">{question.option_percentages[4]?.toFixed(1)}%</p>
                                                             )}
                                                         </div>
                                                         <div
-                                                            className="bg-[#533E02] h-12 flex items-center justify-center"
+                                                            className="bg-[#07CC00] h-12 flex items-center justify-center"
                                                             style={{ width: `${question.option_percentages[5]}%` }}
                                                         >
                                                             {question.option_percentages[5] !== 0 && (
-                                                                <p className="text-white">{question.option_percentages[5]}%</p>
+                                                                <p className="text-white">{question.option_percentages[5]?.toFixed(1)}%</p>
                                                             )}
                                                         </div>
                                                     </div>

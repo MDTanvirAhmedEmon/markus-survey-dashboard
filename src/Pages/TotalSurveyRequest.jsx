@@ -3,6 +3,7 @@ import { ConfigProvider, message, Modal, Pagination, Spin, Table } from 'antd';
 import { MakeFormData } from '../utils/FormDataHooks';
 import { imageUrl } from '../redux/api/baseApi';
 import { useAcceptRequestMutation, useGetEmployeeRequestQuery, useGetProjectsForSurveyRequestQuery } from '../redux/features/employeeRequest/employeeRequestApi';
+import { FaUser } from 'react-icons/fa6';
 
 const TotalEmployeeRequest = () => {
 
@@ -19,7 +20,6 @@ const TotalEmployeeRequest = () => {
 
     // employee request api
     const { data } = useGetEmployeeRequestQuery();
-    console.log(data)
 
     // accept request
     const [acceptRequest, { isLoading, isSuccess, isError }] = useAcceptRequestMutation();
@@ -59,10 +59,10 @@ const TotalEmployeeRequest = () => {
         {
             title: 'Email',
             dataIndex: 'email',
-            key: 'email  ',
+            key: 'email',
             render: (_, record) => {
                 return (<div className=''>
-                    <p className='font-medium'>{record?.user?.email}</p>
+                    <p className='font-medium'>{record?.email}</p>
                 </div>)
             }
         },
@@ -72,8 +72,11 @@ const TotalEmployeeRequest = () => {
             key: 'name',
             render: (_, record) => {
                 return (<div className='flex items-center gap-3'>
-                    <img src={`${imageUrl}${record?.user?.image}`} className='w-[40px] h-[40px] rounded-sm' alt="" />
-                    <p className='font-medium'>{record?.user?.name}</p>
+                    {
+                        record?.image ? <img src={`${imageUrl}${record?.image}`} className='w-[40px] h-[40px] rounded-sm' alt="" /> : <FaUser className='text-gray-600' size={20} />
+                    }
+                    
+                    <p className='font-medium'>{record?.name || "No name"}</p>
                 </div>)
             }
         },
@@ -133,12 +136,22 @@ const TotalEmployeeRequest = () => {
         )
     }
 
+    console.log(data?.data?.data);
+    const formattedDataTable = data?.data?.data?.map((user, i)=>{
+        return {
+            serial : i +1,
+            email : user?.user_details?.email,
+            name : user?.user_details?.name,
+            image : user?.user_details?.image
 
+        }
+    })
+    // console.log(formattedDataTable);
 
     return (
         <div>
             <div className='bg-[var(--color-7)] rounded-md mb-8 pb-6'>
-                <Table className='dashboard-custom-table' pagination={false} dataSource={data?.data?.data} columns={columns} />
+                <Table className='dashboard-custom-table' pagination={false} dataSource={formattedDataTable} columns={columns} />
                 <Modal
                     centered
                     footer={false}

@@ -96,7 +96,7 @@ const Sidebar = () => {
         },
         {
             path: '/manage-admin',
-            label: 'Make Admin',
+            label: 'Manage Admin',
             sub_menu: false,
             icon: <RiAdminLine />,
         },

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useGetUsersQuery, useSoftDeleteCompanyMutation } from '../redux/features/company/company';
 import { MdOutlineDelete } from 'react-icons/md';
 import Swal from 'sweetalert2';
-
+import x from '../assets/images/x.png'
 const ManageUser = () => {
   const [softDelteCompany] = useSoftDeleteCompanyMutation()
   const userType = 'EMPLOYEE'
@@ -90,6 +90,7 @@ const ManageUser = () => {
           </Link>
           <p className="text-xl">Manage User</p>
         </div>
+        <img src={x} alt="" />
 
       </div>
 
