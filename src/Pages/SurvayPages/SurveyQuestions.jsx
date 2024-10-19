@@ -81,28 +81,39 @@ const SurveyQuestions = () => {
 
   // Handle answer selection
   const handleAnswerClick = (answer, displayValue) => {
-    setSelectedAnswer(displayValue,answer);
+    setSelectedAnswer(displayValue, answer);
   };
 
-  const uniqueId = uuidv1();
+  // const uniqueId = uuidv1();
 
-  if(!sessionStorage.getItem('uniqueId')){
-    sessionStorage.setItem("uniqueId",uniqueId)
-  }
+  // if (!sessionStorage.getItem('uniqueId')) {
+  //   sessionStorage.setItem("uniqueId", uniqueId)
+  // }
 
-  // Handle "Next" button click
   const handleNextClick = async () => {
-    // console.log("selected",selectedAnswer);
     try {
+      if (sessionStorage.getItem('uniqueId') && currentQuestion === 0) {
+        sessionStorage.removeItem('uniqueId');
+        const newUniqueId = uuidv1();
+        sessionStorage.setItem('uniqueId', newUniqueId);
+      }else if (!sessionStorage.getItem('uniqueId')) {
+        const newUniqueId = uuidv1();
+        sessionStorage.setItem('uniqueId', newUniqueId);
+      }
+      if (!sessionStorage.getItem('uniqueId')) {
+        return
+      }
+      // Generate a new unique ID and store it in session storage
       if (selectedAnswer) {
         const questionId = SVquestions[currentQuestion]?.id;
         const commentText = document.querySelector("textarea")?.value || "";
+
         // Create FormData and append the question, answer, and comment
         let data = new FormData();
         data.append("question_id", questionId);
         data.append("answer", selectedAnswer);
         data.append("comment", currentComment === 1 ? commentText : "");
-        data.append("unique_id", sessionStorage.getItem('uniqueId'));
+        data.append("unique_id", sessionStorage.getItem('uniqueId')); 
 
         // Submit current answer to the server
         const response = await postSurveyQn(data)
@@ -112,26 +123,22 @@ const SurveyQuestions = () => {
               title: "Good job!",
               text: "Thank You!",
               icon: "success",
-              confirmButtonColor : '#ECB206',
-              
+              confirmButtonColor: '#ECB206',
             });
             setCurrentQuestion(currentQuestion + 1);
           })
           .catch((err) => {
             Swal.fire({
-              title: "Good job!",
-              confirmButtonColor : '#ECB206',
-              text:
-                err?.data?.message || "You have already submitted that survey",
-              icon: "success",
+              title: "Oops...",
+              confirmButtonColor: '#ECB206',
+              text: err?.data?.message || "You have already submitted that survey",
+              icon: "error",
             });
 
             if (err?.status === 409) {
               setCurrentQuestion(currentQuestion + 1);
             }
           });
-
-        // console.log("Server response:", response);
 
         // Update progress and state
         const updatedAnswers = {
@@ -142,7 +149,6 @@ const SurveyQuestions = () => {
 
         const newProgress = ((currentQuestion + 1) / SVquestions.length) * 100;
         setProgress(newProgress);
-        // clear the comment box:
 
         // Navigate to the next question or finish
         if (currentQuestion < SVquestions.length - 1) {
@@ -176,6 +182,92 @@ const SurveyQuestions = () => {
     }
   };
 
+  // Handle "Next" button click
+  // const handleNextClick = async () => {
+  //   // console.log("selected",selectedAnswer);
+  //   try {
+  //     if (selectedAnswer) {
+  //       const questionId = SVquestions[currentQuestion]?.id;
+  //       const commentText = document.querySelector("textarea")?.value || "";
+  //       // Create FormData and append the question, answer, and comment
+  //       let data = new FormData();
+  //       data.append("question_id", questionId);
+  //       data.append("answer", selectedAnswer);
+  //       data.append("comment", currentComment === 1 ? commentText : "");
+  //       data.append("unique_id", sessionStorage.getItem('uniqueId'));
+
+  //       // Submit current answer to the server
+  //       const response = await postSurveyQn(data)
+  //         .unwrap()
+  //         .then((res) => {
+  //           Swal.fire({
+  //             title: "Good job!",
+  //             text: "Thank You!",
+  //             icon: "success",
+  //             confirmButtonColor: '#ECB206',
+
+  //           });
+  //           setCurrentQuestion(currentQuestion + 1);
+  //         })
+  //         .catch((err) => {
+  //           Swal.fire({
+  //             title: "Good job!",
+  //             confirmButtonColor: '#ECB206',
+  //             text:
+  //               err?.data?.message || "You have already submitted that survey",
+  //             icon: "success",
+  //           });
+
+  //           if (err?.status === 409) {
+  //             setCurrentQuestion(currentQuestion + 1);
+  //           }
+  //         });
+
+  //       // console.log("Server response:", response);
+
+  //       // Update progress and state
+  //       const updatedAnswers = {
+  //         ...answers,
+  //         [currentQuestion]: selectedAnswer,
+  //       };
+  //       setAnswers(updatedAnswers);
+
+  //       const newProgress = ((currentQuestion + 1) / SVquestions.length) * 100;
+  //       setProgress(newProgress);
+  //       // clear the comment box:
+
+  //       // Navigate to the next question or finish
+  //       if (currentQuestion < SVquestions.length - 1) {
+  //         setCurrentQuestion(currentQuestion + 1);
+  //         setSelectedAnswer(null);
+  //       } else {
+  //         if (!survey_id) {
+  //           console.error("Survey ID is not defined");
+  //           Swal.fire({
+  //             title: "Error",
+  //             text: "Survey ID is missing. Cannot navigate.",
+  //             icon: "error",
+  //           });
+  //           return;
+  //         }
+  //         // Navigate to the allQuestionAnsPage with survey_id
+  //         navigate(`/allQuestionAnsPage/${survey_id}`, {
+  //           state: { SVquestions, answers: updatedAnswers, language, emoji },
+  //         });
+  //       }
+  //     } else {
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Oops...",
+  //         text: "Please select an answer before proceeding.",
+  //       });
+  //     }
+  //     setAnswer("");
+  //   } catch (error) {
+  //     console.error("Error submitting survey answer:", error);
+  //   }
+  // };
+
   const handleQuitClick = () => {
     navigate("/thankYouPage", { replace: true });
   };
@@ -188,13 +280,12 @@ const SurveyQuestions = () => {
       {[...Array(5)].map((_, index) => (
         <img
           key={index}
-          className={`btn ${
-            selectedAnswer && answerIndex === index ? "h-16" : "h-10"
-          } cursor-pointer`}
+          className={`btn ${selectedAnswer && answerIndex === index ? "h-16" : "h-10"
+            } cursor-pointer`}
           src={starImage}
           alt={`star ${index + 1}`}
           onClick={() => {
-            handleAnswerClick(index + 1, "⭐");
+            handleAnswerClick(index + 1, `${index + 1}⭐`);
             setAnswerIndex(index);
           }}
         />
@@ -237,7 +328,7 @@ const SurveyQuestions = () => {
       />
     </div>
   );
-  
+
 
   return (
     <div className="container mx-auto bg-[fdfdfd] my-5">

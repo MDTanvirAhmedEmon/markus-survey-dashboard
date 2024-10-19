@@ -109,9 +109,9 @@ export const surveyAPi = baseApi.injectEndpoints({
             query: (survey_id) => `/anonymous-survey-report?survey_id=${survey_id}`,
         }),
         getSurveyBasedInfo: builder.query({
-            query: (id) => {
+            query: ({id , unique_id}) => {
                 return {
-                    url: `anonymous-survey-report?survey_id=${id}`,
+                    url: `anonymous-survey-report?survey_id=${id}&unique_id=${unique_id}`,
                     method: "GET",
                 }
             },

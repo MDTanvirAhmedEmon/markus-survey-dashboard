@@ -133,8 +133,9 @@ const SCompanyManage = () => {
                 title: "Are you sure?",
                 text: "You will be able to revert this!",
                 icon: "warning",
+                
                 showCancelButton: true,
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: "#ECB206",
                 cancelButtonColor: "#1E3042",
                 confirmButtonText: "delete",
                 cancelButtonText: "cancel",
