@@ -36,7 +36,7 @@ import ThankYouPage from "../Pages/SurvayPages/ThankYouPage.jsx";
 import AllSurveyComments from "../Pages/AllSurveyComments.jsx";
 import TotalEmployeeRequest from "../Pages/TotalSurveyRequest";
 import TranslateComponent from "../Components/TranslateComponent.jsx";
-import TotalSuveuRequest from "../Components/Dashboard/TotalSuveuRequestAll.jsx";
+// import TotalSuveuRequest from "../Components/Dashboard/TotalSuveuRequestAll.jsx";
 import TotalSuveuRequestAll from "../Components/Dashboard/TotalSuveuRequestAll.jsx";
 import ManageAdmin from "../Pages/SuperAdmin/ManageAdmin.jsx";
 import Trash from "../Pages/SuperAdmin/Trash.jsx";

@@ -12,7 +12,7 @@ import { IoArrowBackSharp } from "react-icons/io5";
 import { MdEdit, MdOutlineDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import "../../assets/css/style.css";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { MakeFormData } from "../../utils/FormDataHooks";
 import { useCreateCompanyMutation,  useGetCompaniesQuery, useSoftDeleteCompanyMutation,  useUpdateCompaniesMutation } from "../../redux/features/company/company";
@@ -28,7 +28,8 @@ const SCompanyManage = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [form] = Form.useForm();
   const [addForm, setAddForm] = useState(true)
-  const [page, setPage] = useState(1);
+  const [page, 
+    setPage] = useState(1);
   const [fileList, setFileList] = useState([]);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [createCompany, { isLoading, isError }] = useCreateCompanyMutation()
