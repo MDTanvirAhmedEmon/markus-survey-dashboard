@@ -19,7 +19,6 @@ const Profile = () => {
     const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation()
     const [updatePassword, { isLoading: isUpdatingPass }] = useUpdatePasswordMutation()
     const { data, isLoading, } = useGetProfileQuery() || {};
-    console.log(data)
     const [passError, setPassError] = useState('')
     const handlePageChange = (tab) => {
         setTab(tab);

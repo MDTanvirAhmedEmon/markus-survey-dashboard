@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ConfigProvider, message, Modal, Pagination, Spin, Table } from 'antd';
 import { MakeFormData } from '../utils/FormDataHooks';
 import { imageUrl } from '../redux/api/baseApi';
@@ -19,7 +19,7 @@ const TotalEmployeeRequest = () => {
 
 
     // employee request api
-    const { data } = useGetEmployeeRequestQuery({status : 'pending'});
+    const { data } = useGetEmployeeRequestQuery({ status: 'pending' });
 
     // accept request
     const [acceptRequest, { isLoading, isSuccess, isError }] = useAcceptRequestMutation();
@@ -75,7 +75,7 @@ const TotalEmployeeRequest = () => {
                     {
                         record?.image ? <img src={`${imageUrl}${record?.image}`} className='w-[40px] h-[40px] rounded-sm' alt="" /> : <FaUser className='text-gray-600' size={20} />
                     }
-                    
+
                     <p className='font-medium'>{record?.name || "No name"}</p>
                 </div>)
             }
@@ -106,18 +106,15 @@ const TotalEmployeeRequest = () => {
     ];
 
     const handleSave = () => {
-        console.log(selectedID)
-        console.log(userId)
-        console.log(Id)
         const data = {
             id: Id,
-            project_ids: selectedID,
+            project_ids: JSON.stringify(selectedID),
             user_id: userId
         }
-        console.log("form handler", data)
         const formData = MakeFormData(data);
-        console.log(formData)
-        acceptRequest(formData)
+        acceptRequest(formData).unwrap()
+            .then((payload) => console.log('fulfilled', payload))
+            .catch((error) => console.error('rejected', error));
     };
 
     if (isLoading) {
@@ -136,17 +133,18 @@ const TotalEmployeeRequest = () => {
         )
     }
 
-    console.log(data?.data?.data);
-    const formattedDataTable = data?.data?.data?.map((user, i)=>{
+    const formattedDataTable = data?.data?.data?.map((user, i) => {
+        console.log(data?.data?.data);
         return {
-            serial : i +1,
-            email : user?.user_details?.email,
-            name : user?.user_details?.name,
-            image : user?.user_details?.image
+            serial: i + 1,
+            email: user?.user_details?.email,
+            name: user?.user_details?.name,
+            image: user?.user_details?.image,
+            user_id : user?.user_id,
+            id : user?.id
 
         }
     })
-    // console.log(formattedDataTable);
 
     return (
         <div>

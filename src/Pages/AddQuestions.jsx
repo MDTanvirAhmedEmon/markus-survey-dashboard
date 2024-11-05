@@ -107,7 +107,7 @@ const AddQuestions = () => {
                         <IoArrowBackSharp />
                         back
                     </Link>
-                    <p className="text-xl">Company Manages</p>
+                    <p className="text-xl">Company Manage</p>
                 </div>
             </div>
             <Form

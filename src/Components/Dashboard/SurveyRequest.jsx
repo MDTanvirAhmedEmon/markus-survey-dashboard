@@ -18,7 +18,6 @@ const SurveyRequest = () => {
 
     // employee request api
     const { data } = useGetEmployeeRequestQuery({status : 'pending'});
-    console.log(data);
     // accept request
     const [acceptRequest, { isLoading, isSuccess, isError }] = useAcceptRequestMutation();
     const { data: getRequestUser } = useEditUserRequestQuery(acceptUserId)
@@ -183,7 +182,6 @@ const SurveyRequest = () => {
     }
 
     const slicedData = data?.data?.data?.slice(0, 3) || [];
-    console.log(slicedData);
     return (
         <div className='bg-[var(--color-7)] rounded-md mb-8'>
             <Table className='dashboard-custom-table' pagination={false} dataSource={slicedData} columns={columns} />
