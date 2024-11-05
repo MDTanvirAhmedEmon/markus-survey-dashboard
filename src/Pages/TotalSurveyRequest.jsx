@@ -19,7 +19,7 @@ const TotalEmployeeRequest = () => {
 
 
     // employee request api
-    const { data } = useGetEmployeeRequestQuery();
+    const { data } = useGetEmployeeRequestQuery({status : 'pending'});
 
     // accept request
     const [acceptRequest, { isLoading, isSuccess, isError }] = useAcceptRequestMutation();

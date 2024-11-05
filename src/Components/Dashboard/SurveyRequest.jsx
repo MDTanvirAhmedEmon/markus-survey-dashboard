@@ -1,5 +1,5 @@
 import { Avatar, ConfigProvider, message, Modal, Pagination, Spin, Table } from 'antd';
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { useAcceptRequestMutation, useAssignProjectMutation, useEditUserRequestQuery, useGetEmployeeRequestQuery, useGetProjectsForSurveyRequestQuery } from '../../redux/features/employeeRequest/employeeRequestApi';
 import { MakeFormData } from '../../utils/FormDataHooks';
 import { imageUrl } from '../../redux/api/baseApi';
@@ -17,8 +17,8 @@ const SurveyRequest = () => {
     });
 
     // employee request api
-    const { data } = useGetEmployeeRequestQuery();
-
+    const { data } = useGetEmployeeRequestQuery({status : 'pending'});
+    console.log(data);
     // accept request
     const [acceptRequest, { isLoading, isSuccess, isError }] = useAcceptRequestMutation();
     const { data: getRequestUser } = useEditUserRequestQuery(acceptUserId)
@@ -183,6 +183,7 @@ const SurveyRequest = () => {
     }
 
     const slicedData = data?.data?.data?.slice(0, 3) || [];
+    console.log(slicedData);
     return (
         <div className='bg-[var(--color-7)] rounded-md mb-8'>
             <Table className='dashboard-custom-table' pagination={false} dataSource={slicedData} columns={columns} />
