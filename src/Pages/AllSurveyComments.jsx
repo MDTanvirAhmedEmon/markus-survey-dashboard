@@ -23,10 +23,11 @@ const AllSurveyComments = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+    console.log(data);
 
     return (
         <div>
-            <div className='between-center px-3 my-2  '>
+            <div className='between-center px-3 my-2'>
                 <div className='start-center gap-2 mb-3 p-5'>
                     <Link to={-1}
                         className='bg-[var(--color-2)] py-1 px-2 rounded-md start-center gap-1 text-white'><IoArrowBackSharp />back</Link>
