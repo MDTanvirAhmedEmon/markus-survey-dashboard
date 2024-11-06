@@ -33,6 +33,8 @@ const SurveyQuestions = () => {
   const [language, setLanguage] = useState(
     localStorage.getItem("language") || "de"
   );
+
+  console.log(selectedAnswer);
   // RTK Query for fetching survey questions
   const { barcode } = useParams();
   const { data: surveydata } = useGetSurveyQNQuery(barcode);
@@ -81,7 +83,8 @@ const SurveyQuestions = () => {
 
   // Handle answer selection
   const handleAnswerClick = (answer, displayValue) => {
-    setSelectedAnswer(displayValue, answer);
+    console.log(answer);
+    setSelectedAnswer(answer, displayValue);
   };
 
   // const uniqueId = uuidv1();
@@ -107,7 +110,7 @@ const SurveyQuestions = () => {
       if (selectedAnswer) {
         const questionId = SVquestions[currentQuestion]?.id;
         const commentText = document.querySelector("textarea")?.value || "";
-
+        console.log(selectedAnswer);
         // Create FormData and append the question, answer, and comment
         let data = new FormData();
         data.append("question_id", questionId);
@@ -297,35 +300,40 @@ const SurveyQuestions = () => {
   const renderEmojis = () => (
     <div className="flex gap-5 justify-center items-center my-12">
       <img
-        className={`btn cursor-pointer ${selectedAnswer === "😠" ? "h-14" : "h-10"}`}
+        className={`btn cursor-pointer ${selectedAnswer === "1" ? "h-14" : "h-10"}`}
         src={angry}
         alt="angry emoji"
-        onClick={() => handleAnswerClick("😠", "😠")}
+        // onClick={() => handleAnswerClick("😠", "😠")}
+        onClick={() => handleAnswerClick("1")}
       />
       <img
-        className={`btn cursor-pointer ${selectedAnswer === "😢" ? "h-14" : "h-10"}`}
+        className={`btn cursor-pointer ${selectedAnswer === "2" ? "h-14" : "h-10"}`}
         src={sad}
         alt="sad emoji"
-        onClick={() => handleAnswerClick("😢", "😢")}
+        // onClick={() => handleAnswerClick("😢", "😢")}
+        onClick={() => handleAnswerClick("2")}
       />
       <img
-        className={`btn cursor-pointer ${selectedAnswer === "🤐" ? "h-14" : "h-10"}`}
+        className={`btn cursor-pointer ${selectedAnswer === "3" ? "h-14" : "h-10"}`}
         src={silent}
         alt="silent emoji"
-        onClick={() => handleAnswerClick("🤐", "🤐")}
+        onClick={() => handleAnswerClick("3")}
+        // onClick={() => handleAnswerClick("🤐", "🤐")}
       />
       
       <img
-        className={`btn cursor-pointer ${selectedAnswer === "🙂" ? "h-14" : "h-10"}`}
+        className={`btn cursor-pointer ${selectedAnswer === "4" ? "h-14" : "h-10"}`}
         src={blushing}
         alt="blushing emoji"
-        onClick={() => handleAnswerClick("🙂", "🙂")}
+        onClick={() => handleAnswerClick("4")}
+        // onClick={() => handleAnswerClick("🙂", "🙂")}
       />
       <img
-        className={`btn cursor-pointer ${selectedAnswer === "😊" ? "h-14" : "h-10"}`}
+        className={`btn cursor-pointer ${selectedAnswer === "5" ? "h-14" : "h-10"}`}
         src={smile}
         alt="smile emoji"
-        onClick={() => handleAnswerClick("😊", "😊")}
+        onClick={() => handleAnswerClick("5")}
+        // onClick={() => handleAnswerClick("😊", "😊")}
       />
     </div>
   );
