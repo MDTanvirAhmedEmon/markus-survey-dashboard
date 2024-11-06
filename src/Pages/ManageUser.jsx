@@ -13,7 +13,6 @@ const ManageUser = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
   const { data: getUsers, isLoading, isError } = useGetUsersQuery({ userType, page: currentPage })
-  console.log(getUsers);
   // Formatted User list 
   const formattedUserList = getUsers?.data?.map((user, i) => ({
     id: user?.id,
@@ -90,7 +89,7 @@ const ManageUser = () => {
           </Link>
           <p className="text-xl">Manage User</p>
         </div>
-        <img src={x} alt="" />
+        {/* <img src={x} alt="" /> */}
 
       </div>
 

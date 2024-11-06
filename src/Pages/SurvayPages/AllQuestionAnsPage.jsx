@@ -70,7 +70,7 @@ export default function AllQuestionAnsPage() {
   if (error) return <p>Something went wrong: {error.message}</p>;
 
 
-
+console.log(data?.answers);
   return (
     <div className="container mx-auto mt-5 p-5">
       <div className="flex items-center">
@@ -101,8 +101,8 @@ export default function AllQuestionAnsPage() {
         </p>
       </div>
       <div>
-        {data?.answers?.slice().reverse().map(ans => (
-          <div className="mt-2">
+        {data?.answers?.slice().reverse().map((ans , i) => (
+          <div key={i} className="mt-2">
             <p><span className="font-medium">Question :</span> {ans?.question?.question_en}</p>
             <p className="pb-2"><span className="font-medium">Answer :</span>
               {
@@ -135,7 +135,7 @@ export default function AllQuestionAnsPage() {
                 /></>
               }
               {
-                ans?.answer === "🥰" && <> <img
+                ans?.answer === "🙂" && <> <img
                   src={blushing}
                   alt="blushing emoji"
                   className="inline-block h-6"

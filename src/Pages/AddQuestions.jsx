@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Button, Form, Input, message, Pagination, Select, Space } from 'antd';
 import { CiCircleMinus, CiCirclePlus } from 'react-icons/ci';
 import { IoArrowBackSharp } from 'react-icons/io5';
@@ -66,6 +66,7 @@ const AddQuestions = () => {
     };
 
     const handleProjectChange = (value) => {
+        
         setSelectedProjectId(value); // Update selected project ID when a project is selected
         setCurrentPageSurvey(1); // Reset survey pagination when project changes
     };
@@ -121,7 +122,7 @@ const AddQuestions = () => {
                     >
                         <Select
                             className="w-full h-[42px]"
-                            placeholder="Select A Project"
+                            placeholder="Select A Projects"
                             dropdownRender={CustomDropdown}
                             options={projectOptions}
                             onChange={handleProjectChange} // Handle project selection

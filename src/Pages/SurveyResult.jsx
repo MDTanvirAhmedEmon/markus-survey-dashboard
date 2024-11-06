@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { ConfigProvider, Form, Input, Pagination, Select, Spin, Tag } from "antd";
-import { CiSearch } from "react-icons/ci";
-import { useEffect, useState } from "react";
+import { ConfigProvider, Form, Pagination, Select, Spin, Tag } from "antd";
+import {  useState } from "react";
 import { useGetProjectForManageCompanyQuery, useGetSurveyForEventQuery, useGetSurveyForManageCompanyQuery } from "../redux/features/questions/questionsApi";
 import { useGetAllSurveyCommentsQuery, useGetSurveyResultReportQuery } from "../redux/features/survey/surveyApi";
 import { useRef } from "react";
@@ -20,6 +19,7 @@ import { CSVLink, CSVDownload } from "react-csv";
 
 
 const SurveyResult = () => {
+    const [selectedProjectId, setSelectedProjectId] = useState(null); // Track the selected project ID
 
     const [currentPage, setCurrentPage] = useState(1);
     const [csvDataDisplay, setCsvDataDisplay] = useState()
@@ -32,25 +32,29 @@ const SurveyResult = () => {
 
     const [selectedSurvey, setSelectedSurvey] = useState(null);
 
-
+console.log(selectedProject);
 
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
     const pageSize = 10;
 
-    const { data: projects } = useGetProjectForManageCompanyQuery({
-        page: currentPage
-    });
+    const { data: projects } = useGetProjectForManageCompanyQuery({ page: currentPage});
 
     const options = projects?.data?.data?.map(project => ({
         value: project.id,
         label: project.project_name
     }));
 
+    const { data: surveysdata } = useGetSurveyForManageCompanyQuery({
+        page: currentPageSurvey,
+        project_id: selectedProject, // Pass selected project ID to survey query
+    });
+
+    // console.log(surveysdata);
     const { data: surveys } = useGetSurveyForEventQuery({
         page: currentPageSurvey
     });
 
-    const surveyOptions = surveys?.data?.data?.map(survey => ({
+    const surveyOptions = surveysdata?.data?.data?.map(survey => ({
         value: survey.id,
         label: survey.survey_name
     }));
@@ -200,7 +204,6 @@ const SurveyResult = () => {
             search: "",
         });
     }
-    console.log(reportData);
 
     return (
         <>
@@ -268,7 +271,7 @@ const SurveyResult = () => {
 
                     {
                         reportData?.emoji_or_star === "star" &&
-                        <div div className=" flex items-center gap-10">
+                        <div  className=" flex items-center gap-10">
                             <div className="flex items-center">
                                 <Tag className=" h-6 w-6" color="#ECB206"></Tag>
                                 <img className="w-6" src={star} alt="" />

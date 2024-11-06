@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   ConfigProvider,
   Form,
   Input,
@@ -12,10 +13,10 @@ import { IoArrowBackSharp } from "react-icons/io5";
 import { MdEdit, MdOutlineDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import "../../assets/css/style.css";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { MakeFormData } from "../../utils/FormDataHooks";
-import { useCreateCompanyMutation,  useGetCompaniesQuery, useSoftDeleteCompanyMutation,  useUpdateCompaniesMutation } from "../../redux/features/company/company";
+import { useCreateCompanyMutation, useGetCompaniesQuery, useSoftDeleteCompanyMutation, useUpdateCompaniesMutation } from "../../redux/features/company/company";
 import toast from "react-hot-toast";
 import { imageUrl } from "../../redux/api/baseApi";
 import Swal from "sweetalert2";
@@ -28,23 +29,26 @@ const SCompanyManage = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [form] = Form.useForm();
   const [addForm, setAddForm] = useState(true)
-  const [page, setPage] = useState(1);
+  const [page,
+    setPage] = useState(1);
   const [fileList, setFileList] = useState([]);
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [anonymous, setIsAnonymous] = useState(false);
   const [createCompany, { isLoading, isError }] = useCreateCompanyMutation()
   const [updateCompany, { isLoading: updateLoading, isError: updateError }] = useUpdateCompaniesMutation()
   // const [deleteCompany, { isLoading: deleteLoading, isError: deleteError }] = useDeleteCompaniesMutation()
   // const [companyId, setCompanyId] = useState('')
   const { data, isLoading: isFetching } = useGetCompaniesQuery({ page, search })
-  const [ softDelteCompany] = useSoftDeleteCompanyMutation()
+  const [softDelteCompany] = useSoftDeleteCompanyMutation()
   const [survey, setSurvey] = useState(false)
   const onFinish = (values) => {
-    const { remember, email, ...data } = values
+    const { remember, email , ...data } = values
     if (!survey) {
       return toast.error('please select Unlock Tools ')
     }
     data.role_type = "COMPANY"
     data.password_confirmation = values.password
+    data.anonymous = anonymous
     const formData = MakeFormData(data);
     if (fileList[0]?.originFileObj) {
       formData.append('image', fileList[0]?.originFileObj)
@@ -67,7 +71,7 @@ const SCompanyManage = () => {
         form.resetFields()
         setFileList([])
         setOpenAddModal(false)
-        
+
       }).catch((err) => {
         toast.error(err?.data?.message)
       })
@@ -133,7 +137,7 @@ const SCompanyManage = () => {
                 title: "Are you sure?",
                 text: "You will be able to revert this!",
                 icon: "warning",
-                
+
                 showCancelButton: true,
                 confirmButtonColor: "#ECB206",
                 cancelButtonColor: "#1E3042",
@@ -376,6 +380,17 @@ const SCompanyManage = () => {
                 </Form.Item>
 
               }
+
+              <Form.Item
+                wrapperCol={{ span: 16 }}
+              >
+                <Checkbox
+                  checked={anonymous}
+                  onChange={(e) => setIsAnonymous(e.target.checked)}
+                >
+                  Turn on Anonymous
+                </Checkbox>
+              </Form.Item>
 
               <Form.Item
 

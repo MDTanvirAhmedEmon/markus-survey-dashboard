@@ -19,7 +19,7 @@ export const surveyAPi = baseApi.injectEndpoints({
         getCompanies: builder.query({
             query: ({ page, search }) => {
                 return {
-                    url: `companies?page=${page || 1}&search=${search || ""}`,
+                    url: `companies?page=${page || 1}&search=${search || ""}&per_page=${50}`,
                     method: "GET",
                 }
             },

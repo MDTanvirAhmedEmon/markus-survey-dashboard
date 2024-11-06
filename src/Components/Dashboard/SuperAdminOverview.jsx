@@ -41,7 +41,7 @@ const SuperAdminOverview = () => {
     return (
         <>
             <div className='between-center'>
-                <p className='text-2xl'>Survey & User Overview</p>
+                <p className='text-2xl'>User Overview</p>
                 <Select
                     defaultValue="2024"
                     style={{ width: 120 }}

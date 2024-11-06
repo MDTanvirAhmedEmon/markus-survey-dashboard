@@ -4,9 +4,9 @@ import { baseApi } from "../../api/baseApi";
 export const employeeRequestApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getEmployeeRequest: builder.query({
-            query: () => {
+            query: ({status}) => {
                 return {
-                    url: `show-request`,
+                    url: `show-request?status=${status}`,
                     method: "GET",
                 }
             },

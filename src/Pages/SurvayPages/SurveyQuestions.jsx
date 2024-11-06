@@ -303,17 +303,18 @@ const SurveyQuestions = () => {
         onClick={() => handleAnswerClick("😠", "😠")}
       />
       <img
-        className={`btn cursor-pointer ${selectedAnswer === "🤐" ? "h-14" : "h-10"}`}
-        src={silent}
-        alt="silent emoji"
-        onClick={() => handleAnswerClick("🤐", "🤐")}
-      />
-      <img
         className={`btn cursor-pointer ${selectedAnswer === "😢" ? "h-14" : "h-10"}`}
         src={sad}
         alt="sad emoji"
         onClick={() => handleAnswerClick("😢", "😢")}
       />
+      <img
+        className={`btn cursor-pointer ${selectedAnswer === "🤐" ? "h-14" : "h-10"}`}
+        src={silent}
+        alt="silent emoji"
+        onClick={() => handleAnswerClick("🤐", "🤐")}
+      />
+      
       <img
         className={`btn cursor-pointer ${selectedAnswer === "🙂" ? "h-14" : "h-10"}`}
         src={blushing}

@@ -56,11 +56,11 @@ const SurveyReport = () => {
                 <div className='end-center gap-2'>
                     <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />}
                         placeholder="Search" />
-                    <Link to={`/add-project`}
+                    {/* <Link to={`/add-project`}
                         className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
                         Add New Project
                         <FaPlus />
-                    </Link>
+                    </Link> */}
                 </div>
             </div>
 
@@ -82,9 +82,9 @@ const SurveyReport = () => {
                     <p className='text-[#71717C] text-lg'>{report?.answers_count}</p>
                 </div>
             </div>
-            <Chart answer_counts={report?.answer_counts} />
+            {/* <Chart answer_counts={report?.answer_counts} /> */}
 
-            <div className='flex justify-center items-center mb-8 mt-6'>
+            {/* <div className='flex justify-center items-center mb-8 mt-6'>
                 {
                     formattedUserImages.map(item => <img className='w-20 h-20 rounded-full -ml-8' key={item} src={item} alt="" />)
                 }
@@ -94,7 +94,7 @@ const SurveyReport = () => {
                 '>
                     {formattedUserImages?.length}+
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }
