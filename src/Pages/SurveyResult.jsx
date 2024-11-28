@@ -15,6 +15,7 @@ import silent from "../assets/images/silent.png"
 import angry from "../assets/images/angry.png"
 import star from "../assets/images/star.png"
 import { CSVLink, CSVDownload } from "react-csv";
+import { FaRegStar, FaStar } from "react-icons/fa6";
 
 
 
@@ -272,35 +273,37 @@ console.log(selectedProject);
                     {
                         reportData?.emoji_or_star === "star" &&
                         <div  className=" flex items-center gap-10">
-                            <div className="flex items-center">
-                                <Tag className=" h-6 w-6" color="#ECB206"></Tag>
-                                <img className="w-6" src={star} alt="" />
-                                <img className="w-6" src={star} alt="" />
-                                <img className="w-6" src={star} alt="" />
-                                <img className="w-6" src={star} alt="" />
-                                <img className="w-6" src={star} alt="" />
+                             <div className="flex items-center">
+                                <Tag className=" h-6 w-6 bg-[#FF0000]" ></Tag>
+                                {/* <img className="w-6 bg-red-400" src={star} alt="" /> */}
+                                <FaStar size={26} className="text-[#FF0000]" />
                             </div>
                             <div className="flex items-center">
-                                <Tag className=" h-6 w-6" color="#1E3042"></Tag>
-                                <img className="w-6" src={star} alt="" />
-                                <img className="w-6" src={star} alt="" />
-                                <img className="w-6" src={star} alt="" />
-                                <img className="w-6" src={star} alt="" />
+                                <Tag className=" h-6 w-6" color="#ff9100"></Tag>
+                                <FaStar size={26} className="text-[#ff9100]" />
+                                <FaStar size={26} className="text-[#ff9100]" />
+                            </div>
+                           
+                            <div className="flex items-center">
+                                <Tag className=" h-6 w-6" color="#FFD500"></Tag>
+                                <FaStar size={26} className="text-[#FFD500]" />
+                                <FaStar size={26} className="text-[#FFD500]" />
+                                <FaStar size={26} className="text-[#FFD500]" />
                             </div>
                             <div className="flex items-center">
-                                <Tag className=" h-6 w-6" color="#F9E7B2"></Tag>
-                                <img className="w-6" src={star} alt="" />
-                                <img className="w-6" src={star} alt="" />
-                                <img className="w-6" src={star} alt="" />
+                                <Tag className=" h-6 w-6" color="#B5D900"></Tag>
+                                <FaStar size={26} className="text-[#B5D900]" />
+                                <FaStar size={26} className="text-[#B5D900]" />
+                                <FaStar size={26} className="text-[#B5D900]" />
+                                <FaStar size={26} className="text-[#B5D900]" />
                             </div>
                             <div className="flex items-center">
-                                <Tag className=" h-6 w-6" color="#85714D"></Tag>
-                                <img className="w-6" src={star} alt="" />
-                                <img className="w-6" src={star} alt="" />
-                            </div>
-                            <div className="flex items-center">
-                                <Tag className=" h-6 w-6" color="#533E02"></Tag>
-                                <img className="w-6" src={star} alt="" />
+                                <Tag className=" h-6 w-6" color="#07CC00"></Tag>
+                                <FaStar size={26} className="text-[#07CC00]" />
+                                <FaStar size={26} className="text-[#07CC00]" />
+                                <FaStar size={26} className="text-[#07CC00]" />
+                                <FaStar size={26} className="text-[#07CC00]" />
+                                <FaStar size={26} className="text-[#07CC00]" />
                             </div>
                         </div>
                     }

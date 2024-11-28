@@ -71,9 +71,9 @@ const ArchiveProject = () => {
                     <Link to={`/survey-report/${record.key}`}>
                         <FaRegEye className='cursor-pointer' />
                     </Link>
-                    <Link to={`/edit-survey-question/${record.key}`}>
+                    {/* <Link to={`/edit-survey-question/${record.key}`}>
                         <FaEdit className='cursor-pointer' />
-                    </Link>
+                    </Link> */}
                 </div>
             ),
         },

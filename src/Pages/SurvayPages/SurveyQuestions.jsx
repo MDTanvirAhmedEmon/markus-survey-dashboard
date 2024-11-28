@@ -19,6 +19,7 @@ import { v1 as uuidv1 } from 'uuid';
 import Swal from "sweetalert2";
 import { useGetSurveyQNQuery, usePostSurveyQnMutation } from "../../redux/features/company/company";
 import translateText from "../../TranslateText";
+import { FaStar } from "react-icons/fa6";
 
 const SurveyQuestions = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -83,8 +84,8 @@ const SurveyQuestions = () => {
 
   // Handle answer selection
   const handleAnswerClick = (answer, displayValue) => {
-    console.log(answer);
-    setSelectedAnswer(answer, displayValue);
+    console.log(answer , displayValue);
+    setSelectedAnswer(answer,displayValue);
   };
 
   // const uniqueId = uuidv1();
@@ -99,7 +100,7 @@ const SurveyQuestions = () => {
         sessionStorage.removeItem('uniqueId');
         const newUniqueId = uuidv1();
         sessionStorage.setItem('uniqueId', newUniqueId);
-      }else if (!sessionStorage.getItem('uniqueId')) {
+      } else if (!sessionStorage.getItem('uniqueId')) {
         const newUniqueId = uuidv1();
         sessionStorage.setItem('uniqueId', newUniqueId);
       }
@@ -116,7 +117,7 @@ const SurveyQuestions = () => {
         data.append("question_id", questionId);
         data.append("answer", selectedAnswer);
         data.append("comment", currentComment === 1 ? commentText : "");
-        data.append("unique_id", sessionStorage.getItem('uniqueId')); 
+        data.append("unique_id", sessionStorage.getItem('uniqueId'));
 
         // Submit current answer to the server
         const response = await postSurveyQn(data)
@@ -277,22 +278,69 @@ const SurveyQuestions = () => {
 
   // Render stars rating:
 
-
+console.log(answerIndex);
   const renderStars = () => (
-    <div className="flex gap-5 justify-center items-center my-12">
-      {[...Array(5)].map((_, index) => (
-        <img
-          key={index}
-          className={`btn ${selectedAnswer && answerIndex === index ? "h-16" : "h-10"
-            } cursor-pointer`}
-          src={starImage}
-          alt={`star ${index + 1}`}
-          onClick={() => {
-            handleAnswerClick(index + 1, `${index + 1}⭐`);
-            setAnswerIndex(index);
-          }}
-        />
-      ))}
+    <div className="flex gap-3 justify-center items-center my-12">
+      <FaStar size={selectedAnswer && answerIndex == 1 ? 40 : 30} 
+       onClick={() => {
+        handleAnswerClick(`1⭐`,1 );
+        setAnswerIndex(1);
+      }}
+      className={` text-[#FF0000] cursor-pointer`} />
+
+      <FaStar size={selectedAnswer && answerIndex == 2 ? 40 : 30} 
+       onClick={() => {
+        handleAnswerClick(`2⭐`,2);
+        setAnswerIndex(2);
+      }}
+      className={` text-[#ff9100] cursor-pointer`} />
+      <FaStar size={selectedAnswer && answerIndex == 3 ? 40 : 30} 
+       onClick={() => {
+        handleAnswerClick( `3⭐`,3);
+        setAnswerIndex(3);
+      }}
+      className={` text-[#FFD500] cursor-pointer`} />
+      <FaStar size={selectedAnswer && answerIndex == 4 ? 40 : 30} 
+       onClick={() => {
+        handleAnswerClick(`4⭐`,4 );
+        setAnswerIndex(4);
+      }}
+      className={` text-[#B5D900] cursor-pointer`} />
+      <FaStar size={selectedAnswer && answerIndex == 5 ? 40 : 30} 
+       onClick={() => {
+        handleAnswerClick( `5⭐`,5);
+        setAnswerIndex(5);
+      }}
+      className={` text-[#07CC00] cursor-pointer`} />
+
+
+
+
+
+
+
+
+
+
+      {/* {[...Array(5)].map((_, index) => {
+        console.log(index)
+        return (
+
+          <img
+            key={index}
+            className={`btn ${selectedAnswer && answerIndex === index ? "h-16" : "h-10"
+              } cursor-pointer`}
+            src={starImage}
+            alt={`star ${index + 1}`}
+            onClick={() => {
+              handleAnswerClick(index + 1, `${index + 1}⭐`);
+              setAnswerIndex(index);
+            }}
+          />
+          )
+
+      })} */}
+
     </div>
   );
 
@@ -318,22 +366,22 @@ const SurveyQuestions = () => {
         src={silent}
         alt="silent emoji"
         onClick={() => handleAnswerClick("3")}
-        // onClick={() => handleAnswerClick("🤐", "🤐")}
+      // onClick={() => handleAnswerClick("🤐", "🤐")}
       />
-      
+
       <img
         className={`btn cursor-pointer ${selectedAnswer === "4" ? "h-14" : "h-10"}`}
         src={blushing}
         alt="blushing emoji"
         onClick={() => handleAnswerClick("4")}
-        // onClick={() => handleAnswerClick("🙂", "🙂")}
+      // onClick={() => handleAnswerClick("🙂", "🙂")}
       />
       <img
         className={`btn cursor-pointer ${selectedAnswer === "5" ? "h-14" : "h-10"}`}
         src={smile}
         alt="smile emoji"
         onClick={() => handleAnswerClick("5")}
-        // onClick={() => handleAnswerClick("😊", "😊")}
+      // onClick={() => handleAnswerClick("😊", "😊")}
       />
     </div>
   );
