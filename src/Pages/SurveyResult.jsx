@@ -33,7 +33,6 @@ const SurveyResult = () => {
 
     const [selectedSurvey, setSelectedSurvey] = useState(null);
 
-console.log(selectedProject);
 
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
     const pageSize = 10;
