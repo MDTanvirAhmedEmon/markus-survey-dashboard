@@ -9,13 +9,14 @@ import blushing from "../../assets/images/blushing.png";
 import starImage from "../../assets/images/star.png";
 import { useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery } from "../../redux/features/company/company";
 import translateText from "../../TranslateText";
+import { FaStar } from "react-icons/fa6";
 // import translateText from "../../translateText";
 // import { useGetAllQnAnsQuery } from "../../redux/api/baseapi";
 
 export default function AllQuestionAnsPage() {
   const selectedlanguage = localStorage.getItem("language") || "de";
   const [translatedQuestions, setTranslatedQuestions] = useState({});
-  const [unique_id , setunique_id] = useState(sessionStorage.getItem('uniqueId'))
+  const [unique_id, setunique_id] = useState(sessionStorage.getItem('uniqueId'))
   const navigate = useNavigate();
   const location = useLocation();
   // RTK Query for all question:
@@ -26,7 +27,7 @@ export default function AllQuestionAnsPage() {
   // let unique_id = ''
 
 
- 
+
   const { data } = useGetSurveyBasedInfoQuery({ id: survey_id, unique_id });
 
   const { language = selectedlanguage } = location.state || {};
@@ -69,7 +70,7 @@ export default function AllQuestionAnsPage() {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Something went wrong: {error.message}</p>;
 
-
+  console.log(data);
   return (
     <div className="container mx-auto mt-5 p-5">
       <div className="flex items-center">
@@ -100,10 +101,10 @@ export default function AllQuestionAnsPage() {
         </p>
       </div>
       <div>
-        {data?.answers?.slice().reverse().map((ans , i) => (
+        {data?.answers?.slice().reverse().map((ans, i) => (
           <div key={i} className="mt-2">
             <p><span className="font-medium">Question :</span> {ans?.question?.question_en}</p>
-            <p className="pb-2"><span className="font-medium">Answer : </span>
+            <p className="pb-2 flex items-center gap-2"><span className="font-medium">Answer : </span>
               {
                 ans?.answer === "1" && <><img
                   src={angry}
@@ -114,46 +115,66 @@ export default function AllQuestionAnsPage() {
               }
               {
                 ans?.answer === "2" && <> <img
-                  src={silent}
+                  src={sad}
                   alt="silent emoji"
                   className="inline-block h-6"
                 /></>
               }
               {
                 ans?.answer === "3" && <>  <img
-                  src={sad}
+                  src={silent}
                   alt="sad emoji"
                   className="inline-block h-6"
                 /></>
               }
               {
                 ans?.answer === "4" && <>  <img
-                  src={smile}
+                  src={blushing}
                   alt="smile emoji"
                   className="inline-block h-6"
                 /></>
               }
               {
                 ans?.answer === "5" && <> <img
-                  src={blushing}
+                  src={smile}
                   alt="blushing emoji"
                   className="inline-block h-6"
                 /></>
               }
               {
-                ans?.answer === "5⭐" && <><p className="inline-block">⭐⭐⭐⭐⭐</p></>
+                ans?.answer === "5⭐" && <><p className="flex">
+                  <FaStar size={26} className="text-[#07CC00]" />
+                  <FaStar size={26} className="text-[#07CC00]" />
+                  <FaStar size={26} className="text-[#07CC00]" />
+                  <FaStar size={26} className="text-[#07CC00]" />
+                  <FaStar size={26} className="text-[#07CC00]" />
+                </p></>
               }
               {
-                ans?.answer === "4⭐" && <><p className="inline-block">⭐⭐⭐⭐</p></>
+                ans?.answer === "4⭐" && <><p className="flex">
+                  <FaStar size={26} className="text-[#B5D900]" />
+                  <FaStar size={26} className="text-[#B5D900]" />
+                  <FaStar size={26} className="text-[#B5D900]" />
+                  <FaStar size={26} className="text-[#B5D900]" />
+                </p></>
               }
               {
-                ans?.answer === "3⭐" && <><p className="inline-block">⭐⭐⭐</p></>
+                ans?.answer === "3⭐" && <><p className="flex">
+
+                  <FaStar size={26} className="text-[#FFD500]" />
+                  <FaStar size={26} className="text-[#FFD500]" />
+                  <FaStar size={26} className="text-[#FFD500]" /></p></>
               }
               {
-                ans?.answer === "2⭐" && <><p className="inline-block">⭐⭐</p></>
+                ans?.answer === "2⭐" && <><p className="flex">
+                  <FaStar size={26} className="text-[#ff9100]" />
+                  <FaStar size={26} className="text-[#ff9100]" />
+                </p></>
               }
               {
-                ans?.answer === "1⭐" && <><p className="inline-block">⭐</p></>
+                ans?.answer === "1⭐" && <><p className="inline-block">
+                  <FaStar size={26} className="text-[#FF0000]" />
+                </p></>
               }
             </p>
             <p>
@@ -161,7 +182,7 @@ export default function AllQuestionAnsPage() {
             </p>
           </div>
         ))}
-       
+
       </div>
       <button
         className="py-2 w-full md:w-44 bg-[#ecb206] text-white rounded-md mt-12 mb-10"
