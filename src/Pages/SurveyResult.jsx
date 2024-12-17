@@ -122,19 +122,19 @@ const SurveyResult = () => {
                 let label = "";
                 switch (key) {
                     case "1":
-                        label ="Red";
+                        label ="1.Red";
                         break;
                     case "2":
-                        label = "Orange";
+                        label = "2.Orange";
                         break;
                     case "3":
-                        label ="Yellow";
+                        label ="3.Yellow";
                         break;
                     case "4":
-                        label = "light green";
+                        label = "4.light green";
                         break;
                     case "5":
-                        label = "Green";
+                        label = "5.Green";
                         break;
                     default:
                         label = `Key ${key}`;
