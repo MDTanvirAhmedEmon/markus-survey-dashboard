@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
 import { ConfigProvider, Form, Pagination, Select, Spin, Tag } from "antd";
-import {  useState } from "react";
+import { useState } from "react";
 import { useGetProjectForManageCompanyQuery, useGetSurveyForEventQuery, useGetSurveyForManageCompanyQuery } from "../redux/features/questions/questionsApi";
 import { useGetAllSurveyCommentsQuery, useGetSurveyResultReportQuery } from "../redux/features/survey/surveyApi";
 import { useRef } from "react";
@@ -37,7 +37,7 @@ const SurveyResult = () => {
     const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
     const pageSize = 10;
 
-    const { data: projects } = useGetProjectForManageCompanyQuery({ page: currentPage});
+    const { data: projects } = useGetProjectForManageCompanyQuery({ page: currentPage });
 
     const options = projects?.data?.data?.map(project => ({
         value: project.id,
@@ -116,13 +116,39 @@ const SurveyResult = () => {
 
 
     const csvfileDataFormat = reportData?.data?.map((item, index) => {
-        const optionPercentagesString = JSON.stringify(item.option_percentages);
+        // const optionPercentagesString = JSON.stringify(item.option_percentages);
+        const optionPercentagesFormatted = Object.entries(item.option_percentages)
+            .map(([key, value]) => {
+                let label = "";
+                switch (key) {
+                    case "1":
+                        label ="Red";
+                        break;
+                    case "2":
+                        label = "Orange";
+                        break;
+                    case "3":
+                        label ="Yellow";
+                        break;
+                    case "4":
+                        label = "light green";
+                        break;
+                    case "5":
+                        label = "Green";
+                        break;
+                    default:
+                        label = `Key ${key}`;
+                }
+                return `${label}: ${value}%`;
+            })
+            .join(", ");
+            // console.log(optionPercentagesFormatted);
         return {
             key: index + 1,
             ...item,
-            option_percentages: optionPercentagesString 
-          }
-})
+            option_percentages: optionPercentagesFormatted
+        }
+    })
     // csvfileDataFormat?.unshift(["Project", "Question", "Survey"]);
 
 
@@ -193,7 +219,7 @@ const SurveyResult = () => {
 
 
 
-
+// console.log(reportData);
 
 
     const handelGetImage = (id) => {
@@ -271,8 +297,8 @@ const SurveyResult = () => {
 
                     {
                         reportData?.emoji_or_star === "star" &&
-                        <div  className=" flex items-center gap-10">
-                             <div className="flex items-center">
+                        <div className=" flex items-center gap-10">
+                            <div className="flex items-center">
                                 <Tag className=" h-6 w-6 bg-[#FF0000]" ></Tag>
                                 {/* <img className="w-6 bg-red-400" src={star} alt="" /> */}
                                 <FaStar size={26} className="text-[#FF0000]" />
@@ -282,7 +308,7 @@ const SurveyResult = () => {
                                 <FaStar size={26} className="text-[#ff9100]" />
                                 <FaStar size={26} className="text-[#ff9100]" />
                             </div>
-                           
+
                             <div className="flex items-center">
                                 <Tag className=" h-6 w-6" color="#FFD500"></Tag>
                                 <FaStar size={26} className="text-[#FFD500]" />
@@ -322,18 +348,18 @@ const SurveyResult = () => {
                                 <Tag className=" h-6 w-6" color="#FFD500"></Tag>
                                 <img className="w-10" src={silent} alt="" />
                             </div>
-                               <div className="flex items-center">
+                            <div className="flex items-center">
                                 <Tag className=" h-6 w-6" color="#B5D900"></Tag>
                                 <img className="w-10" src={smile} alt="" />
                             </div>
-                           
+
                             <div className="flex items-center">
-                                <Tag className=" h-6 w-6"  color="#07CC00"></Tag>
+                                <Tag className=" h-6 w-6" color="#07CC00"></Tag>
                                 <img className="w-10" src={hugeSmile} alt="" />
                             </div>
-                         
-                          
-                            
+
+
+
                         </div>
                     }
                 </div>
