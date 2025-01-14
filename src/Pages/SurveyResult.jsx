@@ -46,10 +46,10 @@ const SurveyResult = () => {
 
     const { data: surveysdata } = useGetSurveyForManageCompanyQuery({
         page: currentPageSurvey,
-        project_id: selectedProject, // Pass selected project ID to survey query
+        project_id: selectedProject,
     });
 
-    // console.log(surveysdata);
+    
     const { data: surveys } = useGetSurveyForEventQuery({
         page: currentPageSurvey
     });
@@ -113,6 +113,7 @@ const SurveyResult = () => {
     );
 
 
+    console.log(reportData);
 
 
     const csvfileDataFormat = reportData?.data?.map((item, index) => {

@@ -35,7 +35,6 @@ const SurveyQuestions = () => {
     localStorage.getItem("language") || "de"
   );
 
-  console.log(selectedAnswer);
   // RTK Query for fetching survey questions
   const { barcode } = useParams();
   const { data: surveydata } = useGetSurveyQNQuery(barcode);
@@ -85,7 +84,7 @@ const SurveyQuestions = () => {
   // Handle answer selection
   const handleAnswerClick = (answer, displayValue) => {
     console.log(answer , displayValue);
-    setSelectedAnswer(answer,displayValue);
+    setSelectedAnswer(displayValue,answer,);
   };
 
   // const uniqueId = uuidv1();
@@ -278,7 +277,6 @@ const SurveyQuestions = () => {
 
   // Render stars rating:
 
-console.log(answerIndex);
   const renderStars = () => (
     <div className="flex gap-3 justify-center items-center my-12">
       <FaStar size={selectedAnswer && answerIndex == 1 ? 40 : 30} 
