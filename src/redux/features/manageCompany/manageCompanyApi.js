@@ -33,7 +33,6 @@ export const manageCompanyApi = baseApi.injectEndpoints({
         }),
         surveyReport: builder.query({
             query: (id) => {
-                console.log('api slice form', id)
                 return {
                     url: `surveys/${id}`,
                     method: "GET",
@@ -71,9 +70,17 @@ export const manageCompanyApi = baseApi.injectEndpoints({
                 }
             },
             invalidatesTags: ['GetSurveyUser']
+        }),
+        getArchive : builder.query({
+            query : ()=>{
+                return {
+                    url : 'archive-surveys',
+                    method :'GET'
+                }
+            }
         })
 
     }),
 });
 
-export const { useGetCompanySurveyQuery, useSurveyReportQuery, useUpdateSurveyQuestionMutation, useGetProjectDetailsQuery, useDeleteSurveyUserMutation } = manageCompanyApi;
+export const { useGetCompanySurveyQuery, useSurveyReportQuery, useUpdateSurveyQuestionMutation, useGetProjectDetailsQuery, useDeleteSurveyUserMutation , useGetArchiveQuery} = manageCompanyApi;

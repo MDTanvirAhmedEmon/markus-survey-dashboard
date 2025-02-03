@@ -4,13 +4,16 @@ import { CiSearch } from 'react-icons/ci';
 import { FaEdit, FaRegEye } from 'react-icons/fa';
 import { IoArrowBackSharp } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
-import { useGetCompanySurveyQuery } from '../redux/features/manageCompany/manageCompanyApi';
+import { useGetArchiveQuery, useGetCompanySurveyQuery } from '../redux/features/manageCompany/manageCompanyApi';
 
 const ArchiveProject = () => {
 
     const [searchTerm, setSearchTerm] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
+
+    const {data :  getArchive} = useGetArchiveQuery()
+    console.log(getArchive?.data);
 
     const { data, isLoading } = useGetCompanySurveyQuery({
         page: currentPage,
@@ -21,7 +24,7 @@ const ArchiveProject = () => {
         setCurrentPage(page);
     };
 
-    const dataSource = data?.data?.map((item, index) => ({
+    const dataSource = getArchive?.data?.map((item, index) => ({
         key: item.id,
         id: index + 1,
         project_name: item?.project?.project_name,
@@ -88,9 +91,9 @@ const ArchiveProject = () => {
                     </Link>
                     <p className='text-xl'>Archive Project</p>
                 </div>
-                <div className='end-center gap-2'>
+                {/* <div className='end-center gap-2'>
                     <Input onChange={(e) => setSearchTerm(e.target.value)} className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />} placeholder="Search" />
-                </div>
+                </div> */}
             </div>
 
             {isLoading ? (

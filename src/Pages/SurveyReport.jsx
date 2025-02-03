@@ -18,9 +18,10 @@ const SurveyReport = () => {
     const { data: projectDetails, isError, loading } = useGetProjectDetailsQuery({id},{
         refetchOnMountOrArgChange: true,
     })
-    console.log(projectDetails?.data)
-    const formattedUserImages = projectDetails?.data?.map((item, i) => `${imageUrl}${item?.user?.image}`)
-    console.log(formattedUserImages)
+    const formattedUserImages = projectDetails?.data
+  ? projectDetails.data.map((item, i) => `${imageUrl}${item?.user?.image}`)
+  : []; 
+
 
     const { data: report, isLoading } = useSurveyReportQuery(id);
 
@@ -54,8 +55,8 @@ const SurveyReport = () => {
                     <p className='text-xl'>Survey Report</p>
                 </div>
                 <div className='end-center gap-2'>
-                    <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />}
-                        placeholder="Search" />
+                    {/* <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />}
+                        placeholder="Search" /> */}
                     {/* <Link to={`/add-project`}
                         className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
                         Add New Project
@@ -82,9 +83,9 @@ const SurveyReport = () => {
                     <p className='text-[#71717C] text-lg'>{report?.answers_count}</p>
                 </div>
             </div>
-            {/* <Chart answer_counts={report?.answer_counts} /> */}
+            <Chart answer_counts={report?.answer_counts} />
 
-            {/* <div className='flex justify-center items-center mb-8 mt-6'>
+            <div className='flex justify-center items-center mb-8 mt-6'>
                 {
                     formattedUserImages.map(item => <img className='w-20 h-20 rounded-full -ml-8' key={item} src={item} alt="" />)
                 }
@@ -94,7 +95,7 @@ const SurveyReport = () => {
                 '>
                     {formattedUserImages?.length}+
                 </div>
-            </div> */}
+            </div>
         </div>
     )
 }

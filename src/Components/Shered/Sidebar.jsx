@@ -94,18 +94,19 @@ const Sidebar = () => {
             sub_menu: false,
             icon: <SiHomeassistantcommunitystore />,
         },
-        {
-            path: '/manage-admin',
-            label: 'Manage Admin',
-            sub_menu: false,
-            icon: <RiAdminLine />,
-        },
-        {
-            path: '/manage-user',
-            label: 'Manage User',
-            icon: <FaUserFriends />,
-            sub_menu: false
-        },
+        // {
+        //     path: '/manage-admin',
+        //     label: 'Manage Admin',
+        //     sub_menu: false,
+        //     icon: <RiAdminLine />,
+        // },
+       
+        // {
+        //     path: '/manage-user',
+        //     label: 'Manage User',
+        //     icon: <FaUserFriends />,
+        //     sub_menu: false
+        // },
         // {
         //     path: '/super-admin/company-details',
         //     label: 'Company Details',
@@ -147,6 +148,21 @@ const Sidebar = () => {
             sub_menu: false,
         },
     ];
+
+    if(userRole === "SUPER ADMIN"){
+        links?.push({
+            path: '/manage-user',
+            label: 'Manage User',
+            icon: <FaUserFriends />,
+            sub_menu: false
+        })
+        links?.push( {
+            path: '/manage-admin',
+            label: 'Manage Admin',
+            sub_menu: false,
+            icon: <RiAdminLine />,
+        },)
+    }
 
     const toggleAccordion = (index) => {
         setOpenIndex((prevIndex) => (prevIndex === index ? null : index));

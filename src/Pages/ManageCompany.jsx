@@ -23,6 +23,7 @@ const ManageCompany = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+    console.log(data?.data);
 
     const dataSource = data?.data?.map((item, index) => ({
         key: item.id,

@@ -20,6 +20,8 @@ const Profile = () => {
     const [updatePassword, { isLoading: isUpdatingPass }] = useUpdatePasswordMutation()
     const { data, isLoading, } = useGetProfileQuery() || {};
     const [passError, setPassError] = useState('')
+
+    console.log(data);
     const handlePageChange = (tab) => {
         setTab(tab);
         const params = new URLSearchParams(window.location.search);

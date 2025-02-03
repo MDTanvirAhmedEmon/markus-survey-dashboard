@@ -11,6 +11,9 @@ const EditSurveyQuestions = () => {
     const { id } = useParams();
     const { data, isLoading , refetch } = useGetSurveyBasedQuestionQuery(id);
     // State to manage the edited questions
+
+
+    console.log(data?.data[0]?.questions);
     const [editedQuestions, setEditedQuestions] = useState([]);
 
     // Function to handle input changes
