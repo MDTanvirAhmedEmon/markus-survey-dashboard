@@ -7,7 +7,10 @@ import silent from "../../assets/images/silent.png";
 import sad from "../../assets/images/sad.png";
 import blushing from "../../assets/images/blushing.png";
 import starImage from "../../assets/images/star.png";
-import { useGetAllQnAnsQuery, useGetSurveyBasedInfoQuery } from "../../redux/features/company/company";
+import {
+  useGetAllQnAnsQuery,
+  useGetSurveyBasedInfoQuery,
+} from "../../redux/features/company/company";
 import translateText from "../../TranslateText";
 import { FaStar } from "react-icons/fa6";
 // import translateText from "../../translateText";
@@ -16,7 +19,9 @@ import { FaStar } from "react-icons/fa6";
 export default function AllQuestionAnsPage() {
   const selectedlanguage = localStorage.getItem("language") || "de";
   const [translatedQuestions, setTranslatedQuestions] = useState({});
-  const [unique_id, setunique_id] = useState(sessionStorage.getItem('uniqueId'))
+  const [unique_id, setunique_id] = useState(
+    sessionStorage.getItem("uniqueId")
+  );
   const navigate = useNavigate();
   const location = useLocation();
   // RTK Query for all question:
@@ -26,14 +31,15 @@ export default function AllQuestionAnsPage() {
   // get info about survey and project
   // let unique_id = ''
 
-
-
   const { data } = useGetSurveyBasedInfoQuery({ id: survey_id, unique_id });
 
+  // console.log(data);
   const { language = selectedlanguage } = location.state || {};
   const ans = allQn?.answers || [];
   const emoji = allQn?.emoji_or_star === "emoji";
+  console.log(emoji);
 
+  console.log(data);
   useEffect(() => {
     const translateAllQuestions = async () => {
       if (!ans.length) return;
@@ -64,7 +70,7 @@ export default function AllQuestionAnsPage() {
 
   const handleDoneButton = () => {
     navigate("/thankYouPage", { replace: true });
-    sessionStorage.removeItem('uniqueId')
+    sessionStorage.removeItem("uniqueId");
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -101,88 +107,127 @@ export default function AllQuestionAnsPage() {
         </p>
       </div>
       <div>
-        {data?.answers?.slice().reverse().map((ans, i) => (
-          <div key={i} className="mt-2">
-            <p><span className="font-medium">Question :</span> {ans?.question?.question_en}</p>
-            <p className="pb-2 flex items-center gap-2"><span className="font-medium">Answer : </span>
-              {
-                ans?.answer === "1" && <><img
-                  src={angry}
-                  alt="angry emoji"
-                  className="inline-block h-6"
-                /></>
+        {data?.answers
+          ?.slice()
+          .reverse()
+          .map((ans, i) => (
+            <div key={i} className="mt-2">
+              <p>
+                <span className="font-medium">Question :</span>{" "}
+                {ans?.question?.question_en}
+              </p>
+              <p className="pb-2 flex items-center gap-2">
+                <span className="font-medium">Answer : </span>
 
-              }
-              {
-                ans?.answer === "2" && <> <img
-                  src={sad}
-                  alt="silent emoji"
-                  className="inline-block h-6"
-                /></>
-              }
-              {
-                ans?.answer === "3" && <>  <img
-                  src={silent}
-                  alt="sad emoji"
-                  className="inline-block h-6"
-                /></>
-              }
-              {
-                ans?.answer === "4" && <>  <img
-                  src={blushing}
-                  alt="smile emoji"
-                  className="inline-block h-6"
-                /></>
-              }
-              {
-                ans?.answer === "5" && <> <img
-                  src={smile}
-                  alt="blushing emoji"
-                  className="inline-block h-6"
-                /></>
-              }
-              {
-                ans?.answer === "5⭐" && <><p className="flex">
-                  <FaStar size={26} className="text-[#07CC00]" />
-                  <FaStar size={26} className="text-[#07CC00]" />
-                  <FaStar size={26} className="text-[#07CC00]" />
-                  <FaStar size={26} className="text-[#07CC00]" />
-                  <FaStar size={26} className="text-[#07CC00]" />
-                </p></>
-              }
-              {
-                ans?.answer === "4⭐" && <><p className="flex">
-                  <FaStar size={26} className="text-[#B5D900]" />
-                  <FaStar size={26} className="text-[#B5D900]" />
-                  <FaStar size={26} className="text-[#B5D900]" />
-                  <FaStar size={26} className="text-[#B5D900]" />
-                </p></>
-              }
-              {
-                ans?.answer === "3⭐" && <><p className="flex">
+                {emoji
+                  ? ans?.answer === "1" && (
+                      <>
+                        <img
+                          src={angry}
+                          alt="angry emoji"
+                          className="inline-block h-6"
+                        />
+                      </>
+                    )
+                  : ans?.answer === "1" && (
+                      <p className="inline-block">
+                        <FaStar size={26} className="text-[#FF0000]" />
+                      </p>
+                    )}
 
-                  <FaStar size={26} className="text-[#FFD500]" />
-                  <FaStar size={26} className="text-[#FFD500]" />
-                  <FaStar size={26} className="text-[#FFD500]" /></p></>
-              }
-              {
-                ans?.answer === "2⭐" && <><p className="flex">
-                  <FaStar size={26} className="text-[#ff9100]" />
-                  <FaStar size={26} className="text-[#ff9100]" />
-                </p></>
-              }
-              {
-                ans?.answer === "1⭐" && <><p className="inline-block">
-                  <FaStar size={26} className="text-[#FF0000]" />
-                </p></>
-              }
-            </p>
-            <p>
-              <span className="font-medium">Comment :</span> <span>{ans?.comment || 'No comment'}</span>
-            </p>
-          </div>
-        ))}
+                {emoji
+                  ? ans?.answer === "2" && (
+                      <>
+                        {" "}
+                        <img
+                          src={sad}
+                          alt="silent emoji"
+                          className="inline-block h-6"
+                        />
+                      </>
+                    )
+                  : ans?.answer === "2" && (
+                      <>
+                        <p className="flex">
+                          <FaStar size={26} className="text-[#ff9100]" />
+                          <FaStar size={26} className="text-[#ff9100]" />
+                        </p>
+                      </>
+                    )}
 
+                {emoji
+                  ? ans?.answer === "3" && (
+                      <>
+                        {" "}
+                        <img
+                          src={silent}
+                          alt="sad emoji"
+                          className="inline-block h-6"
+                        />
+                      </>
+                    )
+                  : ans?.answer === "3" && (
+                      <>
+                        <p className="flex">
+                          <FaStar size={26} className="text-[#FFD500]" />
+                          <FaStar size={26} className="text-[#FFD500]" />
+                          <FaStar size={26} className="text-[#FFD500]" />
+                        </p>
+                      </>
+                    )}
+
+                {emoji
+                  ? ans?.answer === "4" && (
+                      <>
+                        {" "}
+                        <img
+                          src={blushing}
+                          alt="smile emoji"
+                          className="inline-block h-6"
+                        />
+                      </>
+                    )
+                  : ans?.answer === "4" && (
+                      <>
+                        <p className="flex">
+                          <FaStar size={26} className="text-[#B5D900]" />
+                          <FaStar size={26} className="text-[#B5D900]" />
+                          <FaStar size={26} className="text-[#B5D900]" />
+                          <FaStar size={26} className="text-[#B5D900]" />
+                        </p>
+                      </>
+                    )}
+
+                {emoji
+                  ? ans?.answer === "5" && (
+                      <>
+                        {" "}
+                        <img
+                          src={smile}
+                          alt="blushing emoji"
+                          className="inline-block h-6"
+                        />
+                      </>
+                    )
+                  : ans?.answer === "5⭐" && (
+                      <>
+                        <p className="flex">
+                          <FaStar size={26} className="text-[#07CC00]" />
+                          <FaStar size={26} className="text-[#07CC00]" />
+                          <FaStar size={26} className="text-[#07CC00]" />
+                          <FaStar size={26} className="text-[#07CC00]" />
+                          <FaStar size={26} className="text-[#07CC00]" />
+                        </p>
+                      </>
+                    )}  
+               
+              </p>
+              <p>
+                <span className="font-medium">Comment :</span>{" "}
+                <span>{ans?.comment || "No comment"}</span>
+              </p>
+            </div>
+          ))}
       </div>
       <button
         className="py-2 w-full md:w-44 bg-[#ecb206] text-white rounded-md mt-12 mb-10"

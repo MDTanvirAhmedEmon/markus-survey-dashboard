@@ -87,11 +87,7 @@ const SurveyQuestions = () => {
     setSelectedAnswer(displayValue,answer,);
   };
 
-  // const uniqueId = uuidv1();
-
-  // if (!sessionStorage.getItem('uniqueId')) {
-  //   sessionStorage.setItem("uniqueId", uniqueId)
-  // }
+  
 
   const handleNextClick = async () => {
     try {
@@ -281,32 +277,32 @@ const SurveyQuestions = () => {
     <div className="flex gap-3 justify-center items-center my-12">
       <FaStar size={selectedAnswer && answerIndex == 1 ? 40 : 30} 
        onClick={() => {
-        handleAnswerClick(`1⭐`,1 );
+        handleAnswerClick(`1`,1 );
         setAnswerIndex(1);
       }}
       className={` text-[#FF0000] cursor-pointer`} />
 
       <FaStar size={selectedAnswer && answerIndex == 2 ? 40 : 30} 
        onClick={() => {
-        handleAnswerClick(`2⭐`,2);
+        handleAnswerClick(`2`,2);
         setAnswerIndex(2);
       }}
       className={` text-[#ff9100] cursor-pointer`} />
       <FaStar size={selectedAnswer && answerIndex == 3 ? 40 : 30} 
        onClick={() => {
-        handleAnswerClick( `3⭐`,3);
+        handleAnswerClick( `3`,3);
         setAnswerIndex(3);
       }}
       className={` text-[#FFD500] cursor-pointer`} />
       <FaStar size={selectedAnswer && answerIndex == 4 ? 40 : 30} 
        onClick={() => {
-        handleAnswerClick(`4⭐`,4 );
+        handleAnswerClick(`4`,4 );
         setAnswerIndex(4);
       }}
       className={` text-[#B5D900] cursor-pointer`} />
       <FaStar size={selectedAnswer && answerIndex == 5 ? 40 : 30} 
        onClick={() => {
-        handleAnswerClick( `5⭐`,5);
+        handleAnswerClick( `5`,5);
         setAnswerIndex(5);
       }}
       className={` text-[#07CC00] cursor-pointer`} />
@@ -342,6 +338,8 @@ const SurveyQuestions = () => {
     </div>
   );
 
+  console.log(selectedAnswer);
+
   // Render emoji rating
   const renderEmojis = () => (
     <div className="flex gap-5 justify-center items-center my-12">
@@ -350,20 +348,20 @@ const SurveyQuestions = () => {
         src={angry}
         alt="angry emoji"
         // onClick={() => handleAnswerClick("😠", "😠")}
-        onClick={() => handleAnswerClick("1")}
+        onClick={() => handleAnswerClick("1","1")}
       />
       <img
         className={`btn cursor-pointer ${selectedAnswer === "2" ? "h-14" : "h-10"}`}
         src={sad}
         alt="sad emoji"
         // onClick={() => handleAnswerClick("😢", "😢")}
-        onClick={() => handleAnswerClick("2")}
+        onClick={() => handleAnswerClick("2" ,"2")}
       />
       <img
         className={`btn cursor-pointer ${selectedAnswer === "3" ? "h-14" : "h-10"}`}
         src={silent}
         alt="silent emoji"
-        onClick={() => handleAnswerClick("3")}
+        onClick={() => handleAnswerClick("3","3")}
       // onClick={() => handleAnswerClick("🤐", "🤐")}
       />
 
@@ -371,14 +369,14 @@ const SurveyQuestions = () => {
         className={`btn cursor-pointer ${selectedAnswer === "4" ? "h-14" : "h-10"}`}
         src={blushing}
         alt="blushing emoji"
-        onClick={() => handleAnswerClick("4")}
+        onClick={() => handleAnswerClick("4","4")}
       // onClick={() => handleAnswerClick("🙂", "🙂")}
       />
       <img
         className={`btn cursor-pointer ${selectedAnswer === "5" ? "h-14" : "h-10"}`}
         src={smile}
         alt="smile emoji"
-        onClick={() => handleAnswerClick("5")}
+        onClick={() => handleAnswerClick("5","5")}
       // onClick={() => handleAnswerClick("😊", "😊")}
       />
     </div>
