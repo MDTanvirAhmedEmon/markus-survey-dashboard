@@ -13,7 +13,10 @@ const DriverGrowth = () => {
     };
 
     const { data: dashboardData } = useGetDashboardAnalyticsQuery();
+
+    console.log(dashboardData);
     const processedData = mapMonthNumberToName(dashboardData?.responses_by_month || []);
+
     const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             const { month, count } = payload[0].payload;

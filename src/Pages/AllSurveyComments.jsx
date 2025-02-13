@@ -11,7 +11,7 @@ const AllSurveyComments = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState(null);
     const { data: getUser } = useGetProfileQuery() || {};
-    console.log(getUser?.user?.anonymous);
+    // console.log(getUser?.user?.anonymous);
 
     const pageSize = 10;
 
@@ -22,6 +22,8 @@ const AllSurveyComments = () => {
         search: searchTerm,
     });
 
+
+    console.log(data);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
