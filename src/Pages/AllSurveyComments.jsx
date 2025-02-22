@@ -23,7 +23,6 @@ const AllSurveyComments = () => {
     });
 
 
-    console.log(data);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);

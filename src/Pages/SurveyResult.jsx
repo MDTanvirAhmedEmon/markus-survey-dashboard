@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { ConfigProvider, Form, Pagination, Select, Spin, Tag } from "antd";
+import { ConfigProvider, Form, Modal, Pagination, Select, Spin, Tag } from "antd";
 import { useEffect, useState } from "react";
 import {
   useGetProjectForManageCompanyQuery,
@@ -23,33 +23,48 @@ import angry from "../assets/images/angry.png";
 import star from "../assets/images/star.png";
 import { CSVLink, CSVDownload } from "react-csv";
 import { FaRegStar, FaStar } from "react-icons/fa6";
+import { useGetProfileQuery } from "../redux/features/auth/authApi";
 
 const SurveyResult = () => {
+  const [openModal , setOpenModal] = useState(false)
+  const [questionId, setQuestionId] = useState()
   const [selectedProjectId, setSelectedProjectId] = useState(null); // Track the selected project ID
+  const pageSize = 10;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [csvDataDisplay, setCsvDataDisplay] = useState();
 
+    const { data: getUser } = useGetProfileQuery() || {};
+
+  const { data } = useGetAllSurveyCommentsQuery({
+    id :  questionId,
+    page: currentPage,
+    // search: searchTerm,
+});
+
+
+
+  console.log(data);
+
   // this pagination for survey result page
   const [currentSurveyPage, setCurrentSurveyPage] = useState(1);
 
-  const [selectedProject, setSelectedProject] = useState(localStorage.getItem("selectedProject"));
+  const [selectedProject, setSelectedProject] = useState();
 
-  const [selectedSurvey, setSelectedSurvey] = useState(localStorage.getItem("selectedSurvey"));
+  const [selectedSurvey, setSelectedSurvey] = useState();
 
-  useEffect(() => {
-    localStorage.setItem("selectedProject" , selectedProject)
-    localStorage.setItem("selectedSurvey" , selectedSurvey)
-  }, [selectedProject, selectedSurvey]);
+  // useEffect(() => {
+  //   localStorage.setItem("selectedProject" , selectedProject)
+  //   localStorage.setItem("selectedSurvey" , selectedSurvey)
+  // }, [selectedProject, selectedSurvey]);
 
  
-  useEffect(()=>{
-    setSelectedProject(localStorage.getItem("selectedProject"))
-    setSelectedSurvey(localStorage.getItem("selectedSurvey"))
-  }, [])
+  // useEffect(()=>{
+  //   setSelectedProject(localStorage.getItem("selectedProject"))
+  //   setSelectedSurvey(localStorage.getItem("selectedSurvey"))
+  // }, [])
 
   const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
-  const pageSize = 10;
 
   const { data: projects } = useGetProjectForManageCompanyQuery({
     page: currentPage,
@@ -123,7 +138,6 @@ const SurveyResult = () => {
       }
   );
 
-  console.log(reportData);
 
   const csvfileDataFormat = reportData?.data?.map((item, index) => {
     // const optionPercentagesString = JSON.stringify(item.option_percentages);
@@ -164,7 +178,6 @@ const SurveyResult = () => {
   const onFinish = (values) => {
     console.log(values);
   };
-  // const data = ['https://i.ibb.co/0sF5Fk3/images-19.jpg', 'https://i.ibb.co/YpR8Mbw/Ellipse-307.png', 'https://i.ibb.co/JFZhZ7m/Ellipse-311.png', 'https://i.ibb.co/5cXN4Bw/Ellipse-310.png', 'https://i.ibb.co/gz2CbVj/1-intro-photo-final.jpg', 'https://i.ibb.co/7xc44sq/profile-picture-smiling-young-african-260nw-1873784920.webp', 'https://i.ibb.co/sQPHfnR/images-20.jpg']
 
   // pdf
   const printRef = useRef(null);
@@ -468,11 +481,14 @@ const SurveyResult = () => {
                               id={question?.question_id}
                             ></SurveyResultImages>
                           </div>
-                          <Link
+                          {/* <Link
                             to={`/all-survey-comments/${question?.question_id}`}
                           >
-                            <p className="text-lg text-[#ECB206]">View All</p>
-                          </Link>
+                          </Link> */}
+                          <p onClick={()=> {
+                            setQuestionId(question?.question_id)
+                            setOpenModal(true)
+                          }} className="text-lg text-[#ECB206] cursor-pointer">View All</p>
                         </div>
                       </div>
                     </div>
@@ -516,6 +532,51 @@ const SurveyResult = () => {
           </div>
         )}
       </div>
+
+      <Modal footer={false} centered open={openModal} onCancel={()=> setOpenModal(false)}>
+          <p className='text-xl text-center'>All Survey Comments</p>
+
+          <div className='mx-4 bg-white py-8 rounded-md'>
+                {/* table head */}
+                <div className=' w-full flex items-center justify-center gap-3 text-lg'>
+                    <div className='w-[22%]'>SL no.</div>
+                    <div className='w-[34%]'>Comment</div>
+                    {
+                       !getUser?.user?.anonymous && <>
+                            <div className='w-[22%]'>User</div>
+                            <div className='w-[22%]'>Email</div>
+                        </>
+                    }
+                </div>
+
+
+                {/* table body */}
+                {
+                    data?.data?.map((comment, index) => (
+
+                        <div key={index} className=' w-full flex  justify-center items-center gap-3 mt-10'>
+                            <div className='w-[22%]'>0{index + 1}</div>
+                            <div className='w-[34%] pr-12'>{comment?.comment}</div>
+                            {
+                                !getUser?.user?.anonymous && <> <div className='w-[22%] flex gap-3 items-center'><Avatar size={45} shape="circle" className=' shadow' src={`${imageUrl}${comment?.user?.image}`} /> {comment?.user?.name}</div>
+                                    <div className='w-[22%]'>{comment?.user?.email}</div></>
+                            }
+
+                        </div>
+                    ))
+                }
+
+            </div>
+            <div className="mt-10 py-6">
+                <Pagination
+                    className="custom-pagination-all"
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={data?.total}
+                    onChange={handlePageChange}
+                />
+            </div>
+      </Modal>
     </>
   );
 };
