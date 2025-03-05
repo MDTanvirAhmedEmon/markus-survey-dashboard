@@ -29,12 +29,13 @@ export const surveyAPi = baseApi.injectEndpoints({
             }
         }),
         getSurveyForManageCompany: builder.query({
-            query: ({ project_id, page }) => {
+            query: ({ project_id, page , showExpired }) => {
                 return {
-                    url: `surveys?project_id=${project_id}&page=${page}`,
+                    url: `surveys?project_id=${project_id}&is_show=${showExpired}&page=${page}`,
                     method: "GET",
                 }
             }
+
         }),
         getSurveyForEvent: builder.query({
             query: ({ page }) => {

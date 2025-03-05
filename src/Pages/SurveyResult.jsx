@@ -1,6 +1,14 @@
 import { Link } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { ConfigProvider, Form, Modal, Pagination, Select, Spin, Tag } from "antd";
+import {
+  ConfigProvider,
+  Form,
+  Modal,
+  Pagination,
+  Select,
+  Spin,
+  Tag,
+} from "antd";
 import { useEffect, useState } from "react";
 import {
   useGetProjectForManageCompanyQuery,
@@ -26,25 +34,26 @@ import { FaRegStar, FaStar } from "react-icons/fa6";
 import { useGetProfileQuery } from "../redux/features/auth/authApi";
 
 const SurveyResult = () => {
-  const [openModal , setOpenModal] = useState(false)
-  const [questionId, setQuestionId] = useState()
+  const [showExpired, setShowExpired] = useState(1);
+  const [openModal, setOpenModal] = useState(false);
+  const [questionId, setQuestionId] = useState();
   const [selectedProjectId, setSelectedProjectId] = useState(null); // Track the selected project ID
   const pageSize = 10;
+
+  const handleCheckboxChange = () => {
+    setShowExpired((prev) => (prev === 1 ? 0 : 1));
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const [csvDataDisplay, setCsvDataDisplay] = useState();
 
-    const { data: getUser } = useGetProfileQuery() || {};
+  const { data: getUser } = useGetProfileQuery() || {};
 
   const { data } = useGetAllSurveyCommentsQuery({
-    id :  questionId,
+    id: questionId,
     page: currentPage,
     // search: searchTerm,
-});
-
-
-
-  console.log(data);
+  });
 
   // this pagination for survey result page
   const [currentSurveyPage, setCurrentSurveyPage] = useState(1);
@@ -58,7 +67,6 @@ const SurveyResult = () => {
   //   localStorage.setItem("selectedSurvey" , selectedSurvey)
   // }, [selectedProject, selectedSurvey]);
 
- 
   // useEffect(()=>{
   //   setSelectedProject(localStorage.getItem("selectedProject"))
   //   setSelectedSurvey(localStorage.getItem("selectedSurvey"))
@@ -78,6 +86,7 @@ const SurveyResult = () => {
   const { data: surveysdata } = useGetSurveyForManageCompanyQuery({
     page: currentPageSurvey,
     project_id: selectedProject,
+    showExpired
   });
 
   const { data: surveys } = useGetSurveyForEventQuery({
@@ -137,7 +146,6 @@ const SurveyResult = () => {
         page: currentSurveyPage,
       }
   );
-
 
   const csvfileDataFormat = reportData?.data?.map((item, index) => {
     // const optionPercentagesString = JSON.stringify(item.option_percentages);
@@ -307,6 +315,19 @@ const SurveyResult = () => {
               />
             </Form.Item>
           </Form>
+        </div>
+
+        <div className="flex items-center space-x-2 mb-5">
+          <input
+            type="checkbox"
+            id="hideExpired"
+            checked={showExpired === 0}
+            onChange={handleCheckboxChange}
+            className="w-4 h-4"
+          />
+          <label htmlFor="hideExpired" className="text-sm ">
+            Don't show expired surveys
+          </label>
         </div>
 
         <div className=" flex justify-between mb-6 mr-6">
@@ -485,10 +506,15 @@ const SurveyResult = () => {
                             to={`/all-survey-comments/${question?.question_id}`}
                           >
                           </Link> */}
-                          <p onClick={()=> {
-                            setQuestionId(question?.question_id)
-                            setOpenModal(true)
-                          }} className="text-lg text-[#ECB206] cursor-pointer">View All</p>
+                          <p
+                            onClick={() => {
+                              setQuestionId(question?.question_id);
+                              setOpenModal(true);
+                            }}
+                            className="text-lg text-[#ECB206] cursor-pointer"
+                          >
+                            View All
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -533,49 +559,62 @@ const SurveyResult = () => {
         )}
       </div>
 
-      <Modal footer={false} centered open={openModal} onCancel={()=> setOpenModal(false)}>
-          <p className='text-xl text-center'>All Survey Comments</p>
+      <Modal
+        footer={false}
+        centered
+        open={openModal}
+        onCancel={() => setOpenModal(false)}
+      >
+        <p className="text-xl text-center">All Survey Comments</p>
 
-          <div className='mx-4 bg-white py-8 rounded-md'>
-                {/* table head */}
-                <div className=' w-full flex items-center justify-center gap-3 text-lg'>
-                    <div className='w-[22%]'>SL no.</div>
-                    <div className='w-[34%]'>Comment</div>
-                    {
-                       !getUser?.user?.anonymous && <>
-                            <div className='w-[22%]'>User</div>
-                            <div className='w-[22%]'>Email</div>
-                        </>
-                    }
-                </div>
+        <div className="mx-4 bg-white py-8 rounded-md">
+          {/* table head */}
+          <div className=" w-full flex items-center justify-center gap-3 text-lg">
+            <div className="w-[22%]">SL no.</div>
+            <div className="w-[34%]">Comment</div>
+            {!getUser?.user?.anonymous && (
+              <>
+                <div className="w-[22%]">User</div>
+                <div className="w-[22%]">Email</div>
+              </>
+            )}
+          </div>
 
-
-                {/* table body */}
-                {
-                    data?.data?.map((comment, index) => (
-
-                        <div key={index} className=' w-full flex  justify-center items-center gap-3 mt-10'>
-                            <div className='w-[22%]'>0{index + 1}</div>
-                            <div className='w-[34%] pr-12'>{comment?.comment}</div>
-                            {
-                                !getUser?.user?.anonymous && <> <div className='w-[22%] flex gap-3 items-center'><Avatar size={45} shape="circle" className=' shadow' src={`${imageUrl}${comment?.user?.image}`} /> {comment?.user?.name}</div>
-                                    <div className='w-[22%]'>{comment?.user?.email}</div></>
-                            }
-
-                        </div>
-                    ))
-                }
-
+          {/* table body */}
+          {data?.data?.map((comment, index) => (
+            <div
+              key={index}
+              className=" w-full flex  justify-center items-center gap-3 mt-10"
+            >
+              <div className="w-[22%]">0{index + 1}</div>
+              <div className="w-[34%] pr-12">{comment?.comment}</div>
+              {!getUser?.user?.anonymous && (
+                <>
+                  {" "}
+                  <div className="w-[22%] flex gap-3 items-center">
+                    <Avatar
+                      size={45}
+                      shape="circle"
+                      className=" shadow"
+                      src={`${imageUrl}${comment?.user?.image}`}
+                    />{" "}
+                    {comment?.user?.name}
+                  </div>
+                  <div className="w-[22%]">{comment?.user?.email}</div>
+                </>
+              )}
             </div>
-            <div className="mt-10 py-6">
-                <Pagination
-                    className="custom-pagination-all"
-                    current={currentPage}
-                    pageSize={pageSize}
-                    total={data?.total}
-                    onChange={handlePageChange}
-                />
-            </div>
+          ))}
+        </div>
+        <div className="mt-10 py-6">
+          <Pagination
+            className="custom-pagination-all"
+            current={currentPage}
+            pageSize={pageSize}
+            total={data?.total}
+            onChange={handlePageChange}
+          />
+        </div>
       </Modal>
     </>
   );
