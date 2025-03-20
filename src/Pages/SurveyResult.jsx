@@ -147,6 +147,7 @@ const SurveyResult = () => {
       }
   );
 
+
   const csvfileDataFormat = reportData?.data?.map((item, index) => {
     // const optionPercentagesString = JSON.stringify(item.option_percentages);
     const optionPercentagesFormatted = Object.entries(item.option_percentages)

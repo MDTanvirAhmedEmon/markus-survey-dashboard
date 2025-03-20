@@ -40,7 +40,23 @@ export const settingsApi = baseApi.injectEndpoints({
             },
             providesTags: ['admin-dashboard'],
         }),
+        getAllQuestions: builder.query({
+            query: (id) => {
+                return {
+                    url: `/survey-based-questions?survey_id=${id}`,
+                    method: "GET",
+                }
+            }
+        }),
+        getQuestionStatistics : builder.query({
+            query : ({surveyId , questionId})=>{
+                return {
+                    url : `/surveys/${surveyId}?question_id=${questionId}`,
+                    method  : 'GET'
+                }
+            }
+        })
     })
 })
 
-export const { useCreateSettingMutation, useGetPrivacyPolicyQuery, useGetTermsQuery, useGetOverviewQuery } = settingsApi
+export const { useCreateSettingMutation, useGetPrivacyPolicyQuery, useGetTermsQuery, useGetOverviewQuery  , useGetAllQuestionsQuery , useGetQuestionStatisticsQuery} = settingsApi

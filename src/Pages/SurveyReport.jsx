@@ -1,102 +1,187 @@
-import React, { useState } from 'react'
-import { IoArrowBackSharp } from 'react-icons/io5'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ConfigProvider, Input, Select, Spin } from "antd";
-import { FaPlus } from "react-icons/fa6";
-import { CiSearch } from "react-icons/ci";
-import Chart from "./Chart.jsx"
-import { useGetProjectDetailsQuery, useSurveyReportQuery } from '../redux/features/manageCompany/manageCompanyApi.js';
-import { imageUrl } from '../redux/api/baseApi.js';
+import React, { useState } from "react";
+import { IoArrowBackSharp } from "react-icons/io5";
+import { Link, useParams } from "react-router-dom";
+import { ConfigProvider, Modal, Spin, Table } from "antd";
+import {
+  useGetAllQuestionsQuery,
+  useGetQuestionStatisticsQuery,
+} from "../redux/features/Settings/Settings.js";
+import { FaRegEye } from "react-icons/fa";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ReferenceLine,
+  ResponsiveContainer,
+} from "recharts";
 
+const data = [
+  {
+    name: "Page A",
+    uv: 4000,
+    pv: 2400,
+    amt: 2400,
+  },
+  {
+    name: "Page B",
+    uv: 3000,
+    pv: 1398,
+    amt: 2210,
+  },
+  {
+    name: "Page C",
+    uv: 2000,
+    pv: 9800,
+    amt: 2290,
+  },
+  {
+    name: "Page D",
+    uv: 2780,
+    pv: 3908,
+    amt: 2000,
+  },
+  {
+    name: "Page E",
+    uv: 1890,
+    pv: 4800,
+    amt: 2181,
+  },
+  {
+    name: "Page F",
+    uv: 2390,
+    pv: 3800,
+    amt: 2500,
+  },
+  {
+    name: "Page G",
+    uv: 3490,
+    pv: 4300,
+    amt: 2100,
+  },
+];
 
 const SurveyReport = () => {
-    // const [searchTerm, setSearchTerm] = useState(null);
-
-    const { id } = useParams();
-
-    /** Get sarvay user information api */
-    const { data: projectDetails, isError, loading } = useGetProjectDetailsQuery({id},{
-        refetchOnMountOrArgChange: true,
-    })
-    const formattedUserImages = projectDetails?.data
-  ? projectDetails.data.map((item, i) => `${imageUrl}${item?.user?.image}`)
-  : []; 
+  const [openModal, setOpenModal] = useState(false);
+  const { id } = useParams();
+  const [questionId, setQuestionId] = useState();
+  const { data: getAllQuestions, isLoading } = useGetAllQuestionsQuery(id);
+  const { data: getStatistics } = useGetQuestionStatisticsQuery(
+    { surveyId: id, questionId: questionId },
+    { skip: !id || !questionId }
+  );
 
 
-    const { data: report, isLoading } = useSurveyReportQuery(id);
-
-
-    const data = ['https://i.ibb.co/0sF5Fk3/images-19.jpg', 'https://i.ibb.co/YpR8Mbw/Ellipse-307.png', 'https://i.ibb.co/JFZhZ7m/Ellipse-311.png', 'https://i.ibb.co/5cXN4Bw/Ellipse-310.png', 'https://i.ibb.co/gz2CbVj/1-intro-photo-final.jpg', 'https://i.ibb.co/7xc44sq/profile-picture-smiling-young-african-260nw-1873784920.webp', 'https://i.ibb.co/sQPHfnR/images-20.jpg']
-    const navigate = useNavigate()
-
-    if (isLoading) {
-        return (
-            <div className='h-[600px] w-full flex justify-center items-center'>
-                <ConfigProvider
-                    theme={{
-                        token: {
-                            colorPrimary: "#ECB206",
-                        },
-                    }}
-                >
-                    <Spin size="large" />
-                </ConfigProvider>
-            </div>
-        )
+  const datas = getStatistics?.monthly_ratings?.map((mon , i)=>{
+    return {
+        name : mon?.month,
+        average : mon?.avg_rating
     }
+  })
 
 
+ 
+
+  if (isLoading) {
     return (
-        <div className='bg-[var(--color-7)] p-4 rounded-md'>
-            <div className='between-center px-3 my-2 pt-5 pb-5'>
-                <div className='start-center gap-2 mb-3 p-5'>
-                    <Link to={-1}
-                        className='bg-[var(--color-2)] py-1 px-2 rounded-md start-center gap-1 text-white'><IoArrowBackSharp />back</Link>
-                    <p className='text-xl'>Survey Report</p>
-                </div>
-                <div className='end-center gap-2'>
-                    {/* <Input className='max-w-[250px] h-10' prefix={<CiSearch className='text-2xl' />}
-                        placeholder="Search" /> */}
-                    {/* <Link to={`/add-project`}
-                        className='bg-[var(--color-2)] px-4 rounded-md start-center gap-1 py-2 text-white flex justify-center items-center whitespace-nowrap'>
-                        Add New Project
-                        <FaPlus />
-                    </Link> */}
-                </div>
-            </div>
+      <div className="h-[600px] w-full flex justify-center items-center">
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#ECB206",
+            },
+          }}
+        >
+          <Spin size="large" />
+        </ConfigProvider>
+      </div>
+    );
+  }
 
-            <div className="grid grid-cols-4 gap-4">
-                <div>
-                    <h1 className='text-2xl font-semibold text-[#6B6B6B]'>Project Name</h1>
-                    <p className='text-[#71717C] text-lg'>{report?.project?.project_name}</p>
-                </div>
-                <div>
-                    <h1 className='text-2xl font-semibold text-[#6B6B6B]'>Survey Name</h1>
-                    <p className='text-[#71717C] text-lg'>{report?.survey_name}</p>
-                </div>
-                <div>
-                    <h1 className='text-2xl font-semibold text-[#6B6B6B]'>Total Question</h1>
-                    <p className='text-[#71717C] text-lg'>{report?.questions_count}</p>
-                </div>
-                <div>
-                    <h1 className='text-2xl font-semibold text-[#6B6B6B]'>Total Survey Do</h1>
-                    <p className='text-[#71717C] text-lg'>{report?.answers_count}</p>
-                </div>
-            </div>
-            <Chart answer_counts={report?.answer_counts} />
+  const questionData = getAllQuestions?.questions?.map((question) => {
+    return {
+      id: question?.id,
+      question: question?.question_en,
+    };
+  });
 
-            <div className='flex justify-center items-center mb-8 mt-6'>
-                {
-                    formattedUserImages.map(item => <img className='w-20 h-20 rounded-full -ml-8' key={item} src={item} alt="" />)
-                }
-                <div onClick={() => {
-                    navigate(`/project-users/${id}`)
-                }} className='h-20 w-20 rounded-full bg-black bg-opacity-60 -ml-20 flex justify-center items-center text-white cursor-pointer select-none
-                '>
-                    {formattedUserImages?.length}+
-                </div>
-            </div>
+  const columns = [
+    {
+      title: "Questions Id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Questions Name",
+      dataIndex: "question",
+      key: "question",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <div
+          onClick={() => {
+            setQuestionId(record?.id);
+            setOpenModal(true);
+          }}
+          className="start-center text-2xl gap-1"
+        >
+          <FaRegEye className="cursor-pointer" />
         </div>
-    )
-}
-export default SurveyReport
+      ),
+    },
+  ];
+
+  return (
+    <div className="bg-[var(--color-7)] p-4 rounded-md">
+      <div className="between-center px-3 my-2 pt-5 pb-5">
+        <div className="start-center gap-2 mb-3 p-5">
+          <Link
+            to={-1}
+            className="bg-[var(--color-2)] py-1 px-2 rounded-md start-center gap-1 text-white"
+          >
+            <IoArrowBackSharp />
+            back
+          </Link>
+          <p className="text-xl">All Questions</p>
+        </div>
+      </div>
+
+      <Table dataSource={questionData} columns={columns} pagination={false} />
+
+      <Modal
+        centered
+        footer={false}
+        open={openModal}
+        onCancel={() => setOpenModal(false)}
+        width={1100}
+      >
+        <p className="text-center text-xl">Question Statistics</p>
+
+        <div className="w-full h-[400px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart width={500} height={300} data={datas}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="average"
+                stroke="#8884d8"
+                activeDot={{ r: 8 }}
+              />
+              <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </Modal>
+    </div>
+  );
+};
+export default SurveyReport;
