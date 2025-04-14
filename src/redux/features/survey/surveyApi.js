@@ -47,6 +47,14 @@ export const surveyApi = baseApi.injectEndpoints({
                 }
             },
         }),
+        getCsvReport: builder.query({
+            query: ({ project_id, survey_id }) => {
+                return {
+                    url: `/export-survey?survey_id=${survey_id}&project_id=${project_id}`,
+                    method: "GET",
+                }
+            },
+        }),
         getAllSurveyComments: builder.query({
             query: ({ id, page, search }) => {
 
@@ -61,4 +69,4 @@ export const surveyApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useCreateSurveyMutation, useGetSurveyQuery, useDeleteSurveyMutation, useGetSurveyResultReportQuery, useGetAllSurveyCommentsQuery, useUpdateSurveyDateMutation } = surveyApi;
+export const { useCreateSurveyMutation, useGetSurveyQuery, useDeleteSurveyMutation, useGetSurveyResultReportQuery, useGetAllSurveyCommentsQuery, useUpdateSurveyDateMutation  , useGetCsvReportQuery} = surveyApi;

@@ -9,7 +9,7 @@ import {
   Spin,
   Tag,
 } from "antd";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import {
   useGetProjectForManageCompanyQuery,
   useGetSurveyForEventQuery,
@@ -17,6 +17,7 @@ import {
 } from "../redux/features/questions/questionsApi";
 import {
   useGetAllSurveyCommentsQuery,
+  useGetCsvReportQuery,
   useGetSurveyResultReportQuery,
 } from "../redux/features/survey/surveyApi";
 import { useRef } from "react";
@@ -28,16 +29,28 @@ import smile from "../assets/images/blushing.png";
 import sad from "../assets/images/sad.png";
 import silent from "../assets/images/silent.png";
 import angry from "../assets/images/angry.png";
-import star from "../assets/images/star.png";
-import { CSVLink, CSVDownload } from "react-csv";
-import { FaRegStar, FaStar } from "react-icons/fa6";
+import { CSVLink} from "react-csv";
+import {FaStar } from "react-icons/fa6";
 import { useGetProfileQuery } from "../redux/features/auth/authApi";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ReferenceLine,
+  ResponsiveContainer,
+} from "recharts";
+import { useGetQuestionStatisticsQuery } from "../redux/features/Settings/Settings";
 
 const SurveyResult = () => {
   const [showExpired, setShowExpired] = useState(1);
   const [openModal, setOpenModal] = useState(false);
+  const [openChartModal, setOpenChartModal] = useState(false);
   const [questionId, setQuestionId] = useState();
-  const [selectedProjectId, setSelectedProjectId] = useState(null); // Track the selected project ID
+  const [selectedProjectId, setSelectedProjectId] = useState(null); 
   const pageSize = 10;
 
   const handleCheckboxChange = () => {
@@ -52,7 +65,6 @@ const SurveyResult = () => {
   const { data } = useGetAllSurveyCommentsQuery({
     id: questionId,
     page: currentPage,
-    // search: searchTerm,
   });
 
   // this pagination for survey result page
@@ -62,17 +74,22 @@ const SurveyResult = () => {
 
   const [selectedSurvey, setSelectedSurvey] = useState();
 
-  // useEffect(() => {
-  //   localStorage.setItem("selectedProject" , selectedProject)
-  //   localStorage.setItem("selectedSurvey" , selectedSurvey)
-  // }, [selectedProject, selectedSurvey]);
 
-  // useEffect(()=>{
-  //   setSelectedProject(localStorage.getItem("selectedProject"))
-  //   setSelectedSurvey(localStorage.getItem("selectedSurvey"))
-  // }, [])
+
 
   const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
+   const { data: getStatistics } = useGetQuestionStatisticsQuery(
+      { surveyId: selectedSurvey, questionId: questionId },
+      { skip: !selectedSurvey || !questionId }
+    );
+
+    const datas = getStatistics?.monthly_ratings?.map((mon , i)=>{
+      return {
+          name : mon?.month,
+          average : mon?.avg_rating
+      }
+    })
+  
 
   const { data: projects } = useGetProjectForManageCompanyQuery({
     page: currentPage,
@@ -147,43 +164,36 @@ const SurveyResult = () => {
       }
   );
 
+  const {data : getCsvReport} = useGetCsvReportQuery( selectedProject &&
+    selectedSurvey && {
+      project_id: selectedProject,
+      survey_id: selectedSurvey,
+    })
 
-  const csvfileDataFormat = reportData?.data?.map((item, index) => {
-    // const optionPercentagesString = JSON.stringify(item.option_percentages);
-    const optionPercentagesFormatted = Object.entries(item.option_percentages)
-      .map(([key, value]) => {
-        let label = "";
-        switch (key) {
-          case "1":
-            label = "1.Red";
-            break;
-          case "2":
-            label = "2.Orange";
-            break;
-          case "3":
-            label = "3.Yellow";
-            break;
-          case "4":
-            label = "4.light green";
-            break;
-          case "5":
-            label = "5.Green";
-            break;
-          default:
-            label = `Key ${key}`;
-        }
-        return `${label}: ${value}%`;
-      })
-      .join(", ");
-    // console.log(optionPercentagesFormatted);
-    return {
-      key: index + 1,
-      ...item,
-      option_percentages: optionPercentagesFormatted,
+
+    const stripHtml = (htmlString) => {
+      const div = document.createElement("div");
+      div.innerHTML = htmlString;
+      return div.textContent || div.innerText || "";
     };
-  });
-  // csvfileDataFormat?.unshift(["Project", "Question", "Survey"]);
 
+    const formattedCsv = getCsvReport?.data?.map((item)=>({
+      Participant: item.participant,
+      "Project Name": item.project_name,
+      "Survey Name": item.survey_name,
+      "Question Number": `QN.${item.qn}`,
+      Question: item.question,
+      "Question ID": item.question_id,
+      Date: item?.date,
+      Time: item?.time,   
+      Score: item.answer_score,
+      "Vote Emoji": stripHtml(item.emoji),
+      "Comment (Text)": item.comment,
+      "Participation Via": item.via,
+    }))
+
+
+0
   const onFinish = (values) => {
     console.log(values);
   };
@@ -503,10 +513,7 @@ const SurveyResult = () => {
                               id={question?.question_id}
                             ></SurveyResultImages>
                           </div>
-                          {/* <Link
-                            to={`/all-survey-comments/${question?.question_id}`}
-                          >
-                          </Link> */}
+                         
                           <p
                             onClick={() => {
                               setQuestionId(question?.question_id);
@@ -516,6 +523,15 @@ const SurveyResult = () => {
                           >
                             View All
                           </p>
+                          <p
+                            onClick={() => {
+                              setQuestionId(question?.question_id);
+                              setOpenChartModal(true);
+                            }}
+                            className="text-lg text-[#ECB206] cursor-pointer"
+                          >
+                            Chart
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -524,13 +540,11 @@ const SurveyResult = () => {
               ))}
             </div>
             <div className="flex justify-center my-6">
-              {/* <button onClick={handleExportAsPDF} className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">
-                                    Export
-                                </button> */}
+           
 
-              {csvfileDataFormat && csvfileDataFormat.length > 0 ? (
+              {formattedCsv && formattedCsv.length > 0 ? (
                 <CSVLink
-                  data={csvfileDataFormat}
+                  data={formattedCsv}
                   filename={"survey.csv"}
                   className="text-white bg-[#ECB206] px-16 py-4 shadow rounded"
                 >
@@ -539,7 +553,6 @@ const SurveyResult = () => {
               ) : (
                 <p>No data available to export</p>
               )}
-              {/* <CSVLink data={csvfileDataFormat} filename={"survey.csv"} className="text-white bg-[#ECB206] px-16 py-4 shadow rounded">Export</CSVLink> */}
             </div>
             <div className="py-10">
               <Pagination
@@ -617,6 +630,38 @@ const SurveyResult = () => {
           />
         </div>
       </Modal>
+
+
+{/* Chart Modal */}
+
+       <Modal
+              centered
+              footer={false}
+              open={openChartModal}
+              onCancel={() => setOpenChartModal(false)}
+              width={1100}
+            >
+              <p className="text-center text-xl">Question Statistics</p>
+      
+              <div className="w-full h-[400px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart width={500} height={300} data={datas}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
+                    <YAxis  tickFormatter={(value) => Math.round(value)} allowDecimals={false}  />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="average"
+                      stroke="#ECB206"
+                      activeDot={{ r: 8 }}
+                    />
+                    <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </Modal>
     </>
   );
 };

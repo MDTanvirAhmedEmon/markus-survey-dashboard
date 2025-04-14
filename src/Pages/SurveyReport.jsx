@@ -74,6 +74,8 @@ const SurveyReport = () => {
     { skip: !id || !questionId }
   );
 
+  // console.log("id", id , "question", questionId);
+
 
   const datas = getStatistics?.monthly_ratings?.map((mon , i)=>{
     return {
@@ -167,13 +169,13 @@ const SurveyReport = () => {
             <LineChart width={500} height={300} data={datas}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
-              <YAxis />
+              <YAxis  tickFormatter={(value) => Math.round(value)} allowDecimals={false}  />
               <Tooltip />
               <Legend />
               <Line
                 type="monotone"
                 dataKey="average"
-                stroke="#8884d8"
+                stroke="#ECB206"
                 activeDot={{ r: 8 }}
               />
               <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
