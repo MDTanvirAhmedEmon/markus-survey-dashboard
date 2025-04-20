@@ -21,7 +21,7 @@ const Profile = () => {
     const { data, isLoading, } = useGetProfileQuery() || {};
     const [passError, setPassError] = useState('')
 
-    console.log(data);
+
     const handlePageChange = (tab) => {
         setTab(tab);
         const params = new URLSearchParams(window.location.search);
@@ -55,7 +55,6 @@ const Profile = () => {
         })
     };
     const onEditProfile = (values) => {
-        console.log(values?.phone_number);
         const data = {
             name: values?.name,
             phone_number: values?.phone_number,

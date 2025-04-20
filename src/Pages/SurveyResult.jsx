@@ -9,7 +9,7 @@ import {
   Spin,
   Tag,
 } from "antd";
-import {useState } from "react";
+import { useState } from "react";
 import {
   useGetProjectForManageCompanyQuery,
   useGetSurveyForEventQuery,
@@ -29,8 +29,8 @@ import smile from "../assets/images/blushing.png";
 import sad from "../assets/images/sad.png";
 import silent from "../assets/images/silent.png";
 import angry from "../assets/images/angry.png";
-import { CSVLink} from "react-csv";
-import {FaStar } from "react-icons/fa6";
+import { CSVLink } from "react-csv";
+import { FaStar } from "react-icons/fa6";
 import { useGetProfileQuery } from "../redux/features/auth/authApi";
 import {
   LineChart,
@@ -40,17 +40,18 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ReferenceLine,
   ResponsiveContainer,
 } from "recharts";
 import { useGetQuestionStatisticsQuery } from "../redux/features/Settings/Settings";
 
 const SurveyResult = () => {
+  const { data: getUser } = useGetProfileQuery() || {};
+
   const [showExpired, setShowExpired] = useState(1);
   const [openModal, setOpenModal] = useState(false);
   const [openChartModal, setOpenChartModal] = useState(false);
   const [questionId, setQuestionId] = useState();
-  const [selectedProjectId, setSelectedProjectId] = useState(null); 
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
   const pageSize = 10;
 
   const handleCheckboxChange = () => {
@@ -58,9 +59,8 @@ const SurveyResult = () => {
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [csvDataDisplay, setCsvDataDisplay] = useState();
 
-  const { data: getUser } = useGetProfileQuery() || {};
+  // console.log(getUser?.user?.anonymous);
 
   const { data } = useGetAllSurveyCommentsQuery({
     id: questionId,
@@ -74,22 +74,18 @@ const SurveyResult = () => {
 
   const [selectedSurvey, setSelectedSurvey] = useState();
 
-
-
-
   const [currentPageSurvey, setCurrentPageSurvey] = useState(1);
-   const { data: getStatistics } = useGetQuestionStatisticsQuery(
-      { surveyId: selectedSurvey, questionId: questionId },
-      { skip: !selectedSurvey || !questionId }
-    );
+  const { data: getStatistics } = useGetQuestionStatisticsQuery(
+    { surveyId: selectedSurvey, questionId: questionId },
+    { skip: !selectedSurvey || !questionId }
+  );
 
-    const datas = getStatistics?.monthly_ratings?.map((mon , i)=>{
-      return {
-          name : mon?.month,
-          average : mon?.avg_rating
-      }
-    })
-  
+  const datas = getStatistics?.monthly_ratings?.map((mon, i) => {
+    return {
+      name: mon?.month,
+      average: mon?.avg_rating,
+    };
+  });
 
   const { data: projects } = useGetProjectForManageCompanyQuery({
     page: currentPage,
@@ -103,7 +99,7 @@ const SurveyResult = () => {
   const { data: surveysdata } = useGetSurveyForManageCompanyQuery({
     page: currentPageSurvey,
     project_id: selectedProject,
-    showExpired
+    showExpired,
   });
 
   const { data: surveys } = useGetSurveyForEventQuery({
@@ -164,36 +160,36 @@ const SurveyResult = () => {
       }
   );
 
-  const {data : getCsvReport} = useGetCsvReportQuery( selectedProject &&
-    selectedSurvey && {
-      project_id: selectedProject,
-      survey_id: selectedSurvey,
-    })
+  const { data: getCsvReport } = useGetCsvReportQuery(
+    selectedProject &&
+      selectedSurvey && {
+        project_id: selectedProject,
+        survey_id: selectedSurvey,
+        is_anonymous : getUser?.user?.anonymous
+      }
+  );
+console.log(getUser?.user?.anonymous);
+  const stripHtml = (htmlString) => {
+    const div = document.createElement("div");
+    div.innerHTML = htmlString;
+    return div.textContent || div.innerText || "";
+  };
 
+  const formattedCsv = getCsvReport?.data?.map((item) => ({
+    Participant: `${item.participant}`,
+    "Project Name": item.project_name,
+    "Survey Name": item.survey_name,
+    "Question Number": `QN.${item.qn}`,
+    Question: item.question,
+    "Question ID": item.question_id,
+    Date: item?.date,
+    Time: item?.time,
+    Score: item.answer_score,
+    "Vote Emoji": stripHtml(item.emoji),
+    "Comment (Text)": item.comment,
+    "Participation Via": item.via,
+  }));
 
-    const stripHtml = (htmlString) => {
-      const div = document.createElement("div");
-      div.innerHTML = htmlString;
-      return div.textContent || div.innerText || "";
-    };
-
-    const formattedCsv = getCsvReport?.data?.map((item)=>({
-      Participant: item.participant,
-      "Project Name": item.project_name,
-      "Survey Name": item.survey_name,
-      "Question Number": `QN.${item.qn}`,
-      Question: item.question,
-      "Question ID": item.question_id,
-      Date: item?.date,
-      Time: item?.time,   
-      Score: item.answer_score,
-      "Vote Emoji": stripHtml(item.emoji),
-      "Comment (Text)": item.comment,
-      "Participation Via": item.via,
-    }))
-
-
-0
   const onFinish = (values) => {
     console.log(values);
   };
@@ -513,7 +509,7 @@ const SurveyResult = () => {
                               id={question?.question_id}
                             ></SurveyResultImages>
                           </div>
-                         
+
                           <p
                             onClick={() => {
                               setQuestionId(question?.question_id);
@@ -540,11 +536,10 @@ const SurveyResult = () => {
               ))}
             </div>
             <div className="flex justify-center my-6">
-           
-
               {formattedCsv && formattedCsv.length > 0 ? (
                 <CSVLink
                   data={formattedCsv}
+                  separator=";"
                   filename={"survey.csv"}
                   className="text-white bg-[#ECB206] px-16 py-4 shadow rounded"
                 >
@@ -631,37 +626,39 @@ const SurveyResult = () => {
         </div>
       </Modal>
 
+      {/* Chart Modal */}
 
-{/* Chart Modal */}
+      <Modal
+        centered
+        footer={false}
+        open={openChartModal}
+        onCancel={() => setOpenChartModal(false)}
+        width={1100}
+      >
+        <p className="text-center text-xl">Question Statistics</p>
 
-       <Modal
-              centered
-              footer={false}
-              open={openChartModal}
-              onCancel={() => setOpenChartModal(false)}
-              width={1100}
-            >
-              <p className="text-center text-xl">Question Statistics</p>
-      
-              <div className="w-full h-[400px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart width={500} height={300} data={datas}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
-                    <YAxis  tickFormatter={(value) => Math.round(value)} allowDecimals={false}  />
-                    <Tooltip />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="average"
-                      stroke="#ECB206"
-                      activeDot={{ r: 8 }}
-                    />
-                    <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </Modal>
+        <div className="w-full h-[400px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart width={500} height={300} data={datas}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
+              <YAxis
+                tickFormatter={(value) => Math.round(value)}
+                allowDecimals={false}
+              />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="average"
+                stroke="#ECB206"
+                activeDot={{ r: 8 }}
+              />
+              <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </Modal>
     </>
   );
 };

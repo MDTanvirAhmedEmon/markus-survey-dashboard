@@ -48,9 +48,10 @@ export const surveyApi = baseApi.injectEndpoints({
             },
         }),
         getCsvReport: builder.query({
-            query: ({ project_id, survey_id }) => {
+            query: ({ project_id, survey_id  , is_anonymous}) => {
+                console.log(is_anonymous);
                 return {
-                    url: `/export-survey?survey_id=${survey_id}&project_id=${project_id}`,
+                    url: `/export-survey?survey_id=${survey_id}&project_id=${project_id}&is_anonymous=${is_anonymous}`,
                     method: "GET",
                 }
             },
