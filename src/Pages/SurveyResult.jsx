@@ -96,6 +96,10 @@ const SurveyResult = () => {
     label: project.project_name,
   }));
 
+
+
+
+
   const { data: surveysdata } = useGetSurveyForManageCompanyQuery({
     page: currentPageSurvey,
     project_id: selectedProject,
@@ -110,6 +114,7 @@ const SurveyResult = () => {
     value: survey.id,
     label: survey.survey_name,
   }));
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -136,6 +141,8 @@ const SurveyResult = () => {
     </div>
   );
 
+  // console.log(surveys?.data);
+
   const CustomDropdownSurvey = (menu) => (
     <div>
       {menu}
@@ -143,7 +150,7 @@ const SurveyResult = () => {
         className="custom-pagination-all py-4"
         current={currentPageSurvey}
         pageSize={pageSize}
-        total={surveys?.data?.total}
+        total={surveysdata?.data?.total}
         onChange={handlePageChangeSurvey}
         style={{ textAlign: "center", marginTop: 10 }}
       />
@@ -168,7 +175,7 @@ const SurveyResult = () => {
         is_anonymous : getUser?.user?.anonymous
       }
   );
-console.log(getUser?.user?.anonymous);
+// console.log(getUser?.user?.anonymous);
   const stripHtml = (htmlString) => {
     const div = document.createElement("div");
     div.innerHTML = htmlString;
