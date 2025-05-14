@@ -83,7 +83,7 @@ const SurveyResult = () => {
   const datas = getStatistics?.monthly_ratings?.map((mon, i) => {
     return {
       name: mon?.month,
-      average: mon?.avg_rating,
+      average: mon?.avg_rating?.toFixed(2),
     };
   });
 
